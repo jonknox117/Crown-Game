@@ -1,0 +1,45 @@
+name: Apply Sovereign Archive Atmosphere v7
+
+on:
+  push:
+    paths:
+      - '.github/workflows/apply-archive-v7-atmosphere.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply atmosphere and audio systems
+        run: |
+          python scripts/apply_archive_v7_atmosphere.py
+          grep -q 'Atmosphere Build · v7' archive-demo/index.html
+          grep -q 'function soundSettingsPanel()' archive-demo/index.html
+          grep -q 'const AUDIO_PATTERNS=' archive-demo/index.html
+          grep -q 'gothamRain' archive-demo/index.html
+          grep -q "archive-demo-v7" archive-demo/sw.js
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          html=Path('archive-demo/index.html').read_text(encoding='utf-8')
+          m=re.search(r'<script>([\s\S]*?)</script>',html)
+          assert m, 'script missing'
+          Path('/tmp/archive-v7.js').write_text(m.group(1),encoding='utf-8')
+          assert html.count('function soundSettingsPanel()') == 1
+          assert html.count('const AUDIO_PATTERNS=') == 1
+          assert 'version:7' in html
+          assert 'audio:defaultAudio()' in html
+          assert 'data-soundsettings' in html
+          PY
+          node --check /tmp/archive-v7.js
+      - name: Commit atmosphere build
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add archive-demo/index.html archive-demo/sw.js
+          git diff --cached --quiet || git commit -m "Add procedural audio and atmosphere polish"
+          git push
