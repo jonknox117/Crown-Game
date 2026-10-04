@@ -1,0 +1,10 @@
+{
+  "name": "Sovereign Archive Demo",
+  "short_name": "The Archive",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#080a10",
+  "theme_color": "#090b12",
+  "description": "A mobile-first multiverse sandbox RPG demo."
+}
