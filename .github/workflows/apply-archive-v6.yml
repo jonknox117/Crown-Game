@@ -17,6 +17,32 @@ jobs:
       - name: Apply Living Archive systems
         run: |
           python scripts/apply_archive_v6.py
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('archive-demo/index.html')
+          lines=p.read_text(encoding='utf-8').splitlines()
+          hits=[i for i,line in enumerate(lines) if line.startswith('function sceneSvg(kind){')]
+          assert len(hits)==1, f'sceneSvg matches: {len(hits)}'
+          new='''function sceneSvg(kind){
+          if(kind==='archive'){
+            const t=state.archive?.theme||'library';
+            const p={library:['#725bba','#d1af70'],tactical:['#354a67','#76a7ff'],neon:['#286a70','#75e7d2'],gallery:['#75465d','#f1c777']}[t]||['#725bba','#d1af70'];
+            const u=state.archive?.upgrades||{};
+            let rooms='';
+            if(u.manifest)rooms+='<circle cx="165" cy="108" r="32" fill="none" stroke="#d1af70" stroke-width="4"/>';
+            if(u.armory)rooms+='<rect x="42" y="120" width="76" height="56" rx="8" fill="#151b27" stroke="#76a7ff"/>';
+            if(u.recovery)rooms+='<rect x="575" y="120" width="50" height="65" rx="20" fill="#13251f" stroke="#70d8a4"/>';
+            if(u.analysis)rooms+='<rect x="480" y="45" width="86" height="50" rx="7" fill="#111e2d" stroke="#75e7d2"/>';
+            if(u.gallery)rooms+='<path d="M278 159h48l7 24h-62zM375 159h48l7 24h-62z" fill="#251b23" stroke="#f1c777"/>';
+            return `<svg viewBox="0 0 700 232" preserveAspectRatio="none"><defs><radialGradient id="a"><stop stop-color="${p[0]}"/><stop offset="1" stop-color="#111522"/></radialGradient></defs><rect width="700" height="232" fill="url(#a)"/><path d="M0 178h700v54H0z" fill="#090b11"/>${rooms}<ellipse cx="350" cy="98" rx="95" ry="108" fill="none" stroke="${p[1]}" stroke-width="7"/><ellipse cx="350" cy="98" rx="72" ry="87" fill="#070910" opacity=".86"/></svg>`;
+          }
+          if(kind==='gotham')return `<svg viewBox="0 0 700 232" preserveAspectRatio="none"><rect width="700" height="232" fill="#101828"/><circle cx="560" cy="52" r="28" fill="#aab8cf" opacity=".35"/><path d="M0 166L65 122l40 28 52-82 47 90 72-122 58 129 63-86 58 92 45-46 54 45 46-84 70 92v54H0z" fill="#0a0e17"/></svg>`;
+          return `<svg viewBox="0 0 700 232" preserveAspectRatio="none"><rect width="700" height="232" fill="#4d91da"/><circle cx="585" cy="46" r="30" fill="#fff1b4" opacity=".82"/><path d="M0 184h700v48H0z" fill="#182236"/><path d="M55 184V90h65v94M145 184V56h80v128M250 184V110h60v74M338 184V42h78v142M445 184V82h72v102M545 184V62h96v122" fill="#263b5a"/></svg>`;
+          }'''
+          i=hits[0]
+          lines[i:i+1]=new.splitlines()
+          p.write_text('\n'.join(lines),encoding='utf-8')
+          PY
           grep -q 'Living Archive · v6' archive-demo/index.html
           grep -q 'Active Situation' archive-demo/index.html
           grep -q 'function upgradePanel()' archive-demo/index.html
