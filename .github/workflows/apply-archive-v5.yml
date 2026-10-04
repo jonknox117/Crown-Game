@@ -1,0 +1,41 @@
+name: Apply Sovereign Archive v5 manifestation polish
+
+on:
+  push:
+    paths:
+      - '.github/workflows/apply-archive-v5.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply v5 systems and polish
+        run: |
+          python scripts/apply_archive_v5.py
+          grep -q 'Manifestation Capacity' archive-demo/index.html
+          grep -q 'Start New Game' archive-demo/index.html
+          grep -q 'MANIFEST_BODY_LIMIT=5' archive-demo/index.html
+          grep -q 'data-squadadd' archive-demo/index.html
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          html=Path('archive-demo/index.html').read_text(encoding='utf-8')
+          m=re.search(r'<script>([\s\S]*?)</script>',html)
+          assert m, 'script block missing'
+          Path('/tmp/archive-v5.js').write_text(m.group(1),encoding='utf-8')
+          assert html.count('function newGamePanel()')==1
+          assert "archive-demo-v5" in Path('archive-demo/sw.js').read_text(encoding='utf-8')
+          PY
+          node --check /tmp/archive-v5.js
+      - name: Commit polished build
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add archive-demo/index.html archive-demo/sw.js
+          git diff --cached --quiet || git commit -m "Add duplicate manifestations new game QoL and polish"
+          git push
