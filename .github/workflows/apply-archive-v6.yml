@@ -60,7 +60,7 @@ jobs:
           assert html.count('function customizePanel()')==1
           assert 'version:6' in html
           PY
-          node --check /tmp/archive-v6.js
+          node --check /tmp/archive-v6.js || { echo '--- syntax context ---'; nl -ba /tmp/archive-v6.js | sed -n '135,180p'; exit 1; }
       - name: Commit Living Archive build
         run: |
           git config user.name "github-actions[bot]"
