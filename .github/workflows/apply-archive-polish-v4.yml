@@ -17,7 +17,7 @@ jobs:
       - name: Install polished auto-battle build
         shell: bash
         run: |
-          cat .archive-build/v4-01.b64 .archive-build/v4-02.b64 .archive-build/v4-03.b64 .archive-build/v4-04.b64 | tr -d '[:space:]' > /tmp/archive-v4.b64
+          cat .archive-build/v4-01.b64 .archive-build/v4-02.b64 .archive-build/v4-03a.b64 .archive-build/v4-03b.b64 .archive-build/v4-03c.b64 .archive-build/v4-03d.b64 .archive-build/v4-04.b64 | tr -d '[:space:]' > /tmp/archive-v4.b64
           base64 -d /tmp/archive-v4.b64 | gunzip > archive-demo/index.html
           cat > archive-demo/sw.js <<'SW'
           const CACHE='archive-demo-v4';
