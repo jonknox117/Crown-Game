@@ -1,0 +1,2 @@
+Sovereign Archive encounter/combat build ready for Pages deployment.
+Build: encounter-combat-v1
