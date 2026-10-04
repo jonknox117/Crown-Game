@@ -1,0 +1,37 @@
+name: Apply Sovereign Archive combat build
+
+on:
+  push:
+    paths:
+      - '.github/workflows/apply-archive-combat.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install encounter and combat build
+        shell: bash
+        run: |
+          cat .archive-build/part01.b64 .archive-build/part02.b64 .archive-build/part03.b64 .archive-build/part04.b64 > /tmp/archive.b64
+          base64 -d /tmp/archive.b64 | gunzip > archive-demo/index.html
+          cat > archive-demo/sw.js <<'SW'
+          const CACHE='archive-demo-v3';
+          const CORE=['./manifest.webmanifest'];
+          self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
+          self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('archive-demo-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
+          self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;if(e.request.mode==='navigate'){e.respondWith(fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put('./index.html',copy));return r}).catch(()=>caches.match('./index.html')));return;}e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});
+          SW
+          test -s archive-demo/index.html
+          grep -q 'Combat Encounter' archive-demo/index.html
+          grep -q 'Claim Archive' archive-demo/index.html
+          grep -q 'Renee Montoya' archive-demo/index.html
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add archive-demo/index.html archive-demo/sw.js
+          git diff --cached --quiet || git commit -m "Add encounters combat quests and Claim progression"
+          git push
