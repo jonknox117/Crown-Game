@@ -1,0 +1,41 @@
+name: Apply Living Archive v6 QoL fixes
+
+on:
+  push:
+    paths:
+      - '.github/workflows/apply-archive-v6-qol.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply anti-grind and commitment fixes
+        run: |
+          python scripts/apply_archive_v6_qol.py
+          grep -q 'complete working read of this district' archive-demo/index.html
+          grep -q 'No new intel' archive-demo/index.html
+          grep -q 'Situation Lost' archive-demo/index.html
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          html=Path('archive-demo/index.html').read_text(encoding='utf-8')
+          m=re.search(r'<script>([\s\S]*?)</script>',html)
+          assert m
+          Path('/tmp/archive-v6-qol.js').write_text(m.group(1),encoding='utf-8')
+          assert html.count('function districtAction(kind){')==1
+          assert html.count('function openNPC(id,qid){')==1
+          assert html.count('function fleeBattle(){')==1
+          PY
+          node --check /tmp/archive-v6-qol.js
+      - name: Commit QoL fixes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add archive-demo/index.html
+          git diff --cached --quiet || git commit -m "Close Living Archive progression grind loops"
+          git push
