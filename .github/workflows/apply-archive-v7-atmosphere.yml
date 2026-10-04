@@ -16,6 +16,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Apply atmosphere and audio systems
         run: |
+          sed -i "/rep('Sovereign Archive — Living Archive','Sovereign Archive — Atmosphere Build')/d" scripts/apply_archive_v7_atmosphere.py
           python scripts/apply_archive_v7_atmosphere.py
           grep -q 'Atmosphere Build · v7' archive-demo/index.html
           grep -q 'function soundSettingsPanel()' archive-demo/index.html
