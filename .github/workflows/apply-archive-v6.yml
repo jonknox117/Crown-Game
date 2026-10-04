@@ -41,6 +41,7 @@ jobs:
           }'''
           i=hits[0]
           lines[i:i+1]=new.splitlines()
+          lines=[line for line in lines if not (line.startswith("if(kind==='gotham')return") and '<g stroke=' in line) and not (line.startswith('return `<svg') and '<linearGradient id="m"' in line)]
           p.write_text('\n'.join(lines),encoding='utf-8')
           PY
           grep -q 'Living Archive · v6' archive-demo/index.html
@@ -58,9 +59,10 @@ jobs:
           Path('/tmp/archive-v6.js').write_text(m.group(1),encoding='utf-8')
           assert html.count('function upgradePanel()')==1
           assert html.count('function customizePanel()')==1
+          assert html.count('function sceneSvg(kind){')==1
           assert 'version:6' in html
           PY
-          node --check /tmp/archive-v6.js || { echo '--- syntax context ---'; nl -ba /tmp/archive-v6.js | sed -n '135,180p'; exit 1; }
+          node --check /tmp/archive-v6.js || { echo '--- syntax context ---'; nl -ba /tmp/archive-v6.js | sed -n '130,220p'; exit 1; }
       - name: Commit Living Archive build
         run: |
           git config user.name "github-actions[bot]"
