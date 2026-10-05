@@ -15,6 +15,7 @@ js_parts = [
     (game / 'polish.js').read_text(encoding='utf-8'),
     (game / 'systems-v2.js').read_text(encoding='utf-8'),
     (game / 'systems-ui-fix.js').read_text(encoding='utf-8'),
+    (game / 'systems-v3-progression.js').read_text(encoding='utf-8'),
 ]
 
 css = '\n\n'.join(css_parts).replace('</style>', '<\\/style>')
