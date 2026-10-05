@@ -4,7 +4,7 @@ import base64
 root = Path(__file__).resolve().parents[1]
 game = root / 'grimdark-company'
 
-# v12 hotfix: materialize the compressed art atlases as real WebP files during
+# v13 hotfix: materialize the compressed art atlases as real WebP files during
 # the Pages build. This avoids Safari receiving the truncated v11 data URIs.
 asset_dir = game / 'assets' / 'v11'
 asset_sources = {'characters': 'characters2.b64'}
@@ -52,11 +52,11 @@ required = [
     'Storm Bird', 'Fallen Seraph', 'partyDanger', 'decorateNoEmoji',
     'retreatSystem', 'captureSystem', 'audioGainTargets',
     'BL_ART_DATA', 'v11Visuals', 'v11PortraitPools', 'blPortraitHTML',
-    "../assets/v11/characters.webp?v=12"
+    "../assets/v11/characters.webp?v=13"
 ]
 missing = [x for x in required if x not in js]
 if missing:
-    raise SystemExit('Broken Lantern v12 build missing required markers: ' + ', '.join(missing))
+    raise SystemExit('Broken Lantern v13 build missing required markers: ' + ', '.join(missing))
 
 preboot = r'''(function(){
   var failed=false;
