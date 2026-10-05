@@ -6,46 +6,82 @@
 <meta name="theme-color" content="#08090a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
 <title>The Broken Lantern — Stable v16</title>
 <style>
 html,body{margin:0;min-height:100%;background:#08090a;color:#efe4cc;font-family:Georgia,serif}
-#loading{max-width:560px;margin:40px auto;padding:24px;line-height:1.5}
+#loading{max-width:560px;margin:32px auto;padding:22px;line-height:1.5}
+#loading h2{margin:0 0 10px;font-size:30px}
+#loading p{color:#bcae94}
+#loaderr{white-space:pre-wrap;color:#cf927e;font:13px/1.4 ui-monospace,monospace}
 </style>
 </head>
-<body><div id="loading"><h2>Opening The Broken Lantern v16…</h2><p>Loading the stable company build directly from GitHub.</p></div>
+<body>
+<div id="loading"><h2>Opening The Broken Lantern v16…</h2><p>Loading the last known-good company build.</p><div id="loaderr"></div></div>
+<div id="app"></div>
+<div class="bottomnav"><div class="inner" id="nav"></div></div>
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
 <script>
-(async()=>{
-  const root='https://raw.githubusercontent.com/jonknox117/Crown-Game/backup-v16-stable/grimdark-company/';
+(async function(){
+  'use strict';
+  const commit='aad939e3b42279dd63e232f5a23c4656fb3d5c3f';
+  const root='https://raw.githubusercontent.com/jonknox117/Crown-Game/'+commit+'/grimdark-company/';
   const cssFiles=['v9.css','v10.css','v11.css','v14.css','v15.css','v16.css'];
-  const baseParts=['v9-a.js','v9-b.js','v9-c.js','v9-d1.js','v9-d2.js','v9-d3.js','v9-d4.js','v9-e1.js','v9-e2.js','v9-f1.js'];
-  const injectFiles=['v10.js','v10-hotfix.js','v11-assets-a.js','v11-assets-b.js','v11-visuals.js','v11-asset-fix.js','v14-gameplay.js','v15-svg-portraits.js','v16-living-company.js'];
-  async function get(name){
-    const r=await fetch(root+name+'?stable=v16',{cache:'no-store',mode:'cors'});
-    if(!r.ok) throw new Error(name+' HTTP '+r.status);
-    return await r.text();
+  const baseFiles=['v9-a.js','v9-b.js','v9-c.js','v9-d1.js','v9-d2.js','v9-d3.js','v9-d4.js','v9-e1.js','v9-e2.js','v9-f1.js'];
+  const patchFiles=['v10.js','v10-hotfix.js','v11-visuals.js','v14-gameplay.js','v15-svg-portraits.js','v16-living-company.js'];
+  const artFiles={characters:'assets/v11/characters2.b64',environments:'assets/v11/environments.b64',icons:'assets/v11/icons.b64',caches:'assets/v11/caches.b64',title:'assets/v11/title.b64'};
+
+  async function text(path){
+    const r=await fetch(root+path,{cache:'no-store',mode:'cors'});
+    if(!r.ok) throw new Error(path+' — HTTP '+r.status);
+    return r.text();
   }
-  function escErr(v){return String(v).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+  function showError(err){
+    const box=document.getElementById('loaderr');
+    if(box) box.textContent=String(err&&err.stack||err);
+  }
+
+  window.addEventListener('error',e=>showError(e.error||e.message));
+  window.addEventListener('unhandledrejection',e=>showError(e.reason));
+
   try{
-    const css=(await Promise.all(cssFiles.map(get))).join('\n\n').replaceAll('</style>','<\\/style>');
-    const base=(await Promise.all(baseParts.map(get))).join('');
-    let f2=await get('v9-f2.js');
-    const loaded=await Promise.all(injectFiles.map(get));
-    const fixed=loaded.map((txt,i)=>{
-      if(injectFiles[i]==='v11-asset-fix.js') return txt.replaceAll('../assets/v11/',root+'assets/v11/');
-      return txt;
-    });
-    const inj=fixed.join('\n\n');
+    const css=(await Promise.all(cssFiles.map(text))).join('\n\n');
+    const style=document.createElement('style');
+    style.textContent=css;
+    document.head.appendChild(style);
+
+    const [baseParts,f2Source,patchParts,artPairs]=await Promise.all([
+      Promise.all(baseFiles.map(text)),
+      text('v9-f2.js'),
+      Promise.all(patchFiles.map(text)),
+      Promise.all(Object.entries(artFiles).map(async([key,path])=>[key,(await text(path)).trim()]))
+    ]);
+
+    const art=Object.fromEntries(artPairs.map(([k,b64])=>[k,'data:image/webp;base64,'+b64]));
+    const artPrelude='const BL_ART_DATA='+JSON.stringify(art)+';';
+    const [v10,v10hot,v11visuals,v14,v15,v16]=patchParts;
+    const injection=[v10,v10hot,artPrelude,v11visuals,v14,v15,v16].join('\n\n');
+
     const needle='\nboot();\n})();';
-    if(!f2.includes(needle)) throw new Error('Stable v16 boot marker missing');
-    f2=f2.replace(needle,'\n\n'+inj+'\n\nboot();\n})();');
-    const js=(base+f2).replaceAll('</script>','<\\/script>');
-    const preboot=`(function(){var failed=false;function fail(msg){var app=document.getElementById('app');if(!app||document.querySelector('.topbar')||document.querySelector('.startPanel')||failed)return;failed=true;app.innerHTML='<div style="max-width:560px;margin:24px auto;padding:18px;background:#18130f;border:1px solid #6a4930;border-radius:8px;color:#efe4cc;font-family:Georgia,serif"><h2 style="margin-top:0">The ledger failed to open.</h2><pre style="white-space:pre-wrap;color:#bca78b">'+String(msg).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})+'</pre></div>';}window.addEventListener('error',function(e){setTimeout(function(){fail(e.message)},0)});window.addEventListener('unhandledrejection',function(e){setTimeout(function(){fail(e.reason)},0)});setTimeout(function(){if(!document.querySelector('.topbar')&&!document.querySelector('.startPanel'))fail('Startup timed out.')},6000);})();`;
-    document.open();
-    document.write(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#08090a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="format-detection" content="telephone=no"><title>The Broken Lantern — Stable v16</title><style>${css}</style></head><body><div id="app"></div><div class="bottomnav"><div class="inner" id="nav"></div></div><div class="modal" id="modal"><div class="sheet" id="sheet"></div></div><div class="toast" id="toast"></div><script>${preboot}<\\/script><script>${js}<\\/script></body></html>`);
-    document.close();
-  }catch(e){
-    document.body.innerHTML='<div id="loading"><h2>v16 failed to load</h2><p>This launcher could not fetch the stable GitHub files.</p><pre style="white-space:pre-wrap">'+escErr(e)+'</pre></div>';
+    if(!f2Source.includes(needle)) throw new Error('Stable v16 boot marker missing.');
+    const f2=f2Source.replace(needle,'\n\n'+injection+'\n\nboot();\n})();');
+    const gameJs=baseParts.join('')+f2;
+
+    const script=document.createElement('script');
+    script.textContent=gameJs;
+    document.body.appendChild(script);
+
+    setTimeout(()=>{
+      const ok=document.querySelector('.startPanel,.topbar');
+      const loading=document.getElementById('loading');
+      if(ok&&loading) loading.remove();
+      else if(!ok) showError('The v16 engine loaded but did not render its UI.');
+    },250);
+  }catch(err){
+    showError(err);
   }
 })();
 </script>
-</body></html>
+</body>
+</html>
