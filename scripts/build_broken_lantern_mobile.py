@@ -29,7 +29,8 @@ css = (
     (game / 'v10.css').read_text(encoding='utf-8') + '\n\n' +
     (game / 'v11.css').read_text(encoding='utf-8') + '\n\n' +
     (game / 'v14.css').read_text(encoding='utf-8') + '\n\n' +
-    (game / 'v15.css').read_text(encoding='utf-8')
+    (game / 'v15.css').read_text(encoding='utf-8') + '\n\n' +
+    (game / 'v16.css').read_text(encoding='utf-8')
 ).replace('</style>', '<\\/style>')
 base_js = ''.join((game / name).read_text(encoding='utf-8') for name in parts)
 f2 = (game / 'v9-f2.js').read_text(encoding='utf-8')
@@ -41,10 +42,11 @@ v11_visuals = (game / 'v11-visuals.js').read_text(encoding='utf-8')
 v11_asset_fix = (game / 'v11-asset-fix.js').read_text(encoding='utf-8')
 v14_gameplay = (game / 'v14-gameplay.js').read_text(encoding='utf-8')
 v15_portraits = (game / 'v15-svg-portraits.js').read_text(encoding='utf-8')
+v16_living = (game / 'v16-living-company.js').read_text(encoding='utf-8')
 needle = '\nboot();\n})();'
 if needle not in f2:
-    raise SystemExit('Could not locate Broken Lantern boot marker for v15 injection.')
-injection = '\n\n'.join([v10, v10_hotfix, v11_assets_a, v11_assets_b, v11_visuals, v11_asset_fix, v14_gameplay, v15_portraits])
+    raise SystemExit('Could not locate Broken Lantern boot marker for v16 injection.')
+injection = '\n\n'.join([v10, v10_hotfix, v11_assets_a, v11_assets_b, v11_visuals, v11_asset_fix, v14_gameplay, v15_portraits, v16_living])
 f2 = f2.replace(needle, '\n\n' + injection + '\n\nboot();\n})();', 1)
 js = (base_js + f2).replace('</script>', '<\\/script>')
 
@@ -61,11 +63,14 @@ required = [
     "Salvager’s Lodge", 'bl14TargetWeights', 'bl14RetreatDecision',
     'protectorIntercepts', 'strengthBasedRetreat',
     'BL15_CULTURE_COLORS', 'bl15PortraitSvg', 'v15SvgPortraits',
-    'v15RasterAdventurerPortraits'
+    'v15RasterAdventurerPortraits',
+    'livingCompany', 'bl16PairEvent', 'BL16_MISSION_HINTS',
+    'What They’ll Remember', 'Company Stories', 'worldConsequences',
+    'relationshipsMatter', 'emergentStories'
 ]
 missing = [x for x in required if x not in js]
 if missing:
-    raise SystemExit('Broken Lantern v15 build missing required markers: ' + ', '.join(missing))
+    raise SystemExit('Broken Lantern v16 build missing required markers: ' + ', '.join(missing))
 
 preboot = r'''(function(){
   var failed=false;
