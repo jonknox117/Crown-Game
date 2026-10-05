@@ -2,48 +2,35 @@ from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
 game = root / 'grimdark-company'
-
-css_parts = [
-    (game / 'style.css').read_text(encoding='utf-8'),
-    (game / 'polish.css').read_text(encoding='utf-8'),
+parts = [
+    'v9-a.js','v9-b.js','v9-c.js','v9-d1.js','v9-d2.js','v9-d3.js',
+    'v9-d4.js','v9-e1.js','v9-e2.js','v9-f1.js','v9-f2.js'
 ]
-js_parts = [
-    (game / 'core.js').read_text(encoding='utf-8'),
-    (game / 'mobile-hardening.js').read_text(encoding='utf-8'),
-    (game / 'ui.js').read_text(encoding='utf-8'),
-    (game / 'sim.js').read_text(encoding='utf-8'),
-    (game / 'polish.js').read_text(encoding='utf-8'),
-    (game / 'systems-v2.js').read_text(encoding='utf-8'),
-    (game / 'systems-ui-fix.js').read_text(encoding='utf-8'),
-    (game / 'systems-v3-progression.js').read_text(encoding='utf-8'),
-    (game / 'systems-v4-quality.js').read_text(encoding='utf-8'),
-    (game / 'systems-v5-auditfix.js').read_text(encoding='utf-8'),
-    (game / 'systems-v6-audio-newgame.js').read_text(encoding='utf-8'),
-    (game / 'systems-v7-cultures.js').read_text(encoding='utf-8'),
-    (game / 'systems-v8-culture-hotfix.js').read_text(encoding='utf-8'),
+css = (game / 'v9.css').read_text(encoding='utf-8').replace('</style>', '<\\/style>')
+js = ''.join((game / name).read_text(encoding='utf-8') for name in parts).replace('</script>', '<\\/script>')
+
+required = [
+    'brokenLanternCanonical_v9', 'FOUND COMPANY', 'The Veyric Marches',
+    'The Skeld Coast', 'The Hoshin Provinces', 'The Redveld of Nambara',
+    'The Shattered Firmament', 'Common', 'Legendary', 'Game Menu', 'New Game',
+    'Prosperity', 'Stability', 'Threat', '__BL_AUDIT'
 ]
-
-css = '\n\n'.join(css_parts).replace('</style>', '<\\/style>')
-js = '\n\n;\n\n'.join(js_parts)
-
-# Browsers expose a non-configurable window.top. The original UI helper was
-# named top(), which causes global script initialization to fail on iOS/WebKit
-# and Chromium. Rename the source-level occurrences in the bundled build.
-js = js.replace('top()', 'blTop()')
-js = js.replace('</script>', '<\\/script>')
+missing = [x for x in required if x not in js]
+if missing:
+    raise SystemExit('Broken Lantern v9 build missing required markers: ' + ', '.join(missing))
 
 preboot = r'''(function(){
   var failed=false;
   function showFailure(msg){
     var app=document.getElementById('app');
-    if(!app || document.querySelector('.topbar') || failed) return;
+    if(!app || document.querySelector('.topbar') || document.querySelector('.startPanel') || failed) return;
     failed=true;
     var detail=String(msg||'Unknown startup error').replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]});
-    app.innerHTML='<div class="bootFailure" style="max-width:560px;margin:24px auto;padding:18px;background:#18130f;border:1px solid #6a4930;border-radius:16px;color:#efe4cc;font-family:Georgia,serif"><h2 style="margin-top:0">The ledger failed to open.</h2><p style="color:#c2b29a;line-height:1.45">The game shell loaded, but startup failed. Your saved company has not been intentionally erased.</p><button onclick="location.reload()" style="width:100%;padding:13px;border-radius:10px;border:1px solid #8c593c;background:#6e3225;color:white;font-weight:700">Reload Game</button><details style="margin-top:12px;color:#9e8c76"><summary>Technical detail</summary><pre style="white-space:pre-wrap">'+detail+'</pre></details></div>';
+    app.innerHTML='<div style="max-width:560px;margin:24px auto;padding:18px;background:#18130f;border:1px solid #6a4930;border-radius:16px;color:#efe4cc;font-family:Georgia,serif"><h2 style="margin-top:0">The ledger failed to open.</h2><p style="color:#c2b29a;line-height:1.45">The phone build loaded, but the game engine failed to start. Your saved company has not been intentionally erased.</p><button onclick="location.reload()" style="width:100%;padding:13px;border-radius:10px;border:1px solid #8c593c;background:#6e3225;color:white;font-weight:700">Reload Game</button><details style="margin-top:12px;color:#9e8c76"><summary>Technical detail</summary><pre style="white-space:pre-wrap">'+detail+'</pre></details></div>';
   }
   window.addEventListener('error',function(e){setTimeout(function(){showFailure(e.message)},0)});
   window.addEventListener('unhandledrejection',function(e){setTimeout(function(){showFailure(e.reason)},0)});
-  setTimeout(function(){if(!document.querySelector('.topbar'))showFailure('Startup timed out.')},3500);
+  setTimeout(function(){if(!document.querySelector('.topbar')&&!document.querySelector('.startPanel'))showFailure('Startup timed out.')},4000);
 })();'''
 
 html = f'''<!doctype html>
@@ -56,7 +43,7 @@ html = f'''<!doctype html>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="format-detection" content="telephone=no" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<title>The Broken Lantern Company — Phone</title>
+<title>The Broken Lantern — Company RPG</title>
 <style>{css}</style>
 </head>
 <body>
@@ -74,3 +61,6 @@ for dirname in ('mobile', 'play'):
     out.mkdir(parents=True, exist_ok=True)
     (out / 'index.html').write_text(html, encoding='utf-8')
     print(f'Built {out / "index.html"} ({len(html)} bytes)')
+
+# Used by CI for syntax validation; this is outside the published tree.
+Path('/tmp/broken-lantern-v9.js').write_text(js, encoding='utf-8')
