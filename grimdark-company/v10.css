@@ -1,0 +1,95 @@
+/* Broken Lantern v10 visual pass — blackened steel, bone white, restrained blood red. */
+:root{
+ --ink:#08090a;--iron:#121416;--iron2:#1a1d20;--edge:#4b5054;--edge2:#777b7c;
+ --bone:#e7e2d8;--ash:#a6a39c;--dim:#77756f;--blood:#8f1518;--blood2:#c5272b;
+ --gold:#c7a467;--good:#8fa884;--warn:#c49355;
+}
+html,body{background:#070809;color:var(--bone);font-family:Georgia,'Times New Roman',serif}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-3;background:
+ radial-gradient(circle at 50% -10%,rgba(255,255,255,.045),transparent 38%),
+ linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.55)),
+ repeating-linear-gradient(90deg,rgba(255,255,255,.012) 0 1px,transparent 1px 5px)}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;opacity:.32;background:radial-gradient(ellipse at center,transparent 45%,#000 100%)}
+body[data-region="veyric"]{background:linear-gradient(180deg,#0c0d0e,#070809 50%,#090707)}
+body[data-region="skeld"]{background:linear-gradient(180deg,#0b1013,#07090a 55%,#060708)}
+body[data-region="hoshin"]{background:linear-gradient(180deg,#0b1010,#070909 55%,#0a0708)}
+body[data-region="nambara"]{background:linear-gradient(180deg,#12100d,#080807 55%,#0b0706)}
+body[data-region="firmament"]{background:linear-gradient(180deg,#0b0b10,#07070b 45%,#0d0708)}
+
+.uiIcon{width:1.15em;height:1.15em;vertical-align:-.18em;fill:none;stroke:currentColor;stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round;display:inline-block}
+.iconbtn .uiIcon{width:20px;height:20px}
+.navbtn .uiIcon{width:19px;height:19px;margin-bottom:2px}
+.raceGlyph,.enemyGlyph{width:34px;height:34px;border:1px solid #737678;background:linear-gradient(145deg,#202326,#0d0f10);box-shadow:inset 0 0 0 2px #0b0c0d,0 1px 6px #000;display:inline-flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-weight:800;font-size:10px;letter-spacing:.08em;color:#e9e5dc;clip-path:polygon(12% 0,88% 0,100% 12%,100% 88%,88% 100%,12% 100%,0 88%,0 12%)}
+.race-human{border-color:#777}.race-dwarf{border-color:#826f5b}.race-elf{border-color:#687875}.race-orc{border-color:#756858}.race-celestial{border-color:#9e9e9e;color:#fff;box-shadow:inset 0 0 12px rgba(255,255,255,.1),0 1px 6px #000}
+.enemyGlyph{border-color:#6e3a3b;color:#d6c1bd;background:linear-gradient(145deg,#251719,#0d0c0d)}
+
+.topbar{background:linear-gradient(180deg,rgba(22,24,26,.98),rgba(8,9,10,.98));border-bottom:1px solid #55595b;box-shadow:0 5px 18px rgba(0,0,0,.55),inset 0 -1px #000}
+.topbar:before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:#888;opacity:.35}
+.brand h1{text-transform:uppercase;letter-spacing:.085em;font-size:15px;color:#f1ece2;text-shadow:0 1px #000}
+.brand small{letter-spacing:.06em;color:#8f8e89}
+.resources{gap:5px}.res{background:#0d0f10;border:1px solid #303437;border-radius:2px;box-shadow:inset 0 0 0 1px #080909;padding:6px 8px}.res b{color:#e6dfd1}
+.iconbtn{border-radius:2px;border:1px solid #55595b;background:linear-gradient(#25292c,#101214);color:#e0ddd5;box-shadow:inset 0 1px rgba(255,255,255,.06),0 1px 3px #000}
+.iconbtn:active{transform:translateY(1px);background:#0d0f10}
+
+.screen{padding-bottom:92px}
+.hero{position:relative;overflow:hidden;border:1px solid #45494b;border-radius:3px;background:linear-gradient(145deg,rgba(28,30,31,.94),rgba(10,11,12,.96));box-shadow:inset 0 0 0 1px #090a0b,0 9px 24px rgba(0,0,0,.3)}
+.hero:before,.card:before,.startPanel:before,.sheet:before{content:"";position:absolute;pointer-events:none;inset:3px;border:1px solid rgba(255,255,255,.035)}
+.hero h2,.start h1{font-variant:small-caps;letter-spacing:.045em;color:#f1ede5}
+.kicker{color:#a8a49c;letter-spacing:.13em}.hero p{color:#9b9993}
+
+.card{position:relative;border:1px solid #404447;border-radius:3px;background:linear-gradient(155deg,#191c1e,#0d0f10 62%);box-shadow:inset 0 1px rgba(255,255,255,.035),inset 0 -1px #050606,0 3px 10px rgba(0,0,0,.2)}
+button.card{color:inherit}.card:hover{border-color:#5d6265}.card h4,.card b{letter-spacing:.018em}
+.sectionTitle{border-bottom:1px solid #2e3234;padding-bottom:6px}.sectionTitle h3{font-variant:small-caps;letter-spacing:.055em;color:#ddd8ce}.sectionTitle span{color:#767773}
+.empty,.notice{border-radius:2px;background:#0e1011;border:1px solid #34383a;color:#999892}.notice{box-shadow:inset 3px 0 #505457}.notice.danger,.danger{color:#c97a79}.good{color:#9caf92}
+
+.btn{border-radius:2px;border:1px solid #505457;background:linear-gradient(#25292b,#111315);color:#e5e0d7;text-transform:uppercase;letter-spacing:.055em;font-family:Georgia,'Times New Roman',serif;font-weight:700;box-shadow:inset 0 1px rgba(255,255,255,.05),0 1px 3px #000;min-height:42px}
+.btn:active{transform:translateY(1px)}.btn.primary,.goldbtn{background:linear-gradient(#383a39,#171919);border-color:#77776f;color:#f3eee2}.btn.primary:before,.goldbtn:before{content:"";position:absolute}.btn.ghost{background:#0c0e0f;color:#b5b2ab}.dangerBtn{border-color:#712326!important;background:linear-gradient(#42171a,#1d0d0e)!important;color:#efc8c5!important}
+.gold{color:#cfb77f!important}.muted{color:#8c8a84!important}
+
+.bottomnav{background:rgba(6,7,8,.98);border-top:1px solid #4b4f51;box-shadow:0 -7px 20px rgba(0,0,0,.5)}
+.navbtn{color:#777a7b;background:transparent;border:0;text-transform:uppercase;letter-spacing:.07em;font-family:Georgia,serif}.navbtn.active{color:#eee9df}.navbtn.active:after{content:"";display:block;height:2px;background:#9e1d20;margin:3px auto 0;width:22px;box-shadow:0 0 7px rgba(180,26,30,.35)}
+
+.start{background:radial-gradient(circle at 50% 20%,#17191b 0,#090a0b 45%,#050607 100%)}
+.startPanel{position:relative;border:1px solid #5a5e60;border-radius:3px;background:linear-gradient(160deg,rgba(25,27,29,.96),rgba(7,8,9,.98));box-shadow:0 20px 60px #000,inset 0 0 60px rgba(255,255,255,.015)}
+.startPanel:after{content:"";display:block;height:2px;width:62%;margin:18px auto 0;background:linear-gradient(90deg,transparent,#8e171a,transparent)}
+.startMark{color:#a41c20;font-size:62px;filter:drop-shadow(0 5px 15px #000)}.startMark .uiIcon{width:64px;height:64px;stroke-width:1.15}
+.start h1{text-transform:uppercase;font-size:28px;letter-spacing:.11em;text-shadow:0 2px #000}.start p{color:#aaa69e}
+.field{border-radius:2px;border:1px solid #4c5052;background:#090a0b;color:#eee9df;font-family:Georgia,serif;box-shadow:inset 0 2px 8px #000}
+
+.sheet{position:relative;background:linear-gradient(#181b1d,#0a0b0c 58%);border:1px solid #5c6062;border-radius:3px 3px 0 0;box-shadow:0 -18px 50px rgba(0,0,0,.65)}
+.sheetHead{border-bottom:1px solid #333638}.sheetHead h3{text-transform:uppercase;letter-spacing:.055em}.x{color:#bbb;background:#0b0d0e;border:1px solid #3e4244;border-radius:2px}
+
+.portrait{width:52px;height:58px;border-radius:2px;background:radial-gradient(circle at 50% 30%,#25292b,#0b0d0e 70%);border:1px solid #555a5c;box-shadow:inset 0 0 0 2px #0a0b0c,0 4px 10px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center}.portrait .raceGlyph{width:42px;height:42px}
+.face{border:1px solid #45494b;background:#0d0f10;border-radius:2px;box-shadow:inset 0 0 0 1px #060707}.face .raceGlyph{width:30px;height:30px}.face small{background:#090a0b;color:#cfcac0;border:1px solid #3d4143}
+.member{grid-template-columns:58px 1fr auto}.tags{gap:4px}.tag{background:#111314;border:1px solid #35393b;color:#a09e98;border-radius:2px}
+.musterTag{font-size:8px;letter-spacing:.09em;color:#e4c58c;border:1px solid #6f5c3e;padding:3px 5px;margin:0 0 5px;text-align:center;background:#17130d}
+
+.hpbar,.bar,.meter{height:7px;border-radius:0;background:#050606;border:1px solid #333638;box-shadow:inset 0 1px 3px #000}.hpbar i{background:linear-gradient(90deg,#5f1518,#9b2023);box-shadow:0 0 7px rgba(155,32,35,.18)}.goldbar i{background:linear-gradient(90deg,#735f38,#c1a36c)}.meter i{background:linear-gradient(90deg,#373c3e,#9d9f99)}
+
+.battleGrid{gap:8px}.unitList{gap:5px}.unit{border-radius:2px;border:1px solid #383c3e;background:#0c0e0f;padding:7px}.unitTop{align-items:center}.unitIdentity{display:flex;align-items:center;gap:7px;min-width:0}.unitIdentity b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.unit .raceGlyph,.unit .enemyGlyph{width:25px;height:25px;font-size:8px;flex:0 0 auto}.unit.dead{opacity:.34;filter:grayscale(1)}.unitLegendary{border-color:#8d6c35;background:linear-gradient(145deg,#231b11,#0e0d0b);box-shadow:inset 0 0 16px rgba(179,132,51,.07)}.unitLegendary .enemyGlyph{border-color:#ad8a49;color:#f0d49d}
+.combatLog{background:#08090a;border:1px solid #2c3032;color:#9f9d96}
+
+.riskDots{color:#9c2629;letter-spacing:1px}.legendaryBanner{border:1px solid #8d642d;border-left:4px solid #b2782d;background:linear-gradient(90deg,#24170b,#11100e);color:#e4bf79;padding:8px 10px;margin:6px 0;font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase}.legendaryCard{border-color:#795c30!important}.starterBadge{display:inline-block;border:1px solid #5f6658;color:#b7c2a9;background:#10140f;padding:2px 5px;font-size:8px;letter-spacing:.08em;margin-right:5px}.dangerReadout{font-size:9px;font-weight:800;letter-spacing:.08em;border:1px solid;padding:4px 6px}.danger-extreme{color:#ff9a96;border-color:#7d1e22;background:#2a0d0e}.danger-high{color:#e9a28c;border-color:#71402f}.danger-warn{color:#d8b279;border-color:#69563a}.danger-even{color:#b8b7af;border-color:#555}.danger-good{color:#a9be9c;border-color:#4a6443}.dispatchCard{transition:.12s}.dispatchCard:active{transform:scale(.99)}
+.retreatNote{border-left-color:#7b6a48!important}
+
+.ecologyStrip{display:flex;flex-direction:column;gap:4px;border-top:1px solid #2f3335;margin-top:8px;padding-top:7px;font-size:9px;color:#8d8b85}.ecologyStrip b{color:#c2beb5}
+.regionCard{overflow:hidden}.regionCard:after{content:"";position:absolute;right:-35px;top:-38px;width:120px;height:120px;border:1px solid rgba(255,255,255,.035);transform:rotate(45deg);pointer-events:none}.regionCurrent{border-color:#707477}.regionCurrent:before{border-color:rgba(255,255,255,.055)}
+body[data-region="veyric"] .regionCurrent{box-shadow:inset 4px 0 #672023,0 3px 12px #000}
+body[data-region="skeld"] .regionCurrent{box-shadow:inset 4px 0 #516773,0 3px 12px #000}
+body[data-region="hoshin"] .regionCurrent{box-shadow:inset 4px 0 #596d64,0 3px 12px #000}
+body[data-region="nambara"] .regionCurrent{box-shadow:inset 4px 0 #775c36,0 3px 12px #000}
+body[data-region="firmament"] .regionCurrent{box-shadow:inset 4px 0 #786778,0 3px 12px #000}
+
+.itemCard{border-left:3px solid #555}.rarity-1{color:#c1c0bc!important}.rarity-2{color:#9eb79b!important}.rarity-3{color:#8eaabf!important}.rarity-4{color:#b89ac8!important}.rarity-5{color:#ddbc70!important;text-shadow:0 0 7px rgba(213,172,91,.12)}.itemMods div{border-top:1px dotted #292d2f;padding:4px 0;color:#aaa79f}
+
+.audioStatus{margin-top:10px;border:1px solid #3b4143;background:#090b0c;padding:8px;font-size:9px;letter-spacing:.06em;color:#989993}.audioStatus b{color:#d9d5cc}.settingsRow input[type=range]{accent-color:#8f1b1f}
+
+@media(max-width:520px){
+ .topbar{padding-top:max(8px,env(safe-area-inset-top))}.brand h1{font-size:13px}.brand small{font-size:8px}.resources{grid-template-columns:repeat(4,1fr)}.res{padding:5px 4px;font-size:8px}.res b{font-size:12px}
+ .hero{padding:13px 12px}.hero h2{font-size:20px}.hero p{font-size:11px;line-height:1.42}
+ .grid3{gap:5px}.grid3>.card{padding:8px 6px}.btn{font-size:9px;padding:9px 8px;min-height:42px}.card{padding:9px}.member{grid-template-columns:50px minmax(0,1fr) auto;gap:7px}.portrait{width:46px;height:52px}.portrait .raceGlyph{width:36px;height:36px}
+ .battleGrid{grid-template-columns:1fr 1fr}.unit{padding:5px}.unitTop{font-size:8px}.unit .raceGlyph,.unit .enemyGlyph{width:22px;height:22px}
+ .navbtn{font-size:8px}.navbtn .uiIcon{width:18px;height:18px}.bottomnav .inner{padding-bottom:max(5px,env(safe-area-inset-bottom))}
+ .sheet{max-height:88vh}.legendaryBanner{font-size:9px}.ecologyStrip{font-size:8px}
+}
+@media(max-width:380px){.battleGrid{grid-template-columns:1fr}.resources{grid-template-columns:repeat(2,1fr)}.skillGrid{grid-template-columns:repeat(3,1fr)}.member{grid-template-columns:44px minmax(0,1fr)}.member>div:last-child{grid-column:1/-1;display:flex;gap:5px}.portrait{width:42px;height:46px}}
