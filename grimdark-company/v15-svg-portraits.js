@@ -1,6 +1,8 @@
 /* Broken Lantern v15 — crisp modular adventurer portraits.
    No raster portrait atlas: race + gender head, culture torso. */
 
+function bl15Hash(s){let h=2166136261;for(let i=0;i<String(s).length;i++){h^=String(s).charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+
 const BL15_CULTURE_COLORS={
  Veyric:{base:'#294b78',dark:'#15283f',trim:'#a88a52'},
  Skeldic:{base:'#49686b',dark:'#263b3d',trim:'#a6afb0'},
@@ -21,10 +23,10 @@ function bl15EnsureGender(a){
  if(!a)return'Male';
  if(a.gender==='Male'||a.gender==='Female')return a.gender;
  const named=BL15_GENDER_BY_NAME[bl15FirstName(a)];
- a.gender=named||(blHash(`${a.id}|${a.name}|gender`)%2?'Female':'Male');
+ a.gender=named||(bl15Hash(`${a.id}|${a.name}|gender`)%2?'Female':'Male');
  return a.gender;
 }
-function bl15Pick(arr,a,salt=''){return arr[blHash(`${a?.id}|${a?.name}|${salt}`)%arr.length]}
+function bl15Pick(arr,a,salt=''){return arr[bl15Hash(`${a?.id}|${a?.name}|${salt}`)%arr.length]}
 function bl15EscAttr(v){return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
 function bl15CultureTorso(culture){
  const c=BL15_CULTURE_COLORS[culture]||BL15_CULTURE_COLORS.Veyric;
@@ -41,7 +43,7 @@ function bl15FacePath(gender,race){
  return'M31 25Q35 12 50 11Q65 12 69 25V46Q65 60 50 66Q35 60 31 46Z';
 }
 function bl15HairSvg(a,gender,race,hair){
- const variant=blHash(`${a.id}|hair`)%3;
+ const variant=bl15Hash(`${a.id}|hair`)%3;
  if(race==='Dwarf'&&gender==='Male')return`<path d="M29 29Q31 12 50 9Q69 12 71 29L64 24Q50 17 36 24Z" fill="${hair}"/><path d="M34 48Q37 62 50 72Q63 62 66 48Q62 67 57 79L50 75L43 79Q38 67 34 48Z" fill="${hair}"/><path d="M42 58L42 78M58 58L58 78" stroke="#211713" stroke-width="2"/>`;
  if(race==='Dwarf'&&gender==='Female')return`<path d="M31 28Q32 11 50 9Q68 11 69 28L63 22Q50 16 37 22Z" fill="${hair}"/><path d="M32 28Q25 45 31 67L37 61L39 34ZM68 28Q75 45 69 67L63 61L61 34Z" fill="${hair}"/><path d="M33 53L29 73M67 53L71 73" stroke="${hair}" stroke-width="5"/>`;
  if(gender==='Female'){
@@ -62,14 +64,14 @@ function bl15HeadSvg(a){
  if(race==='Elf')extra=`<path d="M34 29L17 22L32 39Z" fill="${skin}" stroke="#17191b" stroke-width="1.5"/><path d="M66 29L83 22L68 39Z" fill="${skin}" stroke="#17191b" stroke-width="1.5"/>`;
  else if(race==='Orc')extra=`<path d="M31 31L18 27L31 40Z" fill="${skin}" stroke="#17191b" stroke-width="1.5"/><path d="M69 31L82 27L69 40Z" fill="${skin}" stroke="#17191b" stroke-width="1.5"/><path d="M39 55L43 64L46 54Z" fill="#e1d3aa" stroke="#27231c"/><path d="M61 55L57 64L54 54Z" fill="#e1d3aa" stroke="#27231c"/>`;
  else extra=`<ellipse cx="31" cy="36" rx="4" ry="7" fill="${skin}"/><ellipse cx="69" cy="36" rx="4" ry="7" fill="${skin}"/>`;
- const scar=(blHash(`${a.id}|scar`)%5===0)?'<path d="M58 28L54 43" stroke="#77453c" stroke-width="1.6" opacity=".8"/>':'';
+ const scar=(bl15Hash(`${a.id}|scar`)%5===0)?'<path d="M58 28L54 43" stroke="#77453c" stroke-width="1.6" opacity=".8"/>':'';
  return`<path d="M42 58V72H58V58" fill="${skin}" stroke="#17191b" stroke-width="1.4"/>${extra}<path d="${bl15FacePath(gender,race)}" fill="${skin}" stroke="#17191b" stroke-width="1.8"/>${bl15HairSvg(a,gender,race,hair)}<path d="M39 35Q43 32 47 35M53 35Q57 32 61 35" fill="none" stroke="#24201e" stroke-width="1.8"/><circle cx="43" cy="36" r="1.3" fill="${eye}"/><circle cx="57" cy="36" r="1.3" fill="${eye}"/><path d="M50 36L47 47L51 48" fill="none" stroke="#6f5547" stroke-width="1.3"/><path d="M43 54Q50 57 57 54" fill="none" stroke="#51372f" stroke-width="1.4"/>${scar}`;
 }
 function bl15PortraitSvg(a){
  const gender=bl15EnsureGender(a),culture=a.culture||'Veyric';
  return`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${bl15EscAttr(a.name)} — ${bl15EscAttr(gender)} ${bl15EscAttr(a.race)} of ${bl15EscAttr(culture)}"><rect width="100" height="100" fill="#090b0c"/><path d="M5 98H95" stroke="#303538" stroke-width="2"/>${bl15CultureTorso(culture)}${bl15HeadSvg(a)}<path d="M2 2H98V98H2Z" fill="none" stroke="#555b5e" stroke-width="2"/></svg>`;
 }
-blPortraitHTML=function(a,cls=''){
+var blPortraitHTML=function(a,cls=''){
  if(!a)return raceGlyph('Human');
  return`<span class="blSvgPortrait ${cls}" data-race="${bl15EscAttr(a.race)}" data-gender="${bl15EscAttr(bl15EnsureGender(a))}" data-culture="${bl15EscAttr(a.culture)}">${bl15PortraitSvg(a)}</span>`;
 };
