@@ -97,7 +97,7 @@ chooseEnemyTarget=function(allies,enemy){
 
 function bl14ProtectorFor(target,allies){
  if(bl14Formation(target)==='FRONT')return null;
- const protectors=alive(allies).filter(a=>a.id!==target.id&&BL14_PROTECTORS[a.className]);
+ const protectors=alive(allies).filter(a=>a!==target&&BL14_PROTECTORS[a.className]);
  if(!protectors.length)return null;
  protectors.sort((a,b)=>(BL14_PROTECTORS[b.className]+b.guard/250)-(BL14_PROTECTORS[a.className]+a.guard/250));
  const p=protectors[0],chanceTo=clamp(BL14_PROTECTORS[p.className]+Math.min(.12,p.resolve/400),.12,.62);
@@ -319,7 +319,7 @@ unitHTML=function(u){
  const form=u.charId?bl14Formation(u):u.role||'ENEMY';
  const target=(u._targetedBy||[]).slice(-1)[0];
  const meta=`<div class="bl14UnitMeta"><span class="bl14Role">${esc(form)}</span>${target?`<span class="bl14Target">TARGETED: ${esc(target.name)} — ${esc(target.reason)}</span>`:''}</div>`;
- return html.replace('</div>',meta+'</div>');
+ return html.replace('<div class="hpbar">',meta+'<div class="hpbar">');
 };
 
 const _battleHTMLV14=battleHTML;
