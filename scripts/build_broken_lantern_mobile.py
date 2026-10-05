@@ -7,8 +7,9 @@ game = root / 'grimdark-company'
 # v12 hotfix: materialize the compressed art atlases as real WebP files during
 # the Pages build. This avoids Safari receiving the truncated v11 data URIs.
 asset_dir = game / 'assets' / 'v11'
+asset_sources = {'characters': 'characters2.b64'}
 for asset_name in ('characters', 'environments', 'icons', 'caches', 'title'):
-    src = asset_dir / f'{asset_name}.b64'
+    src = asset_dir / asset_sources.get(asset_name, f'{asset_name}.b64')
     if not src.exists():
         raise SystemExit(f'Missing Broken Lantern art source: {src}')
     raw = base64.b64decode(src.read_text(encoding='utf-8').strip(), validate=True)
