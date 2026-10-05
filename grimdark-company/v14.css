@@ -1,0 +1,33 @@
+/* Broken Lantern v14 — Combat 2.0 readability */
+.bl14BattleState{
+ display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+ margin:10px 0 7px;padding:8px 10px;border:1px solid #4b4b49;
+ background:linear-gradient(180deg,rgba(28,29,29,.96),rgba(13,14,14,.96));
+ font-size:11px;letter-spacing:.04em;text-transform:uppercase
+}
+.bl14BattleState b{font-size:12px;color:#e8dcc6}
+.bl14BattleState span{color:#a9a397}
+.bl14BattleState.dominant,.bl14BattleState.favored{border-color:#596557}
+.bl14BattleState.dangerous,.bl14BattleState.critical{border-color:#6c3935}
+.bl14BattleState.critical b{color:#d88d84}
+.bl14FormationKey{
+ display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 8px;
+ font-size:10px;color:#817d74
+}
+.bl14FormationKey span{padding:5px 7px;border:1px solid #343535;background:#0c0d0d}
+.bl14FormationKey b{color:#c9bda8}
+.bl14UnitMeta{
+ display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:5px
+}
+.bl14Role{
+ display:inline-block;padding:2px 5px;border:1px solid #55524b;
+ color:#b9ab93;font-size:9px;letter-spacing:.08em
+}
+.bl14Target{
+ display:inline-block;padding:2px 5px;border:1px solid #703b36;
+ color:#c8877e;background:rgba(91,24,18,.17);font-size:9px
+}
+@media(max-width:420px){
+ .bl14FormationKey{grid-template-columns:1fr}
+ .bl14BattleState{gap:5px}
+}
