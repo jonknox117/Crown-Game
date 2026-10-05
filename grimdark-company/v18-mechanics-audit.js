@@ -126,15 +126,18 @@ allyAttack=function(actor,target,p){
 const _enemyAttack181=enemyAttack;
 enemyAttack=function(actor,target,p){
   if(!actor||!target)return _enemyAttack181(actor,target,p);
-  const a=target.charId?state.roster.find(x=>x.id===target.charId):null;
   const family=bl18Family(actor.species||actor.name);
-  const rank=a?bl181FamilyRank(a,family):0,bonus=bl18MasteryBonus(rank);
-  const oldGuard=target.guard,oldResolve=target.resolve;
-  target.guard+=bonus.guard;
-  target.resolve+=bonus.resolve;
+  const battle=p?.expedition?.battle;
+  const snapshots=(battle?.allies||[target]).map(u=>{
+    const a=u.charId?state.roster.find(x=>x.id===u.charId):null;
+    const rank=a?bl181FamilyRank(a,family):0,bonus=bl18MasteryBonus(rank);
+    const snap={u,guard:u.guard,resolve:u.resolve};
+    u.guard+=bonus.guard;
+    u.resolve+=bonus.resolve;
+    return snap;
+  });
   const out=_enemyAttack181(actor,target,p);
-  target.guard=oldGuard;
-  target.resolve=oldResolve;
+  snapshots.forEach(x=>{x.u.guard=x.guard;x.u.resolve=x.resolve});
   return out;
 };
 
@@ -217,6 +220,19 @@ classDamageMult=function(actor,battle,p,e,target){
   return out;
 };
 
+/* The UI used to say “Scars” even though v18 has trauma/phobias, not a
+   separate persistent scar subsystem. Name the thing that actually exists. */
+const _renderInspect181=renderInspect;
+renderInspect=function(id,recruit=false){
+  const out=_renderInspect181(id,recruit);
+  if(!recruit){
+    const sheet=document.getElementById('sheet');
+    const h=[...(sheet?.querySelectorAll('.sectionTitle h3')||[])].find(x=>x.textContent==='Fears & Scars');
+    if(h)h.textContent='Fears & Trauma';
+  }
+  return out;
+};
+
 /* HQ Chronicle mutations made after older save calls now persist immediately. */
 const _upgradeHQ181=upgradeHQ;
 upgradeHQ=function(k){const out=_upgradeHQ181(k);save();return out};
@@ -227,7 +243,7 @@ const _audit181=audit;
 audit=function(){
   const out=_audit181();
   out.v18MechanicsAudit=BL18_MECHANICS_AUDIT;
-  out.v18NoCosmeticMechanics=true;
+  out.v18AdvertisedMechanicsWired=true;
   return out;
 };
 window.__BL_AUDIT=audit;
