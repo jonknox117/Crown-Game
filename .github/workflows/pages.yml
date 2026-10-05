@@ -21,13 +21,66 @@ jobs:
         uses: actions/checkout@v6
       - name: Build Broken Lantern mobile bundle
         run: python3 scripts/build_broken_lantern_mobile.py
-      - name: Validate Broken Lantern v9 JavaScript
+      - name: Validate Broken Lantern JavaScript
         run: |
           node --check /tmp/broken-lantern-v9.js
           grep -q "brokenLanternCanonical_v9" grimdark-company/play/index.html
           grep -q "The Shattered Firmament" grimdark-company/play/index.html
           grep -q "FOUND COMPANY" grimdark-company/play/index.html
           grep -q "__BL_AUDIT" grimdark-company/play/index.html
+          grep -q "var blPortraitHTML=function" grimdark-company/play/index.html
+      - name: Browser startup smoke test
+        run: |
+          BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$BROWSER" ]; then
+            echo "::error::No Chrome/Chromium executable found on runner"
+            exit 1
+          fi
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/bl-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID 2>/dev/null || true' EXIT
+          sleep 1
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=7000 \
+            --dump-dom http://127.0.0.1:8765/grimdark-company/play/ \
+            >/tmp/bl-dom.html 2>/tmp/bl-chrome.log
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+
+          class AppParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.depth = None
+                  self.classes = []
+                  self.text = []
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  if self.depth is None and tag == 'div' and attrs.get('id') == 'app':
+                      self.depth = 1
+                      return
+                  if self.depth is not None:
+                      self.depth += 1
+                      if attrs.get('class'):
+                          self.classes.extend(attrs['class'].split())
+              def handle_endtag(self, tag):
+                  if self.depth is not None:
+                      self.depth -= 1
+                      if self.depth == 0:
+                          self.depth = None
+              def handle_data(self, data):
+                  if self.depth is not None:
+                      self.text.append(data)
+
+          dom = Path('/tmp/bl-dom.html').read_text(encoding='utf-8', errors='replace')
+          p = AppParser(); p.feed(dom)
+          text = ' '.join(p.text)
+          classes = set(p.classes)
+          if 'The ledger failed to open.' in text:
+              raise SystemExit('Browser smoke test hit ledger startup failure: ' + text[:600])
+          if not ({'startPanel','topbar'} & classes):
+              raise SystemExit('Browser smoke test did not render Broken Lantern UI. App text: ' + text[:600])
+          print('Browser startup smoke test passed:', sorted({'startPanel','topbar'} & classes))
+          PY
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload site
