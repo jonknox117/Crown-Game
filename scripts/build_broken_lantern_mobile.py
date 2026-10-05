@@ -5,7 +5,8 @@ root = Path(__file__).resolve().parents[1]
 game = root / 'grimdark-company'
 
 # v13 hotfix: materialize the compressed art atlases as real WebP files during
-# the Pages build. This avoids Safari receiving the truncated v11 data URIs.
+# the Pages build. These remain for monsters/environments while v15 replaces
+# adventurer portraits with native inline SVG.
 asset_dir = game / 'assets' / 'v11'
 asset_sources = {'characters': 'characters2.b64'}
 for asset_name in ('characters', 'environments', 'icons', 'caches', 'title'):
@@ -27,7 +28,8 @@ css = (
     (game / 'v9.css').read_text(encoding='utf-8') + '\n\n' +
     (game / 'v10.css').read_text(encoding='utf-8') + '\n\n' +
     (game / 'v11.css').read_text(encoding='utf-8') + '\n\n' +
-    (game / 'v14.css').read_text(encoding='utf-8')
+    (game / 'v14.css').read_text(encoding='utf-8') + '\n\n' +
+    (game / 'v15.css').read_text(encoding='utf-8')
 ).replace('</style>', '<\\/style>')
 base_js = ''.join((game / name).read_text(encoding='utf-8') for name in parts)
 f2 = (game / 'v9-f2.js').read_text(encoding='utf-8')
@@ -38,10 +40,11 @@ v11_assets_b = (game / 'v11-assets-b.js').read_text(encoding='utf-8')
 v11_visuals = (game / 'v11-visuals.js').read_text(encoding='utf-8')
 v11_asset_fix = (game / 'v11-asset-fix.js').read_text(encoding='utf-8')
 v14_gameplay = (game / 'v14-gameplay.js').read_text(encoding='utf-8')
+v15_portraits = (game / 'v15-svg-portraits.js').read_text(encoding='utf-8')
 needle = '\nboot();\n})();'
 if needle not in f2:
-    raise SystemExit('Could not locate Broken Lantern boot marker for v14 injection.')
-injection = '\n\n'.join([v10, v10_hotfix, v11_assets_a, v11_assets_b, v11_visuals, v11_asset_fix, v14_gameplay])
+    raise SystemExit('Could not locate Broken Lantern boot marker for v15 injection.')
+injection = '\n\n'.join([v10, v10_hotfix, v11_assets_a, v11_assets_b, v11_visuals, v11_asset_fix, v14_gameplay, v15_portraits])
 f2 = f2.replace(needle, '\n\n' + injection + '\n\nboot();\n})();', 1)
 js = (base_js + f2).replace('</script>', '<\\/script>')
 
@@ -56,11 +59,13 @@ required = [
     'BL_ART_DATA', 'v11Visuals', 'v11PortraitPools', 'blPortraitHTML',
     "../assets/v11/characters.webp?v=13",
     "Salvager’s Lodge", 'bl14TargetWeights', 'bl14RetreatDecision',
-    'protectorIntercepts', 'strengthBasedRetreat'
+    'protectorIntercepts', 'strengthBasedRetreat',
+    'BL15_CULTURE_COLORS', 'bl15PortraitSvg', 'v15SvgPortraits',
+    'v15RasterAdventurerPortraits'
 ]
 missing = [x for x in required if x not in js]
 if missing:
-    raise SystemExit('Broken Lantern v14 build missing required markers: ' + ', '.join(missing))
+    raise SystemExit('Broken Lantern v15 build missing required markers: ' + ', '.join(missing))
 
 preboot = r'''(function(){
   var failed=false;
