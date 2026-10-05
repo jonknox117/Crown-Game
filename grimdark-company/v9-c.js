@@ -7,7 +7,7 @@
   return{id:r.id||uid('a'),name:r.name||`${pick(FIRST)} ${pick(LAST)}`,race:RACES[r.race]?r.race:'Human',culture,className:cls.name,background:r.bg||r.background||'Peasant',traits:(r.traits||[]).filter(t=>TRAITS[t]),lvl:r.lvl||1,xp:r.xp||0,hp:r.hp??100,maxHp:r.maxHp??100,stats:baseStats,wage:r.wage||3,status:r.status||'Ready',injury:r.injury||null,recovery:r.recovery||0,gear:{weapon:legacyGear(r.gear?.weapon,'weapon'),armor:legacyGear(r.gear?.armor,'armor'),charm:null},kills:r.kills||0,missions:r.missions||0,scars:r.scars||[],regionId:'veyric',history:[]};
  });
  if(old.hq){Object.keys(HQ_DEFS).forEach(k=>{if(old.hq[k]!=null)s.regions.veyric.hq.upgrades[k]=clamp(Number(old.hq[k])||0,0,HQ_DEFS[k].max)})}
- if(old.parties?.length){s.parties=old.parties.map((p,i)=>({id:p.id||uid('p'),regionId:'veyric',name:p.name||`Party ${i+1}`,members:(p.members||[]).filter(id=>s.roster.some(r=>r.id===id)),tactic:p.tactic||'Balanced',cohesion:0,captainId:null,missions:0,wins:0,deaths:0,expedition:null,specialty:null}))}
+ if(old.parties?.length){s.parties=old.parties.map((p,i)=>({id:p.id||uid('p'),regionId:'veyric',name:p.name||`Party ${i+1}`,members:(p.members||[]).filter(id=>s.roster.some(r=>r.id===id)),tactic:p.tactic||'Balanced',cohesion:0,captainId:null,missions:0,wins:0,deaths:0,expedition:null,specialty:null,enemyWins:{}}))}
  if(!s.parties.length)s.parties=[makeParty('veyric','Ash Dogs')];
  if(old.artifacts)s.artifacts=old.artifacts.map(a=>({id:a.id||uid('art'),name:a.name||'Unknown Artifact',desc:a.desc||'',cost:a.cost||'',regionId:'veyric'}));
  if(old.inventory){old.inventory.forEach(x=>{if(x.type==='Weapon'||x.type==='Armor')s.inventory.push({item:legacyGear(x.name,x.type==='Weapon'?'weapon':'armor'),qty:x.qty||1,regionId:'veyric'});else s.inventory.push({item:{id:uid('mat'),name:x.name,type:'material',rarity:0,mods:[],baseValue:4},qty:x.qty||1,regionId:'veyric'})})}
@@ -28,7 +28,7 @@ function normalizeState(s){
  if((s.version||0)<VERSION&&s.company&&s.regions){s.version=VERSION}
  s.settings=Object.assign({music:true,sfx:true,musicVolume:.8,sfxVolume:.9},s.settings||{});s.ui=Object.assign({tab:'hq'},s.ui||{});s.relationships=s.relationships||{};s.history=s.history||[];s.nemeses=s.nemeses||[];s.inventory=s.inventory||[];s.caches=s.caches||[];s.artifacts=s.artifacts||[];
  REGION_ORDER.forEach(id=>{if(!s.regions[id])s.regions[id]=makeRegion(id);const r=s.regions[id];r.hq=r.hq||{established:id==='veyric',name:REGION_DEFS[id].hqName,upgrades:freshUpgrades()};r.hq.upgrades=Object.assign(freshUpgrades(),r.hq.upgrades||{});r.market=r.market||{stock:[],nextRefresh:1};r.recruits=r.recruits||[];r.contracts=r.contracts||[];r.log=r.log||[]});
- s.roster=(s.roster||[]).map(a=>{a.gear=Object.assign({weapon:null,armor:null,charm:null},a.gear||{});a.regionId=a.regionId||'veyric';a.history=a.history||[];return a});s.parties=(s.parties||[]).map(p=>Object.assign({regionId:'veyric',tactic:'Balanced',cohesion:0,captainId:null,missions:0,wins:0,deaths:0,specialty:null,expedition:null},p));return s;
+ s.roster=(s.roster||[]).map(a=>{a.gear=Object.assign({weapon:null,armor:null,charm:null},a.gear||{});a.regionId=a.regionId||'veyric';a.history=a.history||[];return a});s.parties=(s.parties||[]).map(p=>Object.assign({regionId:'veyric',tactic:'Balanced',cohesion:0,captainId:null,missions:0,wins:0,deaths:0,specialty:null,enemyWins:{},expedition:null},p));return s;
 }
 
 function hasArtifact(name,regionId=state.currentRegion){return state.artifacts.some(a=>a.name===name&&a.regionId===regionId)}
