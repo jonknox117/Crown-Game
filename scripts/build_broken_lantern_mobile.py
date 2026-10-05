@@ -1,7 +1,23 @@
 from pathlib import Path
+import base64
 
 root = Path(__file__).resolve().parents[1]
 game = root / 'grimdark-company'
+
+# v12 hotfix: materialize the compressed art atlases as real WebP files during
+# the Pages build. This avoids Safari receiving the truncated v11 data URIs.
+asset_dir = game / 'assets' / 'v11'
+for asset_name in ('characters', 'environments', 'icons', 'caches', 'title'):
+    src = asset_dir / f'{asset_name}.b64'
+    if not src.exists():
+        raise SystemExit(f'Missing Broken Lantern art source: {src}')
+    raw = base64.b64decode(src.read_text(encoding='utf-8').strip(), validate=True)
+    dest = asset_dir / f'{asset_name}.webp'
+    dest.write_bytes(raw)
+    if len(raw) < 1000 or raw[:4] != b'RIFF' or raw[8:12] != b'WEBP':
+        raise SystemExit(f'Invalid Broken Lantern WebP: {asset_name}')
+    print(f'Built {dest} ({len(raw)} bytes)')
+
 parts = [
     'v9-a.js','v9-b.js','v9-c.js','v9-d1.js','v9-d2.js','v9-d3.js',
     'v9-d4.js','v9-e1.js','v9-e2.js','v9-f1.js'
@@ -18,10 +34,11 @@ v10_hotfix = (game / 'v10-hotfix.js').read_text(encoding='utf-8')
 v11_assets_a = (game / 'v11-assets-a.js').read_text(encoding='utf-8')
 v11_assets_b = (game / 'v11-assets-b.js').read_text(encoding='utf-8')
 v11_visuals = (game / 'v11-visuals.js').read_text(encoding='utf-8')
+v11_asset_fix = (game / 'v11-asset-fix.js').read_text(encoding='utf-8')
 needle = '\nboot();\n})();'
 if needle not in f2:
     raise SystemExit('Could not locate Broken Lantern boot marker for v11 injection.')
-injection = '\n\n'.join([v10, v10_hotfix, v11_assets_a, v11_assets_b, v11_visuals])
+injection = '\n\n'.join([v10, v10_hotfix, v11_assets_a, v11_assets_b, v11_visuals, v11_asset_fix])
 f2 = f2.replace(needle, '\n\n' + injection + '\n\nboot();\n})();', 1)
 js = (base_js + f2).replace('</script>', '<\\/script>')
 
@@ -33,11 +50,12 @@ required = [
     'REGION_ECOLOGY', 'FOUNDER’S MUSTER', 'LEGENDARY THREAT',
     'Storm Bird', 'Fallen Seraph', 'partyDanger', 'decorateNoEmoji',
     'retreatSystem', 'captureSystem', 'audioGainTargets',
-    'BL_ART_DATA', 'v11Visuals', 'v11PortraitPools', 'blPortraitHTML'
+    'BL_ART_DATA', 'v11Visuals', 'v11PortraitPools', 'blPortraitHTML',
+    "../assets/v11/characters.webp?v=12"
 ]
 missing = [x for x in required if x not in js]
 if missing:
-    raise SystemExit('Broken Lantern v11 build missing required markers: ' + ', '.join(missing))
+    raise SystemExit('Broken Lantern v12 build missing required markers: ' + ', '.join(missing))
 
 preboot = r'''(function(){
   var failed=false;
