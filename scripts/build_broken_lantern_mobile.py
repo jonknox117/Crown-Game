@@ -20,6 +20,7 @@ js_parts = [
     (game / 'systems-v5-auditfix.js').read_text(encoding='utf-8'),
     (game / 'systems-v6-audio-newgame.js').read_text(encoding='utf-8'),
     (game / 'systems-v7-cultures.js').read_text(encoding='utf-8'),
+    (game / 'systems-v8-culture-hotfix.js').read_text(encoding='utf-8'),
 ]
 
 css = '\n\n'.join(css_parts).replace('</style>', '<\\/style>')
