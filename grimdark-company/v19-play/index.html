@@ -25,11 +25,11 @@ html,body{margin:0;min-height:100%;background:#08090a;color:#efe4cc;font-family:
 <script>
 (async function(){
   'use strict';
-  const commit='3e5ca2433cfc36f65c7ae8b7de384bec33e71c77';
+  const commit='02aabcebfd507e8aaaf9d338dd29dcd2c725e83d';
   const root='https://raw.githubusercontent.com/jonknox117/Crown-Game/'+commit+'/grimdark-company/';
-  const cssFiles=['v9.css','v10.css','v11.css','v14.css','v15.css','v16.css','v17.css','v18.css','v19.css'];
+  const cssFiles=['v9.css','v10.css','v11.css','v14.css','v15.css','v16.css','v17.css','v18.css','v19.css','v19-2.css'];
   const baseFiles=['v9-a.js','v9-b.js','v9-c.js','v9-d1.js','v9-d2.js','v9-d3.js','v9-d4.js','v9-e1.js','v9-e2.js','v9-f1.js'];
-  const patchFiles=['v10.js','v10-hotfix.js','v14-gameplay.js','v15-svg-portraits.js','v16-living-company.js','v17-career-svg.js','v18-living-veterans.js','v18-mechanics-audit.js','v19-polish.js'];
+  const patchFiles=['v10.js','v10-hotfix.js','v14-gameplay.js','v15-svg-portraits.js','v16-living-company.js','v17-career-svg.js','v18-living-veterans.js','v18-mechanics-audit.js','v19-polish.js','v19-polish-2.js'];
 
   async function text(path){
     const r=await fetch(root+path,{cache:'no-store',mode:'cors'});
@@ -64,6 +64,7 @@ html,body{margin:0;min-height:100%;background:#08090a;color:#efe4cc;font-family:
       ['BL17_CAREER','career system'],
       ['BL18_MECHANICS_AUDIT','v18 mechanics audit'],
       ["const BL19_VERSION='19.0'",'v19 presentation core'],
+      ["const BL19_REFINEMENT='19.1'",'v19 presentation refinement'],
       ['function bl19EnemyArt','enemy presentation'],
       ['function bl19HQScene','HQ growth scene'],
       ['function bl19MapNode','world map'],
