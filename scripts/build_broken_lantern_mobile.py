@@ -2,8 +2,6 @@ from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
 game = root / 'grimdark-company'
-out = game / 'mobile'
-out.mkdir(parents=True, exist_ok=True)
 
 css_parts = [
     (game / 'style.css').read_text(encoding='utf-8'),
@@ -18,13 +16,22 @@ js_parts = [
 ]
 
 css = '\n\n'.join(css_parts).replace('</style>', '<\\/style>')
-js = '\n\n;\n\n'.join(js_parts).replace('</script>', '<\\/script>')
+js = '\n\n;\n\n'.join(js_parts)
+
+# Browsers expose a non-configurable window.top. The original UI helper was
+# named top(), which causes global script initialization to fail on iOS/WebKit
+# and Chromium. Rename the two source-level occurrences in the bundled build.
+js = js.replace('top()', 'blTop()')
+js = js.replace('</script>', '<\\/script>')
 
 preboot = r'''(function(){
+  var failed=false;
   function showFailure(msg){
     var app=document.getElementById('app');
-    if(!app || document.querySelector('.topbar')) return;
-    app.innerHTML='<div style="max-width:560px;margin:24px auto;padding:18px;background:#18130f;border:1px solid #6a4930;border-radius:16px;color:#efe4cc;font-family:Georgia,serif"><h2 style="margin-top:0">The ledger failed to open.</h2><p style="color:#c2b29a;line-height:1.45">The game shell loaded, but iOS blocked part of startup. Your saved company has not been intentionally erased.</p><button onclick="location.reload()" style="width:100%;padding:13px;border-radius:10px;border:1px solid #8c593c;background:#6e3225;color:white;font-weight:700">Reload Game</button><details style="margin-top:12px;color:#9e8c76"><summary>Technical detail</summary><pre style="white-space:pre-wrap">'+String(msg||'Unknown startup error').replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})+'</pre></details></div>';
+    if(!app || document.querySelector('.topbar') || failed) return;
+    failed=true;
+    var detail=String(msg||'Unknown startup error').replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]});
+    app.innerHTML='<div class="bootFailure" style="max-width:560px;margin:24px auto;padding:18px;background:#18130f;border:1px solid #6a4930;border-radius:16px;color:#efe4cc;font-family:Georgia,serif"><h2 style="margin-top:0">The ledger failed to open.</h2><p style="color:#c2b29a;line-height:1.45">The game shell loaded, but startup failed. Your saved company has not been intentionally erased.</p><button onclick="location.reload()" style="width:100%;padding:13px;border-radius:10px;border:1px solid #8c593c;background:#6e3225;color:white;font-weight:700">Reload Game</button><details style="margin-top:12px;color:#9e8c76"><summary>Technical detail</summary><pre style="white-space:pre-wrap">'+detail+'</pre></details></div>';
   }
   window.addEventListener('error',function(e){setTimeout(function(){showFailure(e.message)},0)});
   window.addEventListener('unhandledrejection',function(e){setTimeout(function(){showFailure(e.reason)},0)});
@@ -40,7 +47,8 @@ html = f'''<!doctype html>
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="format-detection" content="telephone=no" />
-<title>The Broken Lantern Company — Mobile</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<title>The Broken Lantern Company — Phone</title>
 <style>{css}</style>
 </head>
 <body>
@@ -53,5 +61,8 @@ html = f'''<!doctype html>
 </body>
 </html>'''
 
-(out / 'index.html').write_text(html, encoding='utf-8')
-print(f'Built {out / "index.html"} ({len(html)} bytes)')
+for dirname in ('mobile', 'play'):
+    out = game / dirname
+    out.mkdir(parents=True, exist_ok=True)
+    (out / 'index.html').write_text(html, encoding='utf-8')
+    print(f'Built {out / "index.html"} ({len(html)} bytes)')
