@@ -22,6 +22,16 @@ v10 = (game / 'v10.js').read_text(encoding='utf-8')
 v10_hotfix = (game / 'v10-hotfix.js').read_text(encoding='utf-8')
 v14_gameplay = (game / 'v14-gameplay.js').read_text(encoding='utf-8')
 v15_portraits = (game / 'v15-svg-portraits.js').read_text(encoding='utf-8')
+# v15 originally replaced a renderer declared by the old v11 raster module.
+# v17 intentionally removes that raster module, so make the SVG renderer
+# self-declared inside the final strict-mode bundle.
+v15_portraits = v15_portraits.replace(
+    '\nblPortraitHTML=function',
+    '\nvar blPortraitHTML=function',
+    1
+)
+if '\nblPortraitHTML=function' in v15_portraits:
+    raise SystemExit('Broken Lantern v17 SVG portrait renderer is still undeclared.')
 v16_living = (game / 'v16-living-company.js').read_text(encoding='utf-8')
 v17 = (game / 'v17-career-svg.js').read_text(encoding='utf-8')
 needle = '\nboot();\n})();'
@@ -42,6 +52,7 @@ required = [
     "Salvager’s Lodge", 'bl14TargetWeights', 'bl14RetreatDecision',
     'protectorIntercepts', 'strengthBasedRetreat',
     'BL15_CULTURE_COLORS', 'bl15PortraitSvg', 'v15SvgPortraits',
+    'var blPortraitHTML=function',
     'livingCompany', 'bl16PairEvent', 'BL16_MISSION_HINTS',
     'What They’ll Remember', 'Company Stories', 'worldConsequences',
     'relationshipsMatter', 'emergentStories',
