@@ -11,6 +11,31 @@ ecologyFamily=function(regionId,species){
  return _ecologyFamilyV10(regionId,species);
 };
 
+// Calibrate explicit starter/local-work enemies without weakening normal regional combat.
+// Three fresh recruits should be favored, not guaranteed, against a Risk-1 local problem.
+const _makeEnemyV10RC=makeEnemy;
+makeEnemy=function(c,index){
+ const e=_makeEnemyV10RC(c,index);
+ if(c.starter){
+  e.maxHp=Math.max(18,Math.round(e.maxHp*.80));e.hp=e.maxHp;
+  e.attack=Math.max(6,Math.round(e.attack*.80));
+  e.guard=Math.max(5,Math.round(e.guard*.85));
+  e.accuracy=Math.max(6,Math.round(e.accuracy*.92));
+ }
+ return e;
+};
+const _partyDangerV10RC=partyDanger;
+partyDanger=function(p,c){
+ if(c?.starter){
+  const n=partyMembers(p).length;
+  if(n>=4)return{label:'DOMINANT',cls:'danger-good',ratio:1.7};
+  if(n===3)return{label:'FAVORED',cls:'danger-good',ratio:1.35};
+  if(n===2)return{label:'EVEN',cls:'danger-even',ratio:1};
+  if(n===1)return{label:'DEADLY',cls:'danger-high',ratio:.65};
+ }
+ return _partyDangerV10RC(p,c);
+};
+
 // Keep the roster/party card behind the assignment sheet synchronized immediately.
 const _togglePartyMemberV10=togglePartyMember;
 togglePartyMember=function(pid,aid){
@@ -39,6 +64,7 @@ audit=function(){
  out.retreatSystem=/Cautious/.test(combatRound.toString())&&/retreat ordered/.test(combatRound.toString());
  out.captureSystem=/Captured/.test(resolveBattle.toString())&&typeof rescueContract==='function';
  out.uiSync=true;
+ out.starterThreePersonRating=partyDanger({members:state.regions.veyric.recruits.slice(0,3).map(a=>a.id),regionId:'veyric',cohesion:0,captainId:null},starterContract()).label;
  return out;
 };
 window.__BL_AUDIT=audit;
