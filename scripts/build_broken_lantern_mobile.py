@@ -13,6 +13,8 @@ js_parts = [
     (game / 'ui.js').read_text(encoding='utf-8'),
     (game / 'sim.js').read_text(encoding='utf-8'),
     (game / 'polish.js').read_text(encoding='utf-8'),
+    (game / 'systems-v2.js').read_text(encoding='utf-8'),
+    (game / 'systems-ui-fix.js').read_text(encoding='utf-8'),
 ]
 
 css = '\n\n'.join(css_parts).replace('</style>', '<\\/style>')
@@ -20,7 +22,7 @@ js = '\n\n;\n\n'.join(js_parts)
 
 # Browsers expose a non-configurable window.top. The original UI helper was
 # named top(), which causes global script initialization to fail on iOS/WebKit
-# and Chromium. Rename the two source-level occurrences in the bundled build.
+# and Chromium. Rename the source-level occurrences in the bundled build.
 js = js.replace('top()', 'blTop()')
 js = js.replace('</script>', '<\\/script>')
 
