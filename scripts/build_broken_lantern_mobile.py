@@ -1,24 +1,7 @@
 from pathlib import Path
-import base64
 
 root = Path(__file__).resolve().parents[1]
 game = root / 'grimdark-company'
-
-# v13 hotfix: materialize the compressed art atlases as real WebP files during
-# the Pages build. These remain for monsters/environments while v15 replaces
-# adventurer portraits with native inline SVG.
-asset_dir = game / 'assets' / 'v11'
-asset_sources = {'characters': 'characters2.b64'}
-for asset_name in ('characters', 'environments', 'icons', 'caches', 'title'):
-    src = asset_dir / asset_sources.get(asset_name, f'{asset_name}.b64')
-    if not src.exists():
-        raise SystemExit(f'Missing Broken Lantern art source: {src}')
-    raw = base64.b64decode(src.read_text(encoding='utf-8').strip(), validate=True)
-    dest = asset_dir / f'{asset_name}.webp'
-    dest.write_bytes(raw)
-    if len(raw) < 1000 or raw[:4] != b'RIFF' or raw[8:12] != b'WEBP':
-        raise SystemExit(f'Invalid Broken Lantern WebP: {asset_name}')
-    print(f'Built {dest} ({len(raw)} bytes)')
 
 parts = [
     'v9-a.js','v9-b.js','v9-c.js','v9-d1.js','v9-d2.js','v9-d3.js',
@@ -30,23 +13,21 @@ css = (
     (game / 'v11.css').read_text(encoding='utf-8') + '\n\n' +
     (game / 'v14.css').read_text(encoding='utf-8') + '\n\n' +
     (game / 'v15.css').read_text(encoding='utf-8') + '\n\n' +
-    (game / 'v16.css').read_text(encoding='utf-8')
+    (game / 'v16.css').read_text(encoding='utf-8') + '\n\n' +
+    (game / 'v17.css').read_text(encoding='utf-8')
 ).replace('</style>', '<\\/style>')
 base_js = ''.join((game / name).read_text(encoding='utf-8') for name in parts)
 f2 = (game / 'v9-f2.js').read_text(encoding='utf-8')
 v10 = (game / 'v10.js').read_text(encoding='utf-8')
 v10_hotfix = (game / 'v10-hotfix.js').read_text(encoding='utf-8')
-v11_assets_a = (game / 'v11-assets-a.js').read_text(encoding='utf-8')
-v11_assets_b = (game / 'v11-assets-b.js').read_text(encoding='utf-8')
-v11_visuals = (game / 'v11-visuals.js').read_text(encoding='utf-8')
-v11_asset_fix = (game / 'v11-asset-fix.js').read_text(encoding='utf-8')
 v14_gameplay = (game / 'v14-gameplay.js').read_text(encoding='utf-8')
 v15_portraits = (game / 'v15-svg-portraits.js').read_text(encoding='utf-8')
 v16_living = (game / 'v16-living-company.js').read_text(encoding='utf-8')
+v17 = (game / 'v17-career-svg.js').read_text(encoding='utf-8')
 needle = '\nboot();\n})();'
 if needle not in f2:
-    raise SystemExit('Could not locate Broken Lantern boot marker for v16 injection.')
-injection = '\n\n'.join([v10, v10_hotfix, v11_assets_a, v11_assets_b, v11_visuals, v11_asset_fix, v14_gameplay, v15_portraits, v16_living])
+    raise SystemExit('Could not locate Broken Lantern boot marker for v17 injection.')
+injection = '\n\n'.join([v10, v10_hotfix, v14_gameplay, v15_portraits, v16_living, v17])
 f2 = f2.replace(needle, '\n\n' + injection + '\n\nboot();\n})();', 1)
 js = (base_js + f2).replace('</script>', '<\\/script>')
 
@@ -58,19 +39,23 @@ required = [
     'REGION_ECOLOGY', 'FOUNDER’S MUSTER', 'LEGENDARY THREAT',
     'Storm Bird', 'Fallen Seraph', 'partyDanger', 'decorateNoEmoji',
     'retreatSystem', 'captureSystem', 'audioGainTargets',
-    'BL_ART_DATA', 'v11Visuals', 'v11PortraitPools', 'blPortraitHTML',
-    "../assets/v11/characters.webp?v=13",
     "Salvager’s Lodge", 'bl14TargetWeights', 'bl14RetreatDecision',
     'protectorIntercepts', 'strengthBasedRetreat',
     'BL15_CULTURE_COLORS', 'bl15PortraitSvg', 'v15SvgPortraits',
-    'v15RasterAdventurerPortraits',
     'livingCompany', 'bl16PairEvent', 'BL16_MISSION_HINTS',
     'What They’ll Remember', 'Company Stories', 'worldConsequences',
-    'relationshipsMatter', 'emergentStories'
+    'relationshipsMatter', 'emergentStories',
+    'BL17_CAREER', 'bl17Skills', 'bl17EnemySvg', 'bl17CacheSvg',
+    'bl17RegionScene', 'v17CareerRarity', 'v17SvgOnlyGameplayVisuals'
 ]
 missing = [x for x in required if x not in js]
 if missing:
-    raise SystemExit('Broken Lantern v16 build missing required markers: ' + ', '.join(missing))
+    raise SystemExit('Broken Lantern v17 build missing required markers: ' + ', '.join(missing))
+
+# Guard against accidentally reintroducing the compressed generated-art pipeline.
+for forbidden in ('BL_ART_DATA', 'characters.webp?v=13', 'environments.webp?v=13', 'caches.webp?v=13'):
+    if forbidden in js:
+        raise SystemExit('Broken Lantern v17 unexpectedly contains raster gameplay art marker: ' + forbidden)
 
 preboot = r'''(function(){
   var failed=false;
@@ -115,5 +100,4 @@ for dirname in ('mobile', 'play'):
     (out / 'index.html').write_text(html, encoding='utf-8')
     print(f'Built {out / "index.html"} ({len(html)} bytes)')
 
-# Used by CI for syntax validation; this is outside the published tree.
 Path('/tmp/broken-lantern-v9.js').write_text(js, encoding='utf-8')
