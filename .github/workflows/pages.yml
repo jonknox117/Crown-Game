@@ -21,6 +21,13 @@ jobs:
         uses: actions/checkout@v6
       - name: Build Broken Lantern mobile bundle
         run: python3 scripts/build_broken_lantern_mobile.py
+      - name: Validate Broken Lantern v9 JavaScript
+        run: |
+          node --check /tmp/broken-lantern-v9.js
+          grep -q "brokenLanternCanonical_v9" grimdark-company/play/index.html
+          grep -q "The Shattered Firmament" grimdark-company/play/index.html
+          grep -q "FOUND COMPANY" grimdark-company/play/index.html
+          grep -q "__BL_AUDIT" grimdark-company/play/index.html
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload site
