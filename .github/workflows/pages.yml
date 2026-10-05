@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Build Broken Lantern mobile bundle
+        run: python3 scripts/build_broken_lantern_mobile.py
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload site
