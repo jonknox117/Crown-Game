@@ -64,7 +64,12 @@ audit=function(){
  out.retreatSystem=/Cautious/.test(combatRound.toString())&&/retreat ordered/.test(combatRound.toString());
  out.captureSystem=/Captured/.test(resolveBattle.toString())&&typeof rescueContract==='function';
  out.uiSync=true;
- out.starterThreePersonRating=partyDanger({members:state.regions.veyric.recruits.slice(0,3).map(a=>a.id),regionId:'veyric',cohesion:0,captainId:null},starterContract()).label;
+ const ratingTest=createState('Starter Rating Audit');
+ out.starterThreePersonRating=withState(ratingTest,()=>{
+  const p=ratingTest.parties[0],aa=ratingTest.regions.veyric.recruits.slice(0,3);
+  aa.forEach(a=>ratingTest.roster.push(a));p.members=aa.map(a=>a.id);
+  return partyDanger(p,starterContract()).label;
+ });
  return out;
 };
 window.__BL_AUDIT=audit;
