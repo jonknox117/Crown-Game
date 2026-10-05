@@ -6,6 +6,14 @@ const BL18_MECHANICS_AUDIT='18.1';
 /* Vengeful used to advertise target-specific vengeance while only granting a tiny
    global Attack bonus. Make the description and mechanic actually target-specific. */
 if(typeof TRAITS!=='undefined'&&TRAITS['Vengeful']){
+  /* Remove legacy metadata fields that were never consumed anywhere; keep only
+     mechanics that have an actual reader in the engine. */
+  if(TRAITS['Hard Worker']){delete TRAITS['Hard Worker'].heal}
+  if(TRAITS['Kindhearted']){delete TRAITS['Kindhearted'].mercy;TRAITS['Kindhearted'].desc='+4 Talk. Also slightly improves day-to-day relationships; the Talk bonus directly helps Rescue and Negotiation checks.'}
+  if(TRAITS['Bloodthirsty']){delete TRAITS['Bloodthirsty'].reckless;TRAITS['Bloodthirsty'].desc='+4 Attack, -2 Talk. Makes the party less willing to retreat while this adventurer is still fighting.'}
+  if(TRAITS['Lucky']){delete TRAITS['Lucky'].lucky}
+  if(TRAITS['Greedy'])TRAITS['Greedy'].desc='+2 Talk and +4% contract payment.';
+  if(TRAITS['Sickly'])TRAITS['Sickly'].desc='-4 Endure and increased expedition attrition.';
   TRAITS['Vengeful'].desc='Deals +12% damage against monster families tied to a close companion’s death; -1 Talk.';
   TRAITS['Vengeful'].combat={};
   TRAITS['Vengeful'].util={talk:-1};
