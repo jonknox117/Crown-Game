@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#08090a">
+<title>The Broken Lantern — v16</title>
+<style>
+html,body{margin:0;background:#08090a;color:#efe4cc;font-family:Georgia,serif}
+#loading{max-width:560px;margin:40px auto;padding:24px}
+</style>
+</head>
+<body><div id="loading">Opening The Broken Lantern v16…</div>
+<script>
+(async()=>{
+  const root='../';
+  const cssFiles=['v9.css','v10.css','v11.css','v14.css','v15.css','v16.css'];
+  const baseParts=['v9-a.js','v9-b.js','v9-c.js','v9-d1.js','v9-d2.js','v9-d3.js','v9-d4.js','v9-e1.js','v9-e2.js','v9-f1.js'];
+  const injectFiles=['v10.js','v10-hotfix.js','v11-assets-a.js','v11-assets-b.js','v11-visuals.js','v14-gameplay.js','v15-svg-portraits.js','v16-living-company.js'];
+  async function get(name){
+    const r=await fetch(root+name+'?v=16-stable',{cache:'no-store'});
+    if(!r.ok) throw new Error(name+' HTTP '+r.status);
+    return await r.text();
+  }
+  try{
+    const css=(await Promise.all(cssFiles.map(get))).join('\n\n').replaceAll('</style>','<\\/style>');
+    const base=(await Promise.all(baseParts.map(get))).join('');
+    let f2=await get('v9-f2.js');
+    const inj=(await Promise.all(injectFiles.map(get))).join('\n\n');
+    const needle='\nboot();\n})();';
+    if(!f2.includes(needle)) throw new Error('v16 boot marker missing');
+    f2=f2.replace(needle,'\n\n'+inj+'\n\nboot();\n})();');
+    const js=(base+f2).replaceAll('</script>','<\\/script>');
+    const preboot=`(function(){var failed=false;function showFailure(msg){var app=document.getElementById('app');if(!app||document.querySelector('.topbar')||document.querySelector('.startPanel')||failed)return;failed=true;var detail=String(msg||'Unknown startup error').replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]});app.innerHTML='<div style="max-width:560px;margin:24px auto;padding:18px;background:#18130f;border:1px solid #6a4930;border-radius:8px;color:#efe4cc;font-family:Georgia,serif"><h2 style="margin-top:0">The ledger failed to open.</h2><p style="color:#c2b29a;line-height:1.45">The phone build loaded, but the game engine failed to start.</p><details style="margin-top:12px;color:#9e8c76"><summary>Technical detail</summary><pre style="white-space:pre-wrap">'+detail+'</pre></details></div>';}window.addEventListener('error',function(e){setTimeout(function(){showFailure(e.message)},0)});window.addEventListener('unhandledrejection',function(e){setTimeout(function(){showFailure(e.reason)},0)});setTimeout(function(){if(!document.querySelector('.topbar')&&!document.querySelector('.startPanel'))showFailure('Startup timed out.')},4000);})();`;
+    document.open();
+    document.write(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#08090a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="format-detection" content="telephone=no"><title>The Broken Lantern — v16</title><style>${css}</style></head><body><div id="app"></div><div class="bottomnav"><div class="inner" id="nav"></div></div><div class="modal" id="modal"><div class="sheet" id="sheet"></div></div><div class="toast" id="toast"></div><script>${preboot}<\\/script><script>${js}<\\/script></body></html>`);
+    document.close();
+  }catch(e){
+    document.body.innerHTML='<div id="loading"><h2>v16 failed to load</h2><pre>'+String(e)+'</pre></div>';
+  }
+})();
+</script>
+</body></html>
