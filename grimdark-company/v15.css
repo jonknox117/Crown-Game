@@ -1,0 +1,9 @@
+/* Broken Lantern v15 — vector portrait presentation. */
+.blSvgPortrait{display:block;width:100%;height:100%;background:#090b0c;overflow:hidden;filter:none!important}
+.blSvgPortrait svg{display:block;width:100%;height:100%;shape-rendering:geometricPrecision;text-rendering:geometricPrecision}
+.blPortraitFrame>.blSvgPortrait{border:0}
+.blPartyFace .blSvgPortrait{width:100%;height:100%}
+.blCombatPortrait.blSvgPortrait{background:#090b0c;filter:none!important}
+.blPortraitLarge.blSvgPortrait{background:#090b0c;filter:none!important}
+.blPickPortrait>.blSvgPortrait{width:100%;height:100%}
+/* Raster atlas remains available only for monsters and other art that has not yet been replaced. */
