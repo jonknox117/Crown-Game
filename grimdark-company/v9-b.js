@@ -61,7 +61,7 @@ const ARTIFACT_POOL=[
  {name:"The King’s Second Face",desc:'Successful contracts pay 25% more in the region where it is stored.',cost:'Weekly local wages rise by 8%.'},
  {name:'Saint Veyra’s Nail',desc:'Supernatural enemies begin combat with weakened Guard.',cost:'Survivors sometimes return Haunted.'},
  {name:'The Salt Crown',desc:'Markets refresh with one additional item.',cost:'Regional Stability drifts downward slightly while stored.'},
- {name:'Glass Heart of Namar',desc:'A downed party has a small chance to keep fighting for one extra combat round.',cost:'Its region gains additional Horror activity.'}
+ {name:'Glass Heart of Namar',desc:'Once per expedition, a completely downed party forces its toughest fallen member back to 1 HP.',cost:'Its region gains additional Horror activity.'}
 ];
 
 const HQ_DEFS={
@@ -97,7 +97,7 @@ function createState(name){
  return s;
 }
 function withState(s,fn){const prev=state;state=s;try{return fn()}finally{state=prev}}
-function makeParty(regionId,name){return{id:uid('p'),regionId,name,members:[],tactic:'Balanced',cohesion:0,captainId:null,missions:0,wins:0,deaths:0,expedition:null,specialty:null}}
+function makeParty(regionId,name){return{id:uid('p'),regionId,name,members:[],tactic:'Balanced',cohesion:0,captainId:null,missions:0,wins:0,deaths:0,expedition:null,specialty:null,enemyWins:{}}}
 
 function idbOpen(name='brokenLanternCanonical'){return new Promise(resolve=>{if(!('indexedDB'in window))return resolve(null);try{const r=indexedDB.open(name,1);r.onupgradeneeded=()=>{const db=r.result;if(!db.objectStoreNames.contains('saves'))db.createObjectStore('saves')};r.onsuccess=()=>resolve(r.result);r.onerror=()=>resolve(null)}catch(e){resolve(null)}})}
 async function idbGet(key=SAVE_KEY,name='brokenLanternCanonical'){const db=await idbOpen(name);if(!db)return null;return new Promise(resolve=>{try{const tx=db.transaction('saves','readonly'),r=tx.objectStore('saves').get(key);r.onsuccess=()=>resolve(r.result||null);r.onerror=()=>resolve(null)}catch(e){resolve(null)}})}
