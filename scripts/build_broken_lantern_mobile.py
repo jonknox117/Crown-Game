@@ -10,10 +10,11 @@ css = ((game / 'v9.css').read_text(encoding='utf-8') + '\n\n' + (game / 'v10.css
 base_js = ''.join((game / name).read_text(encoding='utf-8') for name in parts)
 f2 = (game / 'v9-f2.js').read_text(encoding='utf-8')
 v10 = (game / 'v10.js').read_text(encoding='utf-8')
+v10_hotfix = (game / 'v10-hotfix.js').read_text(encoding='utf-8')
 needle = '\nboot();\n})();'
 if needle not in f2:
     raise SystemExit('Could not locate Broken Lantern boot marker for v10 injection.')
-f2 = f2.replace(needle, '\n\n' + v10 + '\n\nboot();\n})();', 1)
+f2 = f2.replace(needle, '\n\n' + v10 + '\n\n' + v10_hotfix + '\n\nboot();\n})();', 1)
 js = (base_js + f2).replace('</script>', '<\\/script>')
 
 required = [
@@ -22,7 +23,8 @@ required = [
     'The Shattered Firmament', 'Common', 'Legendary', 'Game Menu', 'New Game',
     'Prosperity', 'Stability', 'Threat', '__BL_AUDIT',
     'REGION_ECOLOGY', 'FOUNDER’S MUSTER', 'LEGENDARY THREAT',
-    'Storm Bird', 'Fallen Seraph', 'partyDanger', 'decorateNoEmoji'
+    'Storm Bird', 'Fallen Seraph', 'partyDanger', 'decorateNoEmoji',
+    'retreatSystem', 'captureSystem', 'audioGainTargets'
 ]
 missing = [x for x in required if x not in js]
 if missing:
