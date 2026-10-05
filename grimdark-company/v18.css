@@ -1,0 +1,42 @@
+/* Broken Lantern v18 — Living Veterans UI */
+.bl18Section{margin-top:16px}
+.bl18VeteranSummary{display:grid;gap:8px}
+.bl18RelationCard{padding:8px 0;border-top:1px solid #303538}
+.bl18RelationCard:first-of-type{border-top:0}
+.bl18RelationCard .statline span{font-size:9px;color:#d5c48e;text-transform:uppercase;letter-spacing:.08em}
+.bl18RelMetric{display:grid;grid-template-columns:58px 1fr 26px;gap:7px;align-items:center;margin-top:4px;font-size:8px;color:#9f9a90}
+.bl18RelMetric i{height:5px;background:#16191a;border:1px solid #343a3d;overflow:hidden}
+.bl18RelMetric i b{display:block;height:100%;background:#777}
+.bl18RelMetric i b.good{background:#718d6e}
+.bl18RelMetric i b.neutral{background:#897b62}
+.bl18RelMetric i b.bad{background:#8e4c46}
+.bl18RelMetric em{font-style:normal;text-align:right;color:#b8b0a2}
+.bl18MonsterRow{padding:8px 0;border-top:1px solid #303538}
+.bl18MonsterRow:first-child{border-top:0}
+.bl18MonsterRow .statline span{font-size:9px;color:#d6ad55;text-transform:uppercase}
+.bl18MonsterRow .bar{height:6px;margin:5px 0}
+.bl18FearRow{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid #303538}
+.bl18FearRow:first-child{border-top:0}
+.bl18FearRow b{font-size:10px;color:#ca8a7d}
+.bl18FearRow span{font-size:8px;color:#9f9a90;text-align:right}
+.bl18FearRow.hardened b{color:#80a779}
+.bl18Traits{display:grid;gap:6px}
+.bl18Trait{padding:7px 8px;border:1px solid #343a3d;background:#0b0d0e}
+.bl18Trait b{display:block;color:#d7c58f;font-size:10px}
+.bl18Trait span{display:block;color:#9f9a90;font-size:8px;line-height:1.35;margin-top:2px}
+.bl18Chronicle{display:grid;gap:7px}
+.bl18Chron{display:grid;grid-template-columns:54px 1fr;gap:8px;align-items:start;border-left:3px solid #5f6667}
+.bl18Chron span{font-size:8px;color:#8f887c;text-transform:uppercase}
+.bl18Chron b{font-size:10px;line-height:1.35}
+.bl18Chron.major{border-left-color:#b69758}
+.bl18Chron.death{border-left-color:#8c4741}
+.bl18Chron.hq{border-left-color:#6d7f91}
+.bl18Memorials{display:grid;gap:8px}
+.bl18Memorial{border-left:3px solid #6d5650}
+.bl18Memorial>b{color:#ddd0b3}
+.bl18Memorial .gold{margin-top:5px}
+@media(max-width:420px){
+ .bl18RelMetric{grid-template-columns:52px 1fr 22px}
+ .bl18Chron{grid-template-columns:46px 1fr}
+ .bl18Chron b{font-size:9px}
+}
