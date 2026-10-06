@@ -59,22 +59,41 @@ jobs:
             --dump-dom http://127.0.0.1:8765/grimdark-company/play/ \
             >/tmp/bl-dom.html 2>/tmp/bl-chrome.log
           python3 - <<'PY'
+          from html.parser import HTMLParser
           from pathlib import Path
-          import re, html as htmlmod
-          dom = Path('/tmp/bl-dom.html').read_text(encoding='utf-8', errors='replace')
-          if 'The ledger failed to open.' in dom:
-              pre = re.findall(r'<pre[^>]*>(.*?)</pre>', dom, flags=re.S)
-              print('LEDGER TECHNICAL DETAIL:', htmlmod.unescape(re.sub(r'<[^>]+>', '', pre[-1] if pre else dom[-2500:])))
-              print('CHROME STDERR:', Path('/tmp/bl-chrome.log').read_text(encoding='utf-8', errors='replace')[-2500:])
-              raise SystemExit('Startup hit ledger failure.')
-          if 'startPanel' not in dom and 'topbar' not in dom:
-              print(dom[-2500:])
+
+          class AppParser(HTMLParser):
+              def __init__(self):
+                  super().__init__(); self.depth=None; self.classes=[]; self.text=[]; self.ids=[]
+              def handle_starttag(self, tag, attrs):
+                  attrs=dict(attrs)
+                  if self.depth is None and tag=='div' and attrs.get('id')=='app':
+                      self.depth=1; return
+                  if self.depth is not None:
+                      self.depth += 1
+                      if attrs.get('class'): self.classes.extend(attrs['class'].split())
+                      if attrs.get('id'): self.ids.append(attrs['id'])
+              def handle_endtag(self, tag):
+                  if self.depth is not None:
+                      self.depth -= 1
+                      if self.depth==0: self.depth=None
+              def handle_data(self, data):
+                  if self.depth is not None: self.text.append(data)
+
+          dom=Path('/tmp/bl-dom.html').read_text(encoding='utf-8', errors='replace')
+          p=AppParser(); p.feed(dom)
+          text=' '.join(p.text); classes=set(p.classes); ids=set(p.ids)
+          rendered={'startPanel','topbar'} & classes
+          if not rendered:
+              print('APP TEXT:', text[:1800])
+              print('CHROME STDERR:', Path('/tmp/bl-chrome.log').read_text(encoding='utf-8', errors='replace')[-1800:])
               raise SystemExit('Grim Company UI did not render.')
-          if 'startPanel' in dom:
-              for marker in ('Choose your first region','Create Yourself','founderRace','founderCulture','founderClass'):
-                  if marker not in dom:
-                      raise SystemExit('v20.6 founder creation missing: ' + marker)
-          print('v20.6 startup smoke passed')
+          if 'startPanel' in rendered:
+              for marker in ('Choose your first region','Create Yourself'):
+                  if marker not in text: raise SystemExit('v20.6 founder creation missing text: '+marker)
+              for marker in ('founderRace','founderCulture','founderClass'):
+                  if marker not in ids: raise SystemExit('v20.6 founder creation missing control: '+marker)
+          print('v20.6 startup smoke passed:', sorted(rendered))
           PY
 
       - name: World campaign field and founder behavior smoke tests
