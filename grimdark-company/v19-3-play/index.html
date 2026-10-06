@@ -17,7 +17,7 @@ html,body{margin:0;min-height:100%;background:#08090a;color:#efe4cc;font-family:
 </style>
 </head>
 <body>
-<div id="loading"><h2>Opening Grim Company v19.3…</h2><p>Loading the global-calendar and daily-orders build.</p><div id="loaderr"></div></div>
+<div id="loading"><h2>Opening Grim Company v19.3…</h2><p>Loading the global-calendar, healing, daily-orders and branding build.</p><div id="loaderr"></div></div>
 <div id="app"></div>
 <div class="bottomnav"><div class="inner" id="nav"></div></div>
 <div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
@@ -25,11 +25,11 @@ html,body{margin:0;min-height:100%;background:#08090a;color:#efe4cc;font-family:
 <script>
 (async function(){
   'use strict';
-  const commit='2b209de8d82299800cd2d12f782710d2a8cd5bcd';
+  const commit='0bc74d578a20f82781f7300171375149d590bf5d';
   const root='https://raw.githubusercontent.com/jonknox117/Crown-Game/'+commit+'/grimdark-company/';
   const cssFiles=['v9.css','v10.css','v11.css','v14.css','v15.css','v16.css','v17.css','v18.css','v19.css','v19-2.css','v19-stability.css','v19-3-grim-company.css'];
   const baseFiles=['v9-a.js','v9-b.js','v9-c.js','v9-d1.js','v9-d2.js','v9-d3.js','v9-d4.js','v9-e1.js','v9-e2.js','v9-f1.js'];
-  const patchFiles=['v10.js','v10-hotfix.js','v14-gameplay.js','v15-svg-portraits.js','v16-living-company.js','v17-career-svg.js','v18-living-veterans.js','v18-mechanics-audit.js','v19-polish.js','v19-polish-2.js','v19-stability.js','v19-stability-2.js','v19-stability-checks.js','v19-3-grim-company.js','v19-3-clarity.js','v19-3-time-hotfix.js'];
+  const patchFiles=['v10.js','v10-hotfix.js','v14-gameplay.js','v15-svg-portraits.js','v16-living-company.js','v17-career-svg.js','v18-living-veterans.js','v18-mechanics-audit.js','v19-polish.js','v19-polish-2.js','v19-stability.js','v19-stability-2.js','v19-stability-checks.js','v19-3-grim-company.js','v19-3-clarity.js','v19-3-time-hotfix.js','v19-3-hardening.js','v19-3-integration.js','v19-3-runtime-fix.js'];
 
   async function text(path){
     const r=await fetch(root+path,{cache:'no-store',mode:'cors'});
@@ -70,8 +70,10 @@ html,body{margin:0;min-height:100%;background:#08090a;color:#efe4cc;font-family:
       ['function gc193PatrolRegion','patrol order'],
       ['function gc193ScoutRegion','scout order'],
       ['function gc193SkullSvg','Grim Company SVG logo'],
-      ['function gc193SelfCheck','v19.3 runtime integrity check'],
-      ["const GC193_TIME_HOTFIX='19.3.2'",'calendar edge-case hardening']
+      ["const GC193_HARDENING='19.3.1'",'meaningful-order hardening'],
+      ["const GC193_INTEGRATION='19.3.3'",'calendar/order integration'],
+      ["const GC193_RUNTIME_FIX='19.3.2'",'legacy timer integration'],
+      ['function gc193RuntimeCheck','runtime integrity check']
     ];
     checks.forEach(([marker,label])=>{if(!gameJs.includes(marker))throw new Error('v19.3 '+label+' missing.');});
 
@@ -82,9 +84,17 @@ html,body{margin:0;min-height:100%;background:#08090a;color:#efe4cc;font-family:
     setTimeout(()=>{
       const ok=document.querySelector('.startPanel,.topbar');
       const loading=document.getElementById('loading');
-      if(ok&&loading) loading.remove();
-      else if(!ok) showError('Grim Company v19.3 loaded but did not render its UI.');
-    },500);
+      if(!ok)return showError('Grim Company v19.3 loaded but did not render its UI.');
+      try{
+        const audit=typeof window.__BL_AUDIT==='function'?window.__BL_AUDIT():null;
+        if(!audit||audit.grimCompany!=='19.3'||audit.globalCalendar!==true||audit.contractCompletionAdvancesDay!==false||audit.fieldOrdersReceiveHQHealing!==false||audit.backgroundTravelFrozen!==true){
+          throw new Error('v19.3 runtime audit failed.');
+        }
+        const rt=typeof window.__GC193_RUNTIME_CHECK==='function'?window.__GC193_RUNTIME_CHECK():null;
+        if(rt&&!rt.ok)throw new Error('v19.3 integrity: '+rt.issues.join('; '));
+        if(loading)loading.remove();
+      }catch(err){showError(err);}
+    },650);
   }catch(err){showError(err);}
 })();
 </script>
