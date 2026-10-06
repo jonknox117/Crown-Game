@@ -8,7 +8,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: pages-v19-5
+  group: pages-v19-9
   cancel-in-progress: true
 jobs:
   deploy:
@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Build Broken Lantern v19.5 mobile bundle
+      - name: Build Broken Lantern v19.9 mobile bundle
         run: python3 scripts/build_broken_lantern_mobile.py
       - name: Validate Broken Lantern JavaScript
         run: |
@@ -42,8 +42,15 @@ jobs:
           grep -q "function gc195RunPairEvent" grimdark-company/play/index.html
           grep -q "relationshipDailyEvents=true" grimdark-company/play/index.html
           grep -q "relationshipBattleBehavior=true" grimdark-company/play/index.html
+          grep -q "GC199_VERSION='19.9'" grimdark-company/play/index.html
+          grep -q "GC199_DAY_MS=45000" grimdark-company/play/index.html
+          grep -q "function gc199Loop" grimdark-company/play/index.html
+          grep -q "function gc199PushParty" grimdark-company/play/index.html
+          grep -q "activePlayTime=true" grimdark-company/play/index.html
+          grep -q "autonomousExpeditions=true" grimdark-company/play/index.html
+          grep -q "importantEventAutoPause=true" grimdark-company/play/index.html
           grep -q "name=\"startRegion\"" grimdark-company/play/index.html
-          test -f grimdark-company/play-1934/index.html
+          test -f grimdark-company/play-199/index.html
       - name: Browser startup smoke test
         run: |
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
@@ -56,7 +63,7 @@ jobs:
           trap 'kill $SERVER_PID 2>/dev/null || true' EXIT
           sleep 1
           "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=9000 \
-            --dump-dom http://127.0.0.1:8765/grimdark-company/play-1934/ \
+            --dump-dom http://127.0.0.1:8765/grimdark-company/play-199/ \
             >/tmp/bl-dom.html 2>/tmp/bl-chrome.log
           python3 - <<'PY'
           from html.parser import HTMLParser
@@ -96,7 +103,7 @@ jobs:
                   raise SystemExit('Browser smoke test hit ledger startup failure: ' + text[:800])
               raise SystemExit('Browser smoke test did not render Broken Lantern UI. App text: ' + text[:800])
           if 'Choose your first region' not in text and 'topbar' not in rendered:
-              raise SystemExit('v19.5 start-region selector did not render.')
+              raise SystemExit('v19.9 start-region selector did not render.')
           print('Browser startup smoke test passed:', sorted(rendered))
           PY
       - name: Setup Pages
