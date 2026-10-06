@@ -8,7 +8,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: pages-v19-3
+  group: pages-v19-4
   cancel-in-progress: true
 jobs:
   deploy:
@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Build Broken Lantern v19.3 mobile bundle
+      - name: Build Broken Lantern v19.4 mobile bundle
         run: python3 scripts/build_broken_lantern_mobile.py
       - name: Validate Broken Lantern JavaScript
         run: |
@@ -34,6 +34,11 @@ jobs:
           grep -q "GC193_HARDENING='19.3.1'" grimdark-company/play/index.html
           grep -q "GC193_INTEGRATION='19.3.3'" grimdark-company/play/index.html
           grep -q "GC193_RUNTIME_FIX='19.3.2'" grimdark-company/play/index.html
+          grep -q "GC194_VERSION='19.4'" grimdark-company/play/index.html
+          grep -q "GC194_MAX_LEVEL=20" grimdark-company/play/index.html
+          grep -q "function gc194EncounterChance" grimdark-company/play/index.html
+          grep -q "function gc194InitPayroll" grimdark-company/play/index.html
+          grep -q "name=\"startRegion\"" grimdark-company/play/index.html
           test -f grimdark-company/play-1934/index.html
       - name: Browser startup smoke test
         run: |
@@ -86,6 +91,8 @@ jobs:
               if 'The ledger failed to open.' in text:
                   raise SystemExit('Browser smoke test hit ledger startup failure: ' + text[:800])
               raise SystemExit('Browser smoke test did not render Broken Lantern UI. App text: ' + text[:800])
+          if 'Choose your first region' not in text and 'topbar' not in rendered:
+              raise SystemExit('v19.4 start-region selector did not render.')
           print('Browser startup smoke test passed:', sorted(rendered))
           PY
       - name: Setup Pages
