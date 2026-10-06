@@ -8,7 +8,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: pages-v20-00
+  group: pages-v20-1
   cancel-in-progress: true
 jobs:
   deploy:
@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Build Broken Lantern v20.00 mobile bundle
+      - name: Build Broken Lantern v20.1 mobile bundle
         run: python3 scripts/build_broken_lantern_mobile.py
       - name: Validate Broken Lantern JavaScript
         run: |
@@ -30,35 +30,25 @@ jobs:
           grep -q "__BL_AUDIT" grimdark-company/play/index.html
           grep -q "var blPortraitHTML=function" grimdark-company/play/index.html
           grep -q "BL18_MECHANICS_AUDIT" grimdark-company/play/index.html
-          grep -q "GC193_VERSION='19.3'" grimdark-company/play/index.html
-          grep -q "GC193_HARDENING='19.3.1'" grimdark-company/play/index.html
-          grep -q "GC193_INTEGRATION='19.3.3'" grimdark-company/play/index.html
-          grep -q "GC193_RUNTIME_FIX='19.3.2'" grimdark-company/play/index.html
-          grep -q "GC194_VERSION='19.4'" grimdark-company/play/index.html
           grep -q "GC194_MAX_LEVEL=20" grimdark-company/play/index.html
-          grep -q "function gc194EncounterChance" grimdark-company/play/index.html
-          grep -q "function gc194InitPayroll" grimdark-company/play/index.html
           grep -q "GC195_VERSION='19.5'" grimdark-company/play/index.html
-          grep -q "function gc195RunPairEvent" grimdark-company/play/index.html
-          grep -q "relationshipDailyEvents=true" grimdark-company/play/index.html
-          grep -q "relationshipBattleBehavior=true" grimdark-company/play/index.html
-          grep -q "GC199_VERSION='19.9'" grimdark-company/play/index.html
           grep -q "GC199_DAY_MS=45000" grimdark-company/play/index.html
-          grep -q "function gc199Loop" grimdark-company/play/index.html
-          grep -q "activePlayTime=true" grimdark-company/play/index.html
-          grep -q "autonomousExpeditions=true" grimdark-company/play/index.html
           grep -q "GC200_VERSION='20.00'" grimdark-company/play/index.html
-          grep -q "function gc200ContinuousWork" grimdark-company/play/index.html
-          grep -q "function gc200AdvanceExpedition" grimdark-company/play/index.html
-          grep -q "tickDrivenWork=true" grimdark-company/play/index.html
-          grep -q "tickDrivenEncounterHazard=true" grimdark-company/play/index.html
-          grep -q "sunMoonClock=true" grimdark-company/play/index.html
-          grep -q "expeditionTravelAnimation=true" grimdark-company/play/index.html
-          grep -q "chestOpeningFeedback=true" grimdark-company/play/index.html
-          grep -q "gc200Sky" grimdark-company/play/index.html
-          grep -q "gc200ChestScene" grimdark-company/play/index.html
+          grep -q "GC200_HOTFIX='20.00.1'" grimdark-company/play/index.html
+          grep -q "GC201_VERSION='20.1'" grimdark-company/play/index.html
+          grep -q "GC201_STANCES=\['Scout','Patrol','Train','Recover'\]" grimdark-company/play/index.html
+          grep -q "function gc201ContactRate" grimdark-company/play/index.html
+          grep -q "function gc201BattleLoop" grimdark-company/play/index.html
+          grep -q "function gc201SeedStarterContracts" grimdark-company/play/index.html
+          grep -q "sharedStanceRelationships=true" grimdark-company/play/index.html
+          grep -q "groupTraining=true" grimdark-company/play/index.html
+          grep -q "wagesRemoved=true" grimdark-company/play/index.html
+          grep -q "nativeTickContactPressure=true" grimdark-company/play/index.html
+          grep -q "autoCombatTicks=true" grimdark-company/play/index.html
+          grep -q "pushMomentum=true" grimdark-company/play/index.html
+          grep -q "carriageHorsesLead=true" grimdark-company/play/index.html
           grep -q "name=\"startRegion\"" grimdark-company/play/index.html
-          test -f grimdark-company/play-200/index.html
+          test -f grimdark-company/play-201/index.html
       - name: Browser startup smoke test
         run: |
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
@@ -71,7 +61,7 @@ jobs:
           trap 'kill $SERVER_PID 2>/dev/null || true' EXIT
           sleep 1
           "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=9000 \
-            --dump-dom http://127.0.0.1:8765/grimdark-company/play-200/ \
+            --dump-dom http://127.0.0.1:8765/grimdark-company/play/ \
             >/tmp/bl-dom.html 2>/tmp/bl-chrome.log
           python3 - <<'PY'
           from html.parser import HTMLParser
@@ -109,9 +99,11 @@ jobs:
           if not rendered:
               if 'The ledger failed to open.' in text:
                   raise SystemExit('Browser smoke test hit ledger startup failure: ' + text[:800])
-              raise SystemExit('Browser smoke test did not render Broken Lantern UI. App text: ' + text[:800])
+              raise SystemExit('Browser smoke test did not render Grim Company UI. App text: ' + text[:800])
           if 'Choose your first region' not in text and 'topbar' not in rendered:
-              raise SystemExit('v20.00 start-region selector did not render.')
+              raise SystemExit('v20.1 start-region selector did not render.')
+          if 'startPanel' in rendered and 'Risk 1 contracts' not in text:
+              raise SystemExit('v20.1 fair-start promise did not render.')
           print('Browser startup smoke test passed:', sorted(rendered))
           PY
       - name: Setup Pages
