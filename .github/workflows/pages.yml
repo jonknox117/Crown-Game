@@ -8,7 +8,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: pages-v20-1-2
+  group: pages-v20-3
   cancel-in-progress: true
 jobs:
   deploy:
@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Build Broken Lantern v20.1.2 mobile bundle
+      - name: Build Broken Lantern v20.3 mobile bundle
         run: python3 scripts/build_broken_lantern_mobile.py
       - name: Validate Broken Lantern JavaScript
         run: |
@@ -39,25 +39,25 @@ jobs:
           grep -q "GC201_STANCES=\['Scout','Patrol','Train','Recover'\]" grimdark-company/play/index.html
           grep -q "GC201_BALANCE='20.1.1'" grimdark-company/play/index.html
           grep -q "GC201_QUALITY='20.1.2'" grimdark-company/play/index.html
+          grep -q "GC220_VERSION='20.2'" grimdark-company/play/index.html
+          grep -q "GC220_STANCES=\['Scout','Odd Jobs','Train','Recover'\]" grimdark-company/play/index.html
+          grep -q "GC230_VERSION='20.3'" grimdark-company/play/index.html
           grep -q "function gc201ContactRate" grimdark-company/play/index.html
           grep -q "function gc201BattleLoop" grimdark-company/play/index.html
           grep -q "function gc201SeedStarterContracts" grimdark-company/play/index.html
           grep -q "function gc202RecoveryMetrics" grimdark-company/play/index.html
           grep -q "function gc202UpdateLiveUI" grimdark-company/play/index.html
-          grep -q "sharedStanceRelationships=true" grimdark-company/play/index.html
-          grep -q "groupTraining=true" grimdark-company/play/index.html
-          grep -q "wagesRemoved=true" grimdark-company/play/index.html
-          grep -q "nativeTickContactPressure=true" grimdark-company/play/index.html
-          grep -q "autoCombatTicks=true" grimdark-company/play/index.html
-          grep -q "pushMomentum=true" grimdark-company/play/index.html
-          grep -q "carriageHorsesLead=true" grimdark-company/play/index.html
-          grep -q "recoveryTickVisuals=true" grimdark-company/play/index.html
-          grep -q "oneTapStances=true" grimdark-company/play/index.html
-          grep -q "combatImpactFeedback=true" grimdark-company/play/index.html
-          grep -q "gc202StanceScene" grimdark-company/play/index.html
-          grep -q "gc202Vitals" grimdark-company/play/index.html
+          grep -q "oddJobsStance=true" grimdark-company/play/index.html
+          grep -q "commandDesk=true" grimdark-company/play/index.html
+          grep -q "riskThreatSeparated=true" grimdark-company/play/index.html
+          grep -q "ambientWorldPressure=true" grimdark-company/play/index.html
+          grep -q "threatExpeditionSafety=true" grimdark-company/play/index.html
+          grep -q "stabilityRecruitReliability=true" grimdark-company/play/index.html
+          grep -q "prosperityEconomyBenefits=true" grimdark-company/play/index.html
+          grep -q "contractRegionalImpact=true" grimdark-company/play/index.html
+          grep -q "__GC230_TEST" grimdark-company/play/index.html
           grep -q "name=\"startRegion\"" grimdark-company/play/index.html
-          test -f grimdark-company/play-2012/index.html
+          test -f grimdark-company/play-203/index.html
       - name: Browser startup smoke test
         run: |
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
@@ -110,11 +110,42 @@ jobs:
                   raise SystemExit('Browser smoke test hit ledger startup failure: ' + text[:800])
               raise SystemExit('Browser smoke test did not render Grim Company UI. App text: ' + text[:800])
           if 'Choose your first region' not in text and 'topbar' not in rendered:
-              raise SystemExit('v20.1.2 start-region selector did not render.')
+              raise SystemExit('v20.3 start-region selector did not render.')
           if 'startPanel' in rendered and 'Risk 1 contracts' not in text:
-              raise SystemExit('v20.1.2 fair-start promise did not render.')
+              raise SystemExit('v20.3 fair-start promise did not render.')
           print('Browser startup smoke test passed:', sorted(rendered))
           PY
+      - name: World pressure behavior smoke test
+        run: |
+          BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('grimdark-company/play/index.html')
+          html = p.read_text(encoding='utf-8')
+          probe = r'''<script>
+          setTimeout(function(){
+            try{
+              var r=window.__GC230_TEST&&window.__GC230_TEST();
+              document.body.setAttribute('data-gc230-test',r&&r.ok?'pass':'fail');
+              var n=document.createElement('pre');n.id='gc230-test-output';n.textContent=JSON.stringify(r||{});document.body.appendChild(n);
+            }catch(e){document.body.setAttribute('data-gc230-test','error');var n=document.createElement('pre');n.id='gc230-test-output';n.textContent=String(e&&e.stack||e);document.body.appendChild(n)}
+          },1200);
+          </script>'''
+          Path('grimdark-company/play/gc230-test.html').write_text(html.replace('</body>', probe + '</body>'), encoding='utf-8')
+          PY
+          python3 -m http.server 8766 --bind 127.0.0.1 >/tmp/bl230-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID 2>/dev/null || true; rm -f grimdark-company/play/gc230-test.html' EXIT
+          sleep 1
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=6000 \
+            --dump-dom http://127.0.0.1:8766/grimdark-company/play/gc230-test.html \
+            >/tmp/bl230-dom.html 2>/tmp/bl230-chrome.log
+          if ! grep -q 'data-gc230-test="pass"' /tmp/bl230-dom.html; then
+            echo "::error::v20.3 world-pressure self-check failed"
+            grep -o '<pre id="gc230-test-output">[^<]*' /tmp/bl230-dom.html || true
+            exit 1
+          fi
+          grep -o '<pre id="gc230-test-output">[^<]*' /tmp/bl230-dom.html || true
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload site
