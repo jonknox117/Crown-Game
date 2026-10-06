@@ -1,0 +1,32 @@
+/* Broken Lantern v19.2 — mobile stability hardening */
+#modal.show{overflow:hidden}
+#modal.show>#sheet{display:block;min-width:0;max-width:100%;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+/* Safety net: the modal architecture only permits #sheet as a direct child. */
+#modal.show>:not(#sheet){display:none!important}
+.bl192InspectSheet{width:min(760px,100%);max-width:100vw;overflow-x:hidden}
+.bl192InspectSheet>*{max-width:100%;min-width:0}
+.bl192LivingStack{display:block;width:100%;min-width:0;max-width:100%;overflow:hidden;margin-top:2px}
+.bl192LivingStack>.sectionTitle{display:flex;width:100%;min-width:0}
+.bl192LivingStack>.card{display:block;width:100%;min-width:0;max-width:100%;margin-left:0;margin-right:0}
+.bl192LivingStack .bl18VeteranSummary{display:grid}
+.bl192LivingStack .bl18FearRow{display:flex;min-width:0}
+.bl192LivingStack .bl18FearRow>*{min-width:0;overflow-wrap:anywhere}
+.bl192LivingStack .bl18Trait,.bl192LivingStack .bl18MonsterRow,.bl192LivingStack .bl18RelationCard{min-width:0;overflow-wrap:anywhere;word-break:normal}
+.bl192InspectSheet .sectionTitle{min-width:0;max-width:100%}
+.bl192InspectSheet .sectionTitle h3{min-width:0;overflow-wrap:anywhere}
+.bl192InspectSheet .sectionTitle span{min-width:0;text-align:right}
+.bl192InspectSheet .buildLine{min-width:0;grid-template-columns:minmax(72px,80px) minmax(0,1fr) auto}
+.bl192InspectSheet .buildLine span{min-width:0;overflow-wrap:anywhere}
+.bl192InspectSheet .skillGrid{min-width:0;width:100%}
+.bl192InspectSheet .card,.bl192InspectSheet .notice,.bl192InspectSheet .list{min-width:0;max-width:100%}
+.bl192InspectSheet .bl19BadgeRow{min-width:0;max-width:100%;overflow:hidden}
+.bl192InspectSheet .bl19Badge{max-width:100%}
+.bl192InspectSheet .bl19Badge>span:last-child{overflow:hidden;text-overflow:ellipsis}
+@media(max-width:420px){
+ .sheet.bl192InspectSheet{padding-left:10px;padding-right:10px}
+ .bl192InspectSheet .buildLine{grid-template-columns:68px minmax(0,1fr) 34px;gap:5px}
+ .bl192InspectSheet .buildLine strong{font-size:8px}
+ .bl192InspectSheet .buildLine span{font-size:8px}
+ .bl192LivingStack>.sectionTitle{margin-top:13px}
+ .bl192LivingStack .bl18FearRow{align-items:flex-start}
+}
