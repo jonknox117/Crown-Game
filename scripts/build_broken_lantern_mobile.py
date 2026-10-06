@@ -21,7 +21,25 @@ patch_files = [
 ]
 
 css = '\n\n'.join((game / name).read_text(encoding='utf-8') for name in css_files).replace('</style>', '<\\/style>')
-base_js = ''.join((game / name).read_text(encoding='utf-8') for name in parts)
+
+base_parts = []
+for name in parts:
+    text = (game / name).read_text(encoding='utf-8')
+    if name == 'v9-b.js':
+        # Startup must never wait forever on IndexedDB. Safari private/embedded
+        # contexts and headless browsers can leave open/get requests pending.
+        # LocalStorage remains the first save source; this only makes the backup
+        # database fail soft without deleting or mutating any saved company.
+        old_open = "function idbOpen(name='brokenLanternCanonical'){return new Promise(resolve=>{if(!('indexedDB'in window))return resolve(null);try{const r=indexedDB.open(name,1);r.onupgradeneeded=()=>{const db=r.result;if(!db.objectStoreNames.contains('saves'))db.createObjectStore('saves')};r.onsuccess=()=>resolve(r.result);r.onerror=()=>resolve(null)}catch(e){resolve(null)}})}"
+        new_open = "const BL_IDB_BOOT_TIMEOUT_MS=2000;\nfunction idbOpen(name='brokenLanternCanonical'){return new Promise(resolve=>{if(!('indexedDB'in window))return resolve(null);let settled=false,timer=null;const finish=v=>{if(settled)return;settled=true;if(timer)clearTimeout(timer);resolve(v)};timer=setTimeout(()=>finish(null),BL_IDB_BOOT_TIMEOUT_MS);try{const r=indexedDB.open(name,1);r.onupgradeneeded=()=>{const db=r.result;if(!db.objectStoreNames.contains('saves'))db.createObjectStore('saves')};r.onsuccess=()=>finish(r.result);r.onerror=()=>finish(null);r.onblocked=()=>finish(null)}catch(e){finish(null)}})}"
+        old_get = "async function idbGet(key=SAVE_KEY,name='brokenLanternCanonical'){const db=await idbOpen(name);if(!db)return null;return new Promise(resolve=>{try{const tx=db.transaction('saves','readonly'),r=tx.objectStore('saves').get(key);r.onsuccess=()=>resolve(r.result||null);r.onerror=()=>resolve(null)}catch(e){resolve(null)}})}"
+        new_get = "async function idbGet(key=SAVE_KEY,name='brokenLanternCanonical'){const db=await idbOpen(name);if(!db)return null;return new Promise(resolve=>{let settled=false,timer=null;const finish=v=>{if(settled)return;settled=true;if(timer)clearTimeout(timer);resolve(v)};timer=setTimeout(()=>finish(null),BL_IDB_BOOT_TIMEOUT_MS);try{const tx=db.transaction('saves','readonly'),r=tx.objectStore('saves').get(key);r.onsuccess=()=>finish(r.result||null);r.onerror=()=>finish(null);tx.onabort=()=>finish(null);tx.onerror=()=>finish(null)}catch(e){finish(null)}})}"
+        if old_open not in text or old_get not in text:
+            raise SystemExit('Broken Lantern persistence bootstrap no longer matches expected source; refusing an unsafe build patch.')
+        text = text.replace(old_open, new_open, 1).replace(old_get, new_get, 1)
+    base_parts.append(text)
+base_js = ''.join(base_parts)
+
 f2 = (game / 'v9-f2.js').read_text(encoding='utf-8')
 patches = []
 for name in patch_files:
@@ -49,7 +67,8 @@ required = [
     'function gc193AdvanceDay', 'function gc193HealAdventurer',
     'function gc193PatrolRegion', 'function gc193ScoutRegion',
     "const GC193_HARDENING='19.3.1'", "const GC193_INTEGRATION='19.3.3'",
-    "const GC193_RUNTIME_FIX='19.3.2'", 'function gc193RuntimeCheck'
+    "const GC193_RUNTIME_FIX='19.3.2'", 'function gc193RuntimeCheck',
+    'BL_IDB_BOOT_TIMEOUT_MS=2000'
 ]
 missing = [x for x in required if x not in js]
 if missing:
@@ -70,7 +89,7 @@ preboot = r'''(function(){
   }
   window.addEventListener('error',function(e){setTimeout(function(){showFailure(e.message)},0)});
   window.addEventListener('unhandledrejection',function(e){setTimeout(function(){showFailure(e.reason)},0)});
-  setTimeout(function(){if(!document.querySelector('.topbar')&&!document.querySelector('.startPanel'))showFailure('Startup timed out.')},5000);
+  setTimeout(function(){if(!document.querySelector('.topbar')&&!document.querySelector('.startPanel'))showFailure('Startup timed out.')},6500);
 })();'''
 
 html = f'''<!doctype html>
