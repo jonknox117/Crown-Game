@@ -8,7 +8,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: pages-v20-8
+  group: pages-v21-0-1
   cancel-in-progress: true
 jobs:
   deploy:
@@ -20,8 +20,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Build Grim Company v20.8 mobile bundle
-        run: python3 scripts/build_grim_company_v20_8.py
+      - name: Build Grim Company v21.0.1 mobile bundle
+        run: python3 scripts/build_grim_company_v21_0_1.py
 
       - name: Validate JavaScript and release markers
         run: |
@@ -33,6 +33,10 @@ jobs:
           grep -q "GC260_VERSION='20.6'" grimdark-company/play/index.html
           grep -q "GC270_VERSION='20.7'" grimdark-company/play/index.html
           grep -q "GC280_VERSION='20.8'" grimdark-company/play/index.html
+          grep -q "GC290_VERSION='20.9'" grimdark-company/play/index.html
+          grep -q "GC291_VERSION='20.9.1'" grimdark-company/play/index.html
+          grep -q "GC300_VERSION='21.0'" grimdark-company/play/index.html
+          grep -q "GC301_VERSION='21.0.1'" grimdark-company/play/index.html
           grep -q "playerCharacterIsRosterMember=true" grimdark-company/play/index.html
           grep -q "founderCharacterCreation=true" grimdark-company/play/index.html
           grep -q "modularPortraitSelection=true" grimdark-company/play/index.html
@@ -44,15 +48,28 @@ jobs:
           grep -q "companyFoundingIsMilestone=true" grimdark-company/play/index.html
           grep -q "realRosterCommanders=true" grimdark-company/play/index.html
           grep -q "commandersUseRealContracts=true" grimdark-company/play/index.html
+          grep -q "itemTriggerEngine=true" grimdark-company/play/index.html
+          grep -q "rarityBehaviorIdentity=true" grimdark-company/play/index.html
+          grep -q "structuredCareerHistory=true" grimdark-company/play/index.html
+          grep -q "earnedTitles=true" grimdark-company/play/index.html
+          grep -q "persistentPartyHistory=true" grimdark-company/play/index.html
+          grep -q "partyTraditionsHaveEffects=true" grimdark-company/play/index.html
           grep -q "__GC230_TEST" grimdark-company/play/index.html
           grep -q "__GC240_TEST" grimdark-company/play/index.html
           grep -q "__GC250_TEST" grimdark-company/play/index.html
           grep -q "__GC260_TEST" grimdark-company/play/index.html
           grep -q "__GC270_TEST" grimdark-company/play/index.html
           grep -q "__GC280_TEST" grimdark-company/play/index.html
+          grep -q "__GC290_TEST" grimdark-company/play/index.html
+          grep -q "__GC300_TEST" grimdark-company/play/index.html
+          grep -q "__GC301_TEST" grimdark-company/play/index.html
           test -f grimdark-company/play-206/index.html
           test -f grimdark-company/play-207/index.html
           test -f grimdark-company/play-208/index.html
+          test -f grimdark-company/play-209/index.html
+          test -f grimdark-company/play-2091/index.html
+          test -f grimdark-company/play-210/index.html
+          test -f grimdark-company/play-2101/index.html
 
       - name: Browser startup smoke test
         run: |
@@ -104,10 +121,10 @@ jobs:
               for marker in ('founderRace','founderCulture','founderClass'):
                   if marker not in ids: raise SystemExit('v20.8 character creation missing control: '+marker)
           if 'companyName' in ids: raise SystemExit('v20.8 should not ask for a company name before play begins.')
-          print('v20.8 startup smoke passed:', sorted(rendered))
+          print('v21.0.1 startup smoke passed:', sorted(rendered))
           PY
 
-      - name: Progression command and legacy behavior smoke tests
+      - name: Full progression loot and legacy behavior smoke tests
         run: |
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
           python3 - <<'PY'
@@ -123,9 +140,12 @@ jobs:
                 field:window.__GC250_TEST&&window.__GC250_TEST(),
                 founder:window.__GC260_TEST&&window.__GC260_TEST(),
                 freeblade:window.__GC270_TEST&&window.__GC270_TEST(),
-                command:window.__GC280_TEST&&window.__GC280_TEST()
+                command:window.__GC280_TEST&&window.__GC280_TEST(),
+                loot:window.__GC290_TEST&&window.__GC290_TEST(),
+                veteran:window.__GC300_TEST&&window.__GC300_TEST(),
+                partyLegacy:window.__GC301_TEST&&window.__GC301_TEST()
               };
-              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok;
+              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok;
               document.body.setAttribute('data-all-tests',ok?'pass':'fail');
               var n=document.createElement('pre');n.id='all-test-output';n.textContent=JSON.stringify(out);document.body.appendChild(n);
             }catch(e){
