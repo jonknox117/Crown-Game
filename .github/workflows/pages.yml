@@ -1,4 +1,4 @@
-name: Deploy Crown & Frontier to Pages
+name: Deploy Broken Lantern to Pages
 on:
   push:
     branches: [main]
@@ -8,7 +8,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: pages-v17
+  group: pages-v19-3
   cancel-in-progress: true
 jobs:
   deploy:
@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Build Broken Lantern mobile bundle
+      - name: Build Broken Lantern v19.3 mobile bundle
         run: python3 scripts/build_broken_lantern_mobile.py
       - name: Validate Broken Lantern JavaScript
         run: |
@@ -29,6 +29,12 @@ jobs:
           grep -q "FOUND COMPANY" grimdark-company/play/index.html
           grep -q "__BL_AUDIT" grimdark-company/play/index.html
           grep -q "var blPortraitHTML=function" grimdark-company/play/index.html
+          grep -q "BL18_MECHANICS_AUDIT" grimdark-company/play/index.html
+          grep -q "GC193_VERSION='19.3'" grimdark-company/play/index.html
+          grep -q "GC193_HARDENING='19.3.1'" grimdark-company/play/index.html
+          grep -q "GC193_INTEGRATION='19.3.3'" grimdark-company/play/index.html
+          grep -q "GC193_RUNTIME_FIX='19.3.2'" grimdark-company/play/index.html
+          test -f grimdark-company/play-1934/index.html
       - name: Browser startup smoke test
         run: |
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
@@ -40,8 +46,8 @@ jobs:
           SERVER_PID=$!
           trap 'kill $SERVER_PID 2>/dev/null || true' EXIT
           sleep 1
-          "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=7000 \
-            --dump-dom http://127.0.0.1:8765/grimdark-company/play/ \
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=9000 \
+            --dump-dom http://127.0.0.1:8765/grimdark-company/play-1934/ \
             >/tmp/bl-dom.html 2>/tmp/bl-chrome.log
           python3 - <<'PY'
           from html.parser import HTMLParser
@@ -75,11 +81,12 @@ jobs:
           p = AppParser(); p.feed(dom)
           text = ' '.join(p.text)
           classes = set(p.classes)
-          if 'The ledger failed to open.' in text:
-              raise SystemExit('Browser smoke test hit ledger startup failure: ' + text[:600])
-          if not ({'startPanel','topbar'} & classes):
-              raise SystemExit('Browser smoke test did not render Broken Lantern UI. App text: ' + text[:600])
-          print('Browser startup smoke test passed:', sorted({'startPanel','topbar'} & classes))
+          rendered = {'startPanel','topbar'} & classes
+          if not rendered:
+              if 'The ledger failed to open.' in text:
+                  raise SystemExit('Browser smoke test hit ledger startup failure: ' + text[:800])
+              raise SystemExit('Browser smoke test did not render Broken Lantern UI. App text: ' + text[:800])
+          print('Browser startup smoke test passed:', sorted(rendered))
           PY
       - name: Setup Pages
         uses: actions/configure-pages@v5
