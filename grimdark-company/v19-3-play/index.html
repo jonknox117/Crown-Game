@@ -25,11 +25,11 @@ html,body{margin:0;min-height:100%;background:#08090a;color:#efe4cc;font-family:
 <script>
 (async function(){
   'use strict';
-  const commit='714c4e1dea0b8ee3f5396d9732476f9f5c072561';
+  const commit='2b209de8d82299800cd2d12f782710d2a8cd5bcd';
   const root='https://raw.githubusercontent.com/jonknox117/Crown-Game/'+commit+'/grimdark-company/';
   const cssFiles=['v9.css','v10.css','v11.css','v14.css','v15.css','v16.css','v17.css','v18.css','v19.css','v19-2.css','v19-stability.css','v19-3-grim-company.css'];
   const baseFiles=['v9-a.js','v9-b.js','v9-c.js','v9-d1.js','v9-d2.js','v9-d3.js','v9-d4.js','v9-e1.js','v9-e2.js','v9-f1.js'];
-  const patchFiles=['v10.js','v10-hotfix.js','v14-gameplay.js','v15-svg-portraits.js','v16-living-company.js','v17-career-svg.js','v18-living-veterans.js','v18-mechanics-audit.js','v19-polish.js','v19-polish-2.js','v19-stability.js','v19-stability-2.js','v19-stability-checks.js','v19-3-grim-company.js','v19-3-clarity.js'];
+  const patchFiles=['v10.js','v10-hotfix.js','v14-gameplay.js','v15-svg-portraits.js','v16-living-company.js','v17-career-svg.js','v18-living-veterans.js','v18-mechanics-audit.js','v19-polish.js','v19-polish-2.js','v19-stability.js','v19-stability-2.js','v19-stability-checks.js','v19-3-grim-company.js','v19-3-clarity.js','v19-3-time-hotfix.js'];
 
   async function text(path){
     const r=await fetch(root+path,{cache:'no-store',mode:'cors'});
@@ -70,7 +70,8 @@ html,body{margin:0;min-height:100%;background:#08090a;color:#efe4cc;font-family:
       ['function gc193PatrolRegion','patrol order'],
       ['function gc193ScoutRegion','scout order'],
       ['function gc193SkullSvg','Grim Company SVG logo'],
-      ['function gc193SelfCheck','v19.3 runtime integrity check']
+      ['function gc193SelfCheck','v19.3 runtime integrity check'],
+      ["const GC193_TIME_HOTFIX='19.3.2'",'calendar edge-case hardening']
     ];
     checks.forEach(([marker,label])=>{if(!gameJs.includes(marker))throw new Error('v19.3 '+label+' missing.');});
 
