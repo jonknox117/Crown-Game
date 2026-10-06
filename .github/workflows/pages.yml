@@ -8,7 +8,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: pages-v20-6
+  group: pages-v20-8
   cancel-in-progress: true
 jobs:
   deploy:
@@ -20,8 +20,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Build Grim Company v20.6 mobile bundle
-        run: python3 scripts/build_broken_lantern_mobile.py
+      - name: Build Grim Company v20.8 mobile bundle
+        run: python3 scripts/build_grim_company_v20_8.py
 
       - name: Validate JavaScript and release markers
         run: |
@@ -31,6 +31,8 @@ jobs:
           grep -q "GC240_VERSION='20.4'" grimdark-company/play/index.html
           grep -q "GC250_VERSION='20.5'" grimdark-company/play/index.html
           grep -q "GC260_VERSION='20.6'" grimdark-company/play/index.html
+          grep -q "GC270_VERSION='20.7'" grimdark-company/play/index.html
+          grep -q "GC280_VERSION='20.8'" grimdark-company/play/index.html
           grep -q "playerCharacterIsRosterMember=true" grimdark-company/play/index.html
           grep -q "founderCharacterCreation=true" grimdark-company/play/index.html
           grep -q "modularPortraitSelection=true" grimdark-company/play/index.html
@@ -38,11 +40,19 @@ jobs:
           grep -q "directCommandExpeditions=true" grimdark-company/play/index.html
           grep -q "companyContinuesDuringFounderDecision=true" grimdark-company/play/index.html
           grep -q "founderNoPlotArmor=true" grimdark-company/play/index.html
+          grep -q "freebladeOpening=true" grimdark-company/play/index.html
+          grep -q "companyFoundingIsMilestone=true" grimdark-company/play/index.html
+          grep -q "realRosterCommanders=true" grimdark-company/play/index.html
+          grep -q "commandersUseRealContracts=true" grimdark-company/play/index.html
           grep -q "__GC230_TEST" grimdark-company/play/index.html
           grep -q "__GC240_TEST" grimdark-company/play/index.html
           grep -q "__GC250_TEST" grimdark-company/play/index.html
           grep -q "__GC260_TEST" grimdark-company/play/index.html
+          grep -q "__GC270_TEST" grimdark-company/play/index.html
+          grep -q "__GC280_TEST" grimdark-company/play/index.html
           test -f grimdark-company/play-206/index.html
+          test -f grimdark-company/play-207/index.html
+          test -f grimdark-company/play-208/index.html
 
       - name: Browser startup smoke test
         run: |
@@ -89,14 +99,15 @@ jobs:
               print('CHROME STDERR:', Path('/tmp/bl-chrome.log').read_text(encoding='utf-8', errors='replace')[-1800:])
               raise SystemExit('Grim Company UI did not render.')
           if 'startPanel' in rendered:
-              for marker in ('Choose your first region','Create Yourself'):
-                  if marker not in text: raise SystemExit('v20.6 founder creation missing text: '+marker)
+              for marker in ('Choose where your story begins','Create Yourself','BEGIN AS A FREEBLADE'):
+                  if marker not in text: raise SystemExit('v20.8 opening missing text: '+marker)
               for marker in ('founderRace','founderCulture','founderClass'):
-                  if marker not in ids: raise SystemExit('v20.6 founder creation missing control: '+marker)
-          print('v20.6 startup smoke passed:', sorted(rendered))
+                  if marker not in ids: raise SystemExit('v20.8 character creation missing control: '+marker)
+          if 'companyName' in ids: raise SystemExit('v20.8 should not ask for a company name before play begins.')
+          print('v20.8 startup smoke passed:', sorted(rendered))
           PY
 
-      - name: World campaign field and founder behavior smoke tests
+      - name: Progression command and legacy behavior smoke tests
         run: |
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
           python3 - <<'PY'
@@ -110,9 +121,11 @@ jobs:
                 world:window.__GC230_TEST&&window.__GC230_TEST(),
                 campaign:window.__GC240_TEST&&window.__GC240_TEST(),
                 field:window.__GC250_TEST&&window.__GC250_TEST(),
-                founder:window.__GC260_TEST&&window.__GC260_TEST()
+                founder:window.__GC260_TEST&&window.__GC260_TEST(),
+                freeblade:window.__GC270_TEST&&window.__GC270_TEST(),
+                command:window.__GC280_TEST&&window.__GC280_TEST()
               };
-              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok;
+              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok;
               document.body.setAttribute('data-all-tests',ok?'pass':'fail');
               var n=document.createElement('pre');n.id='all-test-output';n.textContent=JSON.stringify(out);document.body.appendChild(n);
             }catch(e){
