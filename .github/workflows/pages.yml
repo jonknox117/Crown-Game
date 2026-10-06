@@ -8,7 +8,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: pages-v20-3
+  group: pages-v20-4
   cancel-in-progress: true
 jobs:
   deploy:
@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Build Broken Lantern v20.3 mobile bundle
+      - name: Build Broken Lantern v20.4 mobile bundle
         run: python3 scripts/build_broken_lantern_mobile.py
       - name: Validate Broken Lantern JavaScript
         run: |
@@ -42,6 +42,7 @@ jobs:
           grep -q "GC220_VERSION='20.2'" grimdark-company/play/index.html
           grep -q "GC220_STANCES=\['Scout','Odd Jobs','Train','Recover'\]" grimdark-company/play/index.html
           grep -q "GC230_VERSION='20.3'" grimdark-company/play/index.html
+          grep -q "GC240_VERSION='20.4'" grimdark-company/play/index.html
           grep -q "function gc201ContactRate" grimdark-company/play/index.html
           grep -q "function gc201BattleLoop" grimdark-company/play/index.html
           grep -q "function gc201SeedStarterContracts" grimdark-company/play/index.html
@@ -55,9 +56,16 @@ jobs:
           grep -q "stabilityRecruitReliability=true" grimdark-company/play/index.html
           grep -q "prosperityEconomyBenefits=true" grimdark-company/play/index.html
           grep -q "contractRegionalImpact=true" grimdark-company/play/index.html
+          grep -q "regionalCampaigns=true" grimdark-company/play/index.html
+          grep -q "campaignOperationsReuseContracts=true" grimdark-company/play/index.html
+          grep -q "campaignRewardsEscrowed=true" grimdark-company/play/index.html
+          grep -q "campaignFailurePersists=true" grimdark-company/play/index.html
+          grep -q "campaignFinalePayoutOnce=true" grimdark-company/play/index.html
+          grep -q "campaignsSaveSafe=true" grimdark-company/play/index.html
           grep -q "__GC230_TEST" grimdark-company/play/index.html
+          grep -q "__GC240_TEST" grimdark-company/play/index.html
           grep -q "name=\"startRegion\"" grimdark-company/play/index.html
-          test -f grimdark-company/play-203/index.html
+          test -f grimdark-company/play-204/index.html
       - name: Browser startup smoke test
         run: |
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
@@ -110,9 +118,9 @@ jobs:
                   raise SystemExit('Browser smoke test hit ledger startup failure: ' + text[:800])
               raise SystemExit('Browser smoke test did not render Grim Company UI. App text: ' + text[:800])
           if 'Choose your first region' not in text and 'topbar' not in rendered:
-              raise SystemExit('v20.3 start-region selector did not render.')
+              raise SystemExit('v20.4 start-region selector did not render.')
           if 'startPanel' in rendered and 'Risk 1 contracts' not in text:
-              raise SystemExit('v20.3 fair-start promise did not render.')
+              raise SystemExit('v20.4 fair-start promise did not render.')
           print('Browser startup smoke test passed:', sorted(rendered))
           PY
       - name: World pressure behavior smoke test
@@ -146,6 +154,37 @@ jobs:
             exit 1
           fi
           grep -o '<pre id="gc230-test-output">[^<]*' /tmp/bl230-dom.html || true
+      - name: Regional campaign behavior smoke test
+        run: |
+          BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('grimdark-company/play/index.html')
+          html = p.read_text(encoding='utf-8')
+          probe = r'''<script>
+          setTimeout(function(){
+            try{
+              var r=window.__GC240_TEST&&window.__GC240_TEST();
+              document.body.setAttribute('data-gc240-test',r&&r.ok?'pass':'fail');
+              var n=document.createElement('pre');n.id='gc240-test-output';n.textContent=JSON.stringify(r||{});document.body.appendChild(n);
+            }catch(e){document.body.setAttribute('data-gc240-test','error');var n=document.createElement('pre');n.id='gc240-test-output';n.textContent=String(e&&e.stack||e);document.body.appendChild(n)}
+          },1200);
+          </script>'''
+          Path('grimdark-company/play/gc240-test.html').write_text(html.replace('</body>', probe + '</body>'), encoding='utf-8')
+          PY
+          python3 -m http.server 8767 --bind 127.0.0.1 >/tmp/bl240-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID 2>/dev/null || true; rm -f grimdark-company/play/gc240-test.html' EXIT
+          sleep 1
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=7000 \
+            --dump-dom http://127.0.0.1:8767/grimdark-company/play/gc240-test.html \
+            >/tmp/bl240-dom.html 2>/tmp/bl240-chrome.log
+          if ! grep -q 'data-gc240-test="pass"' /tmp/bl240-dom.html; then
+            echo "::error::v20.4 campaign self-check failed"
+            grep -o '<pre id="gc240-test-output">[^<]*' /tmp/bl240-dom.html || true
+            exit 1
+          fi
+          grep -o '<pre id="gc240-test-output">[^<]*' /tmp/bl240-dom.html || true
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload site
