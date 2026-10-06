@@ -9,7 +9,7 @@ function gc280CompanyCommandHTML(){
  if(!gc280NetworkUnlocked())return'';
  const ids=REGION_ORDER.filter(id=>state.regions[id]?.hq?.established);
  const managed=ids.filter(id=>gc280Commander(id)&&gc280CommandState(id).autonomy).length;
- return '<div class="gc280Overview"><div class="statline"><div><span>COMPANY COMMAND</span><b>'+ids.length+' headquarters • '+managed+' delegated</b></div></div><div class="tiny muted">Appoint veterans to operate distant headquarters, or keep any region under direct control.</div></div>';
+ return '<div class="card gc280Overview"><div class="statline"><div><span>COMPANY COMMAND</span><b>'+ids.length+' headquarters • '+managed+' delegated</b></div></div><div class="tiny muted">Appoint veterans to operate distant headquarters, or keep any region under direct control.</div></div>';
 }
 const _renderWorldGC280=renderWorld;
 renderWorld=function(){
