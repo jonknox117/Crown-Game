@@ -1,0 +1,72 @@
+/* Grim Company v20.00 — Hello, World feedback layer */
+.gc200ClockBar{overflow:hidden}
+.gc200Sky{position:relative;height:46px;margin:7px 0 6px;border:1px solid rgba(255,255,255,.08);border-radius:7px;overflow:hidden;background:linear-gradient(180deg,#1a2531 0%,#5a4a3d 66%,#171512 100%);transition:background .8s ease,box-shadow .8s ease}
+.gc200Sky[data-phase="day"]{background:linear-gradient(180deg,#324a5e 0%,#9b7150 68%,#2d241c 100%);box-shadow:inset 0 -10px 24px rgba(236,151,70,.08)}
+.gc200Sky[data-phase="night"]{background:linear-gradient(180deg,#07101d 0%,#182337 67%,#15191f 100%);box-shadow:inset 0 0 28px rgba(85,115,174,.08)}
+.gc200Sky>span{position:absolute;right:8px;bottom:5px;font-size:8px;letter-spacing:.19em;font-weight:800;color:rgba(255,255,255,.48)}
+.gc200Horizon{position:absolute;left:0;right:0;bottom:0;height:12px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.45))}
+.gc200Sun,.gc200Moon{position:absolute;width:21px;height:21px;margin-left:-10px;transition:opacity .25s ease;filter:drop-shadow(0 0 7px rgba(255,255,255,.24));pointer-events:none}
+.gc200Sun i{display:block;width:17px;height:17px;margin:2px;border-radius:50%;background:#ffd56a;box-shadow:0 0 0 2px rgba(255,199,70,.18),0 0 14px rgba(255,181,61,.62)}
+.gc200Moon i{display:block;width:17px;height:17px;margin:2px;border-radius:50%;background:#dde5ef;box-shadow:0 0 11px rgba(186,204,231,.42)}
+.gc200Moon i:after{content:"";position:absolute;width:14px;height:14px;left:7px;top:0;border-radius:50%;background:#111b29}
+
+.gc200Travel{position:relative;height:96px;margin:8px 0 9px;border:1px solid rgba(210,181,135,.16);border-radius:7px;overflow:hidden;background:linear-gradient(180deg,#181c21 0%,#2d2b28 65%,#191512 66%,#0f0d0b 100%)}
+.gc200TravelSky{position:absolute;inset:0 0 31px;background:linear-gradient(180deg,rgba(75,87,95,.2),rgba(138,106,74,.08))}
+.gc200TravelSky i{position:absolute;width:28px;height:2px;border-radius:50%;background:rgba(221,217,204,.08);animation:gc200Cloud 5s linear infinite}
+.gc200TravelSky i:nth-child(1){top:18px;left:15%;animation-duration:6s}
+.gc200TravelSky i:nth-child(2){top:31px;left:63%;width:38px;animation-duration:8s}
+.gc200TravelSky i:nth-child(3){top:10px;left:84%;width:18px;animation-duration:4.8s}
+.gc200Ground{position:absolute;left:0;right:0;bottom:0;height:31px;background:repeating-linear-gradient(90deg,#30261d 0,#30261d 22px,#473729 23px,#473729 26px);animation:gc200Road .65s linear infinite;opacity:.78}
+.gc200Wagon{position:absolute;left:50%;bottom:10px;width:275px;max-width:96%;height:78px;transform:translateX(-50%);overflow:visible}
+.gc200Wagon .gc200Horse{fill:#78614a;stroke:#bda17d;stroke-width:2;animation:gc200HorseBob .46s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+.gc200Wagon .horseB{animation-delay:-.23s;fill:#695443}
+.gc200Wagon .gc200Horse path.leg{fill:none;stroke:#bda17d;stroke-width:4;stroke-linecap:round;animation:gc200Leg .34s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:top}
+.gc200Wagon .horseB path.leg{animation-delay:-.17s}
+.gc200Harness{fill:none;stroke:#967653;stroke-width:2}
+.gc200Cart path:first-child{fill:#55412f;stroke:#a98661;stroke-width:2}
+.gc200Cart path:nth-child(2){fill:none;stroke:#9a8164;stroke-width:7;stroke-linecap:round}
+.gc200Cart .wheel{fill:#231a14;stroke:#a07a55;stroke-width:4;transform-box:fill-box;transform-origin:center;animation:gc200Wheel .72s linear infinite}
+.gc200Cart path:last-child,.gc200Cart path:nth-last-child(2){fill:none;stroke:#a07a55;stroke-width:2}
+.gc200TravelCaption{position:absolute;top:6px;left:8px;padding:3px 6px;border-radius:4px;background:rgba(0,0,0,.38);font-size:8px;letter-spacing:.15em;font-weight:900;color:#c9b89d}
+.gc200Travel.combat{background:linear-gradient(180deg,#251414 0%,#3a2420 65%,#17100e 100%);box-shadow:inset 0 0 25px rgba(178,35,35,.12)}
+.gc200Travel.combat .gc200Ground,.gc200Travel.combat .gc200Horse,.gc200Travel.combat .gc200Horse path.leg,.gc200Travel.combat .wheel,.gc200Travel.combat .gc200TravelSky i{animation-play-state:paused}
+.gc200Travel.combat .gc200TravelCaption{color:#ffd0ca;background:rgba(111,24,22,.72)}
+@keyframes gc200Road{to{background-position:-26px 0}}
+@keyframes gc200Cloud{from{transform:translateX(0)}to{transform:translateX(-90px)}}
+@keyframes gc200HorseBob{from{transform:translateY(0)}to{transform:translateY(-2px)}}
+@keyframes gc200Leg{from{transform:rotate(10deg)}to{transform:rotate(-12deg)}}
+@keyframes gc200Wheel{to{transform:rotate(360deg)}}
+
+.gc200WorkLive{margin:7px 0 3px;padding:7px 8px;border:1px solid rgba(197,166,119,.12);border-radius:5px;background:rgba(255,255,255,.018)}
+.gc200WorkLive>div{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.gc200WorkLive b{font-size:9px;letter-spacing:.12em;color:#d2ad78;white-space:nowrap}
+.gc200WorkLive span{font-size:9px;line-height:1.25;color:#8f867a;text-align:right}
+.gc200WorkLive>i{display:block;height:3px;margin-top:6px;border-radius:4px;background:#16130f;overflow:hidden}
+.gc200WorkLive>i>em{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#7d5936,#c29157);transition:width .24s linear}
+
+.gc200ChestScene{position:relative;height:188px;margin:8px 0 12px;overflow:hidden;border-radius:8px;border:1px solid rgba(209,170,105,.15);background:radial-gradient(circle at 50% 77%,#21180f 0,#100d0a 46%,#080809 100%)}
+.gc200Chest{position:absolute;left:50%;bottom:28px;width:116px;height:88px;transform:translateX(-50%);filter:drop-shadow(0 12px 14px rgba(0,0,0,.6))}
+.gc200ChestBody{position:absolute;left:5px;right:5px;bottom:0;height:53px;border:3px solid #9c7344;border-radius:4px 4px 9px 9px;background:linear-gradient(180deg,#6d4727,#352316);box-shadow:inset 0 6px rgba(255,255,255,.025)}
+.gc200ChestBody:before,.gc200ChestLid:before{content:"";position:absolute;left:14px;right:14px;height:4px;background:#b48a53;opacity:.7}
+.gc200ChestBody:before{top:19px}
+.gc200ChestBody span{position:absolute;left:50%;top:14px;width:14px;height:18px;transform:translateX(-50%);border-radius:3px;background:#c59851;border:2px solid #5d452b}
+.gc200ChestLid{position:absolute;left:3px;right:3px;top:18px;height:37px;border:3px solid #9c7344;border-radius:18px 18px 4px 4px;background:linear-gradient(180deg,#76502c,#442b19);transform-origin:50% 100%;z-index:2}
+.gc200ChestLid:before{bottom:4px}
+.gc200Chest.opening .gc200ChestLid,.gc200ChestScene.opening .gc200ChestLid{animation:gc200ChestOpen .52s cubic-bezier(.24,.73,.3,1) forwards}
+.gc200Glow{position:absolute;left:50%;bottom:57px;width:150px;height:120px;transform:translateX(-50%) scale(.2);border-radius:50%;opacity:0;background:radial-gradient(circle,rgba(255,226,130,.9),rgba(255,180,65,.22) 38%,transparent 70%);animation:gc200Glow .72s .24s ease-out forwards}
+.gc200Particles{position:absolute;inset:0;pointer-events:none}
+.gc200Particles i{position:absolute;left:50%;bottom:74px;width:4px;height:4px;border-radius:50%;background:#f4cf72;opacity:0;--a:calc(var(--i) * 30deg);animation:gc200Spark .7s .34s ease-out forwards}
+.gc200Particles i:nth-child(2n){width:3px;height:3px;background:#fff0bd}
+.gc200ChestReveal{opacity:0;transform:translateY(14px) scale(.985);transition:opacity .28s ease,transform .34s cubic-bezier(.2,.75,.2,1)}
+.gc200ChestReveal.shown{opacity:1;transform:none}
+@keyframes gc200ChestOpen{0%{transform:rotateX(0) translateY(0)}35%{transform:rotateX(-18deg) translateY(-2px)}100%{transform:rotateX(-72deg) translateY(-13px)}}
+@keyframes gc200Glow{0%{opacity:0;transform:translateX(-50%) scale(.2)}45%{opacity:1}100%{opacity:.55;transform:translateX(-50%) scale(1.25)}}
+@keyframes gc200Spark{0%{opacity:0;transform:translate(0,0) scale(.3)}18%{opacity:1}100%{opacity:0;transform:translate(calc(cos(var(--a))*68px),calc(sin(var(--a))*-62px)) scale(1.2)}}
+
+/* Safari does not support trig functions in every CSS version, so give particles
+   deterministic fallback paths. */
+.gc200Particles i:nth-child(1){--x:-62px;--y:-34px}.gc200Particles i:nth-child(2){--x:-45px;--y:-63px}.gc200Particles i:nth-child(3){--x:-20px;--y:-77px}.gc200Particles i:nth-child(4){--x:4px;--y:-70px}.gc200Particles i:nth-child(5){--x:29px;--y:-82px}.gc200Particles i:nth-child(6){--x:58px;--y:-51px}.gc200Particles i:nth-child(7){--x:68px;--y:-20px}.gc200Particles i:nth-child(8){--x:48px;--y:-8px}.gc200Particles i:nth-child(9){--x:21px;--y:-42px}.gc200Particles i:nth-child(10){--x:-8px;--y:-49px}.gc200Particles i:nth-child(11){--x:-34px;--y:-25px}.gc200Particles i:nth-child(12){--x:38px;--y:-30px}
+@supports not (transform:translate(calc(cos(30deg)*1px),0)){@keyframes gc200Spark{0%{opacity:0;transform:translate(0,0) scale(.3)}18%{opacity:1}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.2)}}}
+
+@media (prefers-reduced-motion:reduce){.gc200Travel *,.gc200ChestScene *{animation-duration:.01ms!important;animation-iteration-count:1!important}.gc200Sun,.gc200Moon,.gc200WorkLive em,.gc200ChestReveal{transition:none!important}}
+@media (max-width:430px){.gc200Travel{height:90px}.gc200Wagon{width:255px}.gc200Sky{height:43px}.gc200ChestScene{height:172px}}
