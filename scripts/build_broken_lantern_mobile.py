@@ -21,7 +21,7 @@ patch_files = [
     'v19-3-hardening.js','v19-3-integration.js','v19-3-runtime-fix.js',
     'v19-4-consequences.js','v19-5-relationships.js','v19-9-time-qol.js',
     'v20-hello-world.js','v20-00-hotfix.js','v20-1-idle-company.js',
-    'v20-1-stabilization.js'
+    'v20-1-stabilization.js','v20-1-balance.js'
 ]
 
 css = '\n\n'.join((game / name).read_text(encoding='utf-8') for name in css_files).replace('</style>', '<\\/style>')
@@ -58,7 +58,7 @@ for name in patch_files:
 
 needle = '\nboot();\n})();'
 if needle not in f2:
-    raise SystemExit('Could not locate Broken Lantern boot marker for v20.1 injection.')
+    raise SystemExit('Could not locate Broken Lantern boot marker for v20.1.1 injection.')
 injection = '\n\n'.join(patches)
 f2 = f2.replace(needle, '\n\n' + injection + '\n\nboot();\n})();', 1)
 js = (base_js + f2).replace('</script>', '<\\/script>')
@@ -97,15 +97,17 @@ required = [
     "const GC201_STABILIZATION='20.1'", 'dispatchUsesContinuousPressure=true',
     'returnReportsDoNotPause=true', 'recoveringCountedInStance=true',
     'facilitiesArePassiveModifiers=true',
+    "const GC201_BALANCE='20.1.1'", 'GC201_STARTING_SILVER=160',
+    'riskWeightedTickDanger=true',
     'BL_IDB_BOOT_TIMEOUT_MS=2000'
 ]
 missing = [x for x in required if x not in js]
 if missing:
-    raise SystemExit('Broken Lantern v20.1 build missing required markers: ' + ', '.join(missing))
+    raise SystemExit('Broken Lantern v20.1.1 build missing required markers: ' + ', '.join(missing))
 
 for forbidden in ('BL_ART_DATA', 'characters.webp?v=13', 'environments.webp?v=13', 'caches.webp?v=13'):
     if forbidden in js:
-        raise SystemExit('Broken Lantern v20.1 unexpectedly contains raster gameplay art marker: ' + forbidden)
+        raise SystemExit('Broken Lantern v20.1.1 unexpectedly contains raster gameplay art marker: ' + forbidden)
 
 preboot = r'''(function(){
   var failed=false;
@@ -114,7 +116,7 @@ preboot = r'''(function(){
     if(!app || document.querySelector('.topbar') || document.querySelector('.startPanel') || failed) return;
     failed=true;
     var detail=String(msg||'Unknown startup error').replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]});
-    app.innerHTML='<div style="max-width:560px;margin:24px auto;padding:18px;background:#18130f;border:1px solid #6a4930;border-radius:8px;color:#efe4cc;font-family:Georgia,serif"><h2 style="margin-top:0">The ledger failed to open.</h2><p style="color:#c2b29a;line-height:1.45">The v20.1 phone build loaded, but the game engine failed to start. Your saved company has not been intentionally erased.</p><button onclick="location.reload()" style="width:100%;padding:13px;border-radius:3px;border:1px solid #8c593c;background:#6e3225;color:white;font-weight:700">Reload Game</button><details style="margin-top:12px;color:#9e8c76"><summary>Technical detail</summary><pre style="white-space:pre-wrap">'+detail+'</pre></details></div>';
+    app.innerHTML='<div style="max-width:560px;margin:24px auto;padding:18px;background:#18130f;border:1px solid #6a4930;border-radius:8px;color:#efe4cc;font-family:Georgia,serif"><h2 style="margin-top:0">The ledger failed to open.</h2><p style="color:#c2b29a;line-height:1.45">The v20.1.1 phone build loaded, but the game engine failed to start. Your saved company has not been intentionally erased.</p><button onclick="location.reload()" style="width:100%;padding:13px;border-radius:3px;border:1px solid #8c593c;background:#6e3225;color:white;font-weight:700">Reload Game</button><details style="margin-top:12px;color:#9e8c76"><summary>Technical detail</summary><pre style="white-space:pre-wrap">'+detail+'</pre></details></div>';
   }
   window.addEventListener('error',function(e){setTimeout(function(){showFailure(e.message)},0)});
   window.addEventListener('unhandledrejection',function(e){setTimeout(function(){showFailure(e.reason)},0)});
@@ -131,7 +133,7 @@ html = f'''<!doctype html>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="format-detection" content="telephone=no" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<title>The Broken Lantern — Grim Company v20.1 — Idle Company</title>
+<title>The Broken Lantern — Grim Company v20.1.1 — Idle Company</title>
 <style>{css}</style>
 </head>
 <body>
