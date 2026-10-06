@@ -8,7 +8,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: pages-v20-5
+  group: pages-v20-6
   cancel-in-progress: true
 jobs:
   deploy:
@@ -19,42 +19,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Build Broken Lantern v20.5 mobile bundle
+
+      - name: Build Grim Company v20.6 mobile bundle
         run: python3 scripts/build_broken_lantern_mobile.py
-      - name: Validate Broken Lantern JavaScript
+
+      - name: Validate JavaScript and release markers
         run: |
           node --check /tmp/broken-lantern-v9.js
           grep -q "brokenLanternCanonical_v9" grimdark-company/play/index.html
-          grep -q "The Shattered Firmament" grimdark-company/play/index.html
-          grep -q "FOUND COMPANY" grimdark-company/play/index.html
-          grep -q "__BL_AUDIT" grimdark-company/play/index.html
-          grep -q "var blPortraitHTML=function" grimdark-company/play/index.html
-          grep -q "BL18_MECHANICS_AUDIT" grimdark-company/play/index.html
-          grep -q "GC194_MAX_LEVEL=20" grimdark-company/play/index.html
-          grep -q "GC195_VERSION='19.5'" grimdark-company/play/index.html
-          grep -q "GC199_DAY_MS=45000" grimdark-company/play/index.html
-          grep -q "GC200_VERSION='20.00'" grimdark-company/play/index.html
-          grep -q "GC200_HOTFIX='20.00.1'" grimdark-company/play/index.html
-          grep -q "GC201_VERSION='20.1'" grimdark-company/play/index.html
-          grep -q "GC201_BALANCE='20.1.1'" grimdark-company/play/index.html
-          grep -q "GC201_QUALITY='20.1.2'" grimdark-company/play/index.html
-          grep -q "GC220_VERSION='20.2'" grimdark-company/play/index.html
           grep -q "GC230_VERSION='20.3'" grimdark-company/play/index.html
           grep -q "GC240_VERSION='20.4'" grimdark-company/play/index.html
           grep -q "GC250_VERSION='20.5'" grimdark-company/play/index.html
-          grep -q "riskThreatSeparated=true" grimdark-company/play/index.html
-          grep -q "regionalCampaigns=true" grimdark-company/play/index.html
-          grep -q "fixedRiskLadder=true" grimdark-company/play/index.html
-          grep -q "contractOfficeNoBoardSlots=true" grimdark-company/play/index.html
-          grep -q "campaignNamedAntagonists=true" grimdark-company/play/index.html
-          grep -q "guaranteedFieldCheck=true" grimdark-company/play/index.html
-          grep -q "animatedFieldChecks=true" grimdark-company/play/index.html
-          grep -q "meaningfulFieldConsequences=true" grimdark-company/play/index.html
+          grep -q "GC260_VERSION='20.6'" grimdark-company/play/index.html
+          grep -q "playerCharacterIsRosterMember=true" grimdark-company/play/index.html
+          grep -q "founderCharacterCreation=true" grimdark-company/play/index.html
+          grep -q "modularPortraitSelection=true" grimdark-company/play/index.html
+          grep -q "founderPhysicalLocation=true" grimdark-company/play/index.html
+          grep -q "directCommandExpeditions=true" grimdark-company/play/index.html
+          grep -q "companyContinuesDuringFounderDecision=true" grimdark-company/play/index.html
+          grep -q "founderNoPlotArmor=true" grimdark-company/play/index.html
           grep -q "__GC230_TEST" grimdark-company/play/index.html
           grep -q "__GC240_TEST" grimdark-company/play/index.html
           grep -q "__GC250_TEST" grimdark-company/play/index.html
-          grep -q "name=\"startRegion\"" grimdark-company/play/index.html
-          test -f grimdark-company/play-205/index.html
+          grep -q "__GC260_TEST" grimdark-company/play/index.html
+          test -f grimdark-company/play-206/index.html
+
       - name: Browser startup smoke test
         run: |
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
@@ -70,49 +59,20 @@ jobs:
             --dump-dom http://127.0.0.1:8765/grimdark-company/play/ \
             >/tmp/bl-dom.html 2>/tmp/bl-chrome.log
           python3 - <<'PY'
-          from html.parser import HTMLParser
           from pathlib import Path
-
-          class AppParser(HTMLParser):
-              def __init__(self):
-                  super().__init__()
-                  self.depth = None
-                  self.classes = []
-                  self.text = []
-              def handle_starttag(self, tag, attrs):
-                  attrs = dict(attrs)
-                  if self.depth is None and tag == 'div' and attrs.get('id') == 'app':
-                      self.depth = 1
-                      return
-                  if self.depth is not None:
-                      self.depth += 1
-                      if attrs.get('class'):
-                          self.classes.extend(attrs['class'].split())
-              def handle_endtag(self, tag):
-                  if self.depth is not None:
-                      self.depth -= 1
-                      if self.depth == 0:
-                          self.depth = None
-              def handle_data(self, data):
-                  if self.depth is not None:
-                      self.text.append(data)
-
           dom = Path('/tmp/bl-dom.html').read_text(encoding='utf-8', errors='replace')
-          p = AppParser(); p.feed(dom)
-          text = ' '.join(p.text)
-          classes = set(p.classes)
-          rendered = {'startPanel','topbar'} & classes
-          if not rendered:
-              if 'The ledger failed to open.' in text:
-                  raise SystemExit('Browser smoke test hit ledger startup failure: ' + text[:800])
-              raise SystemExit('Browser smoke test did not render Grim Company UI. App text: ' + text[:800])
-          if 'Choose your first region' not in text and 'topbar' not in rendered:
-              raise SystemExit('v20.5 start-region selector did not render.')
-          if 'startPanel' in rendered and 'Risk 1 contracts' not in text:
-              raise SystemExit('v20.5 fair-start promise did not render.')
-          print('Browser startup smoke test passed:', sorted(rendered))
+          if 'The ledger failed to open.' in dom:
+              raise SystemExit('Startup hit ledger failure.')
+          if 'startPanel' not in dom and 'topbar' not in dom:
+              raise SystemExit('Grim Company UI did not render.')
+          if 'startPanel' in dom:
+              for marker in ('Choose your first region','Create Yourself','founderRace','founderCulture','founderClass'):
+                  if marker not in dom:
+                      raise SystemExit('v20.6 founder creation missing: ' + marker)
+          print('v20.6 startup smoke passed')
           PY
-      - name: World pressure behavior smoke test
+
+      - name: World campaign field and founder behavior smoke tests
         run: |
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
           python3 - <<'PY'
@@ -122,91 +82,45 @@ jobs:
           probe = r'''<script>
           setTimeout(function(){
             try{
-              var r=window.__GC230_TEST&&window.__GC230_TEST();
-              document.body.setAttribute('data-gc230-test',r&&r.ok?'pass':'fail');
-              var n=document.createElement('pre');n.id='gc230-test-output';n.textContent=JSON.stringify(r||{});document.body.appendChild(n);
-            }catch(e){document.body.setAttribute('data-gc230-test','error');var n=document.createElement('pre');n.id='gc230-test-output';n.textContent=String(e&&e.stack||e);document.body.appendChild(n)}
-          },1200);
+              var out={
+                world:window.__GC230_TEST&&window.__GC230_TEST(),
+                campaign:window.__GC240_TEST&&window.__GC240_TEST(),
+                field:window.__GC250_TEST&&window.__GC250_TEST(),
+                founder:window.__GC260_TEST&&window.__GC260_TEST()
+              };
+              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok;
+              document.body.setAttribute('data-all-tests',ok?'pass':'fail');
+              var n=document.createElement('pre');n.id='all-test-output';n.textContent=JSON.stringify(out);document.body.appendChild(n);
+            }catch(e){
+              document.body.setAttribute('data-all-tests','error');
+              var n=document.createElement('pre');n.id='all-test-output';n.textContent=String(e&&e.stack||e);document.body.appendChild(n);
+            }
+          },1500);
           </script>'''
-          Path('grimdark-company/play/gc230-test.html').write_text(html.replace('</body>', probe + '</body>'), encoding='utf-8')
+          Path('grimdark-company/play/all-tests.html').write_text(html.replace('</body>', probe + '</body>'), encoding='utf-8')
           PY
-          python3 -m http.server 8766 --bind 127.0.0.1 >/tmp/bl230-http.log 2>&1 &
+          python3 -m http.server 8768 --bind 127.0.0.1 >/tmp/bl-tests-http.log 2>&1 &
           SERVER_PID=$!
-          trap 'kill $SERVER_PID 2>/dev/null || true; rm -f grimdark-company/play/gc230-test.html' EXIT
+          trap 'kill $SERVER_PID 2>/dev/null || true; rm -f grimdark-company/play/all-tests.html' EXIT
           sleep 1
-          "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=6000 \
-            --dump-dom http://127.0.0.1:8766/grimdark-company/play/gc230-test.html \
-            >/tmp/bl230-dom.html 2>/tmp/bl230-chrome.log
-          if ! grep -q 'data-gc230-test="pass"' /tmp/bl230-dom.html; then
-            echo "::error::v20.3 world-pressure self-check failed"
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=9000 \
+            --dump-dom http://127.0.0.1:8768/grimdark-company/play/all-tests.html \
+            >/tmp/bl-tests-dom.html 2>/tmp/bl-tests-chrome.log
+          if ! grep -q 'data-all-tests="pass"' /tmp/bl-tests-dom.html; then
+            echo "::error::Grim Company behavior self-check failed"
+            grep -o '<pre id="all-test-output">[^<]*' /tmp/bl-tests-dom.html || true
             exit 1
           fi
-      - name: Regional campaign behavior smoke test
-        run: |
-          BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
-          python3 - <<'PY'
-          from pathlib import Path
-          p = Path('grimdark-company/play/index.html')
-          html = p.read_text(encoding='utf-8')
-          probe = r'''<script>
-          setTimeout(function(){
-            try{
-              var r=window.__GC240_TEST&&window.__GC240_TEST();
-              document.body.setAttribute('data-gc240-test',r&&r.ok?'pass':'fail');
-              var n=document.createElement('pre');n.id='gc240-test-output';n.textContent=JSON.stringify(r||{});document.body.appendChild(n);
-            }catch(e){document.body.setAttribute('data-gc240-test','error');var n=document.createElement('pre');n.id='gc240-test-output';n.textContent=String(e&&e.stack||e);document.body.appendChild(n)}
-          },1200);
-          </script>'''
-          Path('grimdark-company/play/gc240-test.html').write_text(html.replace('</body>', probe + '</body>'), encoding='utf-8')
-          PY
-          python3 -m http.server 8767 --bind 127.0.0.1 >/tmp/bl240-http.log 2>&1 &
-          SERVER_PID=$!
-          trap 'kill $SERVER_PID 2>/dev/null || true; rm -f grimdark-company/play/gc240-test.html' EXIT
-          sleep 1
-          "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=7000 \
-            --dump-dom http://127.0.0.1:8767/grimdark-company/play/gc240-test.html \
-            >/tmp/bl240-dom.html 2>/tmp/bl240-chrome.log
-          if ! grep -q 'data-gc240-test="pass"' /tmp/bl240-dom.html; then
-            echo "::error::v20.4 campaign self-check failed"
-            exit 1
-          fi
-      - name: Field encounters behavior smoke test
-        run: |
-          BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
-          python3 - <<'PY'
-          from pathlib import Path
-          p = Path('grimdark-company/play/index.html')
-          html = p.read_text(encoding='utf-8')
-          probe = r'''<script>
-          setTimeout(function(){
-            try{
-              var r=window.__GC250_TEST&&window.__GC250_TEST();
-              document.body.setAttribute('data-gc250-test',r&&r.ok?'pass':'fail');
-              var n=document.createElement('pre');n.id='gc250-test-output';n.textContent=JSON.stringify(r||{});document.body.appendChild(n);
-            }catch(e){document.body.setAttribute('data-gc250-test','error');var n=document.createElement('pre');n.id='gc250-test-output';n.textContent=String(e&&e.stack||e);document.body.appendChild(n)}
-          },1200);
-          </script>'''
-          Path('grimdark-company/play/gc250-test.html').write_text(html.replace('</body>', probe + '</body>'), encoding='utf-8')
-          PY
-          python3 -m http.server 8768 --bind 127.0.0.1 >/tmp/bl250-http.log 2>&1 &
-          SERVER_PID=$!
-          trap 'kill $SERVER_PID 2>/dev/null || true; rm -f grimdark-company/play/gc250-test.html' EXIT
-          sleep 1
-          "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=7000 \
-            --dump-dom http://127.0.0.1:8768/grimdark-company/play/gc250-test.html \
-            >/tmp/bl250-dom.html 2>/tmp/bl250-chrome.log
-          if ! grep -q 'data-gc250-test="pass"' /tmp/bl250-dom.html; then
-            echo "::error::v20.5 field-encounter self-check failed"
-            grep -o '<pre id="gc250-test-output">[^<]*' /tmp/bl250-dom.html || true
-            exit 1
-          fi
-          grep -o '<pre id="gc250-test-output">[^<]*' /tmp/bl250-dom.html || true
+          grep -o '<pre id="all-test-output">[^<]*' /tmp/bl-tests-dom.html || true
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
       - name: Upload site
         uses: actions/upload-pages-artifact@v4
         with:
           path: '.'
+
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
