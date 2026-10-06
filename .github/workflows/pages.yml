@@ -60,10 +60,15 @@ jobs:
             >/tmp/bl-dom.html 2>/tmp/bl-chrome.log
           python3 - <<'PY'
           from pathlib import Path
+          import re, html as htmlmod
           dom = Path('/tmp/bl-dom.html').read_text(encoding='utf-8', errors='replace')
           if 'The ledger failed to open.' in dom:
+              pre = re.findall(r'<pre[^>]*>(.*?)</pre>', dom, flags=re.S)
+              print('LEDGER TECHNICAL DETAIL:', htmlmod.unescape(re.sub(r'<[^>]+>', '', pre[-1] if pre else dom[-2500:])))
+              print('CHROME STDERR:', Path('/tmp/bl-chrome.log').read_text(encoding='utf-8', errors='replace')[-2500:])
               raise SystemExit('Startup hit ledger failure.')
           if 'startPanel' not in dom and 'topbar' not in dom:
+              print(dom[-2500:])
               raise SystemExit('Grim Company UI did not render.')
           if 'startPanel' in dom:
               for marker in ('Choose your first region','Create Yourself','founderRace','founderCulture','founderClass'):
