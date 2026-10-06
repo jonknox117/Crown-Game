@@ -144,8 +144,6 @@ function gc290PowerHTML(item){
  const ps=gc290Powers(item);if(!ps.length)return'';
  return '<div class="gc290PowerList">'+ps.map(p=>'<div class="gc290Power"><b>'+esc(p.name)+'</b><span>'+esc(p.desc)+'</span></div>').join('')+'</div>';
 }
-const _itemHTMLGC290=itemHTML;
-itemHTML=function(item){let html=_itemHTMLGC290(item);const powers=gc290PowerHTML(item);if(powers)html=html.replace('</div></div>',powers+'</div></div>');return html};
 
 const _auditGC290=audit;
 audit=function(){const out=_auditGC290();out.v290Loot=GC290_VERSION;out.v291LegendaryArsenal=GC291_VERSION;out.itemTriggerEngine=true;out.rarityBehaviorIdentity=true;out.handAuthoredLegendaries=GC291_LEGENDARIES.length;out.oldGearMigrates=true;return out};
