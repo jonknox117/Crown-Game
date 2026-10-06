@@ -111,10 +111,11 @@ function gc310AssembleCrew(c,p){
  const f=gc260Founder(),rid=c.regionId,risk=Number(c.risk)||1,need=Math.max(1,gc310CrewSize(c)-1),benchmark=gc194RiskLevel(risk);
  if(!f||!p)return[];
  p.members=[f.id];p.captainId=null;
- let candidates=gc310AvailablePool(rid,risk);
+ let candidates=gc310AvailablePool(rid,risk).filter(a=>(a.lvl||1)>=Math.max(1,benchmark-2));
  while(candidates.length<need){
   const newcomer=gc310MakeFreelancer(rid,clamp(benchmark+rnd(-1,1),1,GC194_MAX_LEVEL));
-  gc310RegionPool(rid).push(newcomer);candidates=gc310AvailablePool(rid,risk);
+  gc310RegionPool(rid).push(newcomer);
+  candidates=gc310AvailablePool(rid,risk).filter(a=>(a.lvl||1)>=Math.max(1,benchmark-2));
  }
  const chosen=candidates.slice(0,need).map(a=>gc310TakeFromPool(rid,a));
  chosen.forEach(a=>p.members.push(a.id));
