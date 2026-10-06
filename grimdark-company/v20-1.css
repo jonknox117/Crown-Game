@@ -1,0 +1,27 @@
+/* Grim Company v20.1 — continuous idle-company UI */
+.gc201CompanyPanel{overflow:hidden}
+.gc201StanceGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:9px 0}
+.gc201Stance{display:block;width:100%;min-width:0;padding:8px;text-align:left;border:1px solid rgba(198,166,117,.14);border-radius:6px;background:rgba(255,255,255,.018);color:inherit}
+.gc201StanceHead{display:flex;align-items:center;justify-content:space-between;gap:6px}.gc201StanceHead b{font-size:9px;letter-spacing:.14em;color:#d0ab75}.gc201StanceHead span{font-size:10px;font-weight:800;color:#eee0c8}
+.gc201Faces{display:flex;align-items:center;gap:3px;min-height:29px;margin:6px 0 4px;overflow:hidden}.gc201Faces>span{display:block;width:27px;height:27px;overflow:hidden;border-radius:50%;border:1px solid rgba(205,172,122,.22);background:#15120f}.gc201Faces svg{width:100%;height:100%;display:block}.gc201Faces em{font-size:9px;color:#71695f;font-style:normal}
+.gc201StanceMeta{min-height:24px;font-size:8px;line-height:1.35;color:#8d8377}.gc201Stance>i{display:block;height:3px;margin-top:5px;overflow:hidden;border-radius:4px;background:#14110e}.gc201Stance>i>em{display:block;height:100%;background:linear-gradient(90deg,#785332,#c18f54);transition:width .2s linear}
+.gc201Stance.recover .gc201StanceHead b{color:#a8c29d}.gc201Stance.scout .gc201StanceHead b{color:#b6b28a}.gc201Stance.patrol .gc201StanceHead b{color:#c68e78}.gc201Stance.train .gc201StanceHead b{color:#caa36e}
+
+.gc201FieldMeta{display:grid;grid-template-columns:1fr auto;gap:3px 8px;margin:6px 0 4px;font-size:9px;color:#8f8679}.gc201FieldMeta span:first-child{grid-column:1/-1}.gc201FieldMeta [data-gc201-risk]{font-weight:800;letter-spacing:.08em;color:#bf9271}.gc201FieldMeta [data-gc201-momentum]{text-align:right;color:#c7a267}
+.gc201AutoCombat{display:flex;flex-direction:column;gap:2px;width:100%;padding:8px 10px;border:1px solid rgba(190,62,55,.2);border-radius:5px;background:rgba(120,28,24,.09)}.gc201AutoCombat b{font-size:10px;color:#d59b91}.gc201AutoCombat span{font-size:8px;color:#887670}
+.gc201RiskReadout span{line-height:1.35}
+
+/* Pushing is a temporary pace, not a one-shot field-day jump. */
+.gc200Travel.gc201Pushing .gc200Ground{animation-duration:calc(.65s / var(--gc201-speed,1))}
+.gc200Travel.gc201Pushing .gc200Wagon{filter:drop-shadow(-7px 4px 5px rgba(116,82,47,.22));animation:gc201WagonSurge .55s ease-in-out infinite alternate}
+.gc200Travel.gc201Pushing:after{content:"";position:absolute;right:10px;bottom:21px;width:42px;height:10px;background:radial-gradient(ellipse at center,rgba(183,142,94,.28),transparent 70%);filter:blur(2px);animation:gc201Dust .55s linear infinite;pointer-events:none}
+@keyframes gc201WagonSurge{from{transform:translateX(-50%) translateX(0)}to{transform:translateX(-50%) translateX(3px)}}
+@keyframes gc201Dust{from{transform:translateX(0) scale(.8);opacity:.2}to{transform:translateX(-18px) scale(1.25);opacity:0}}
+
+/* Combat is a running state rather than a button-gated screen. */
+.gc201Expedition .battleGrid{margin-top:8px}.gc201Expedition .combatLog{max-height:150px;overflow:auto}.gc201Expedition .gc200Travel.combat .gc200TravelCaption{letter-spacing:.13em}
+
+.gc201StartPromise{margin-top:8px;color:#a99478!important}
+
+@media (max-width:430px){.gc201StanceGrid{grid-template-columns:1fr 1fr;gap:6px}.gc201Stance{padding:7px}.gc201Faces>span{width:24px;height:24px}.gc201FieldMeta{font-size:8px}}
+@media (prefers-reduced-motion:reduce){.gc200Travel.gc201Pushing .gc200Wagon,.gc200Travel.gc201Pushing:after{animation:none!important}}
