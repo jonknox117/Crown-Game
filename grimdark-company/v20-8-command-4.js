@@ -11,5 +11,5 @@ function gc280DirectiveDesc(v){
 function gc280CommandStrip(regionId){
  if(!gc280NetworkUnlocked()||!state.regions[regionId]?.hq?.established)return'';
  const c=gc280CommandState(regionId),a=gc280Commander(regionId),last=c.log[c.log.length-1];
- return '<div class="gc280CommandStrip '+(a&&c.autonomy?'active':'')+'"><div><span>REGIONAL COMMAND</span><b>'+(a?esc(a.name):'Direct control')+'</b><small>'+(a?(esc(c.directive)+' • '+esc(c.casualtyPolicy)+(c.autonomy?' • AUTONOMOUS':' • PAUSED')):'No commander appointed.')+'</small>'+(last?'<em>Last: '+esc(last.text)+'</em>':'')+'</div><button class="btn '+(a?'ghost':'goldbtn')+'" data-action="gc280Open" data-region="'+regionId+'">'+(a?'Manage':'Appoint')+'</button></div>';
+ return '<div class="card gc280CommandStrip '+(a&&c.autonomy?'active':'')+'"><div><span>REGIONAL COMMAND</span><b>'+(a?esc(a.name):'Direct control')+'</b><small>'+(a?(esc(c.directive)+' • '+esc(c.casualtyPolicy)+(c.autonomy?' • AUTONOMOUS':' • PAUSED')):'No commander appointed.')+'</small>'+(last?'<em>Last: '+esc(last.text)+'</em>':'')+'</div><button class="btn '+(a?'ghost':'goldbtn')+'" data-action="gc280Open" data-region="'+regionId+'">'+(a?'Manage':'Appoint')+'</button></div>';
 }
