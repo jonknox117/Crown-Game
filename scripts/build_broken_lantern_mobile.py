@@ -20,7 +20,7 @@ patch_files = [
     'v19-3-grim-company.js','v19-3-clarity.js','v19-3-time-hotfix.js',
     'v19-3-hardening.js','v19-3-integration.js','v19-3-runtime-fix.js',
     'v19-4-consequences.js','v19-5-relationships.js','v19-9-time-qol.js',
-    'v20-hello-world.js'
+    'v20-hello-world.js','v20-00-hotfix.js'
 ]
 
 css = '\n\n'.join((game / name).read_text(encoding='utf-8') for name in css_files).replace('</style>', '<\\/style>')
@@ -85,6 +85,8 @@ required = [
     'calendarOnlyMidnight=true', 'tickDrivenEncounterHazard=true',
     'sunMoonClock=true', 'expeditionTravelAnimation=true',
     'chestOpeningFeedback=true', 'legacyAutoExpeditionDisabled=true',
+    "const GC200_HOTFIX='20.00.1'", 'sharedScoutingBreakthroughs=true',
+    'immediateMutationRerender=true',
     'BL_IDB_BOOT_TIMEOUT_MS=2000'
 ]
 missing = [x for x in required if x not in js]
