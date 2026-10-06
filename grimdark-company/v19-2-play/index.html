@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#08090a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<title>The Broken Lantern — v19.2</title>
+<style>
+html,body{margin:0;min-height:100%;background:#08090a;color:#efe4cc;font-family:Georgia,serif}
+#loading{max-width:560px;margin:32px auto;padding:22px;line-height:1.5}
+#loading h2{margin:0 0 10px;font-size:30px}
+#loading p{color:#bcae94}
+#loaderr{white-space:pre-wrap;color:#cf927e;font:13px/1.4 ui-monospace,monospace}
+</style>
+</head>
+<body>
+<div id="loading"><h2>Opening The Broken Lantern v19.2…</h2><p>Loading the stability-fixed Presentation &amp; Polish build.</p><div id="loaderr"></div></div>
+<div id="app"></div>
+<div class="bottomnav"><div class="inner" id="nav"></div></div>
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+<script>
+(async function(){
+  'use strict';
+  const commit='f07799ec4f8526f94e0dfdc62c9429e2a6386237';
+  const root='https://raw.githubusercontent.com/jonknox117/Crown-Game/'+commit+'/grimdark-company/';
+  const cssFiles=['v9.css','v10.css','v11.css','v14.css','v15.css','v16.css','v17.css','v18.css','v19.css','v19-2.css','v19-stability.css'];
+  const baseFiles=['v9-a.js','v9-b.js','v9-c.js','v9-d1.js','v9-d2.js','v9-d3.js','v9-d4.js','v9-e1.js','v9-e2.js','v9-f1.js'];
+  const patchFiles=['v10.js','v10-hotfix.js','v14-gameplay.js','v15-svg-portraits.js','v16-living-company.js','v17-career-svg.js','v18-living-veterans.js','v18-mechanics-audit.js','v19-polish.js','v19-polish-2.js','v19-stability.js','v19-stability-2.js','v19-stability-checks.js'];
+
+  async function text(path){
+    const r=await fetch(root+path,{cache:'no-store',mode:'cors'});
+    if(!r.ok) throw new Error(path+' — HTTP '+r.status);
+    return r.text();
+  }
+  function showError(err){
+    const box=document.getElementById('loaderr');
+    if(box) box.textContent=String(err&&err.stack||err);
+  }
+  window.addEventListener('error',e=>showError(e.error||e.message));
+  window.addEventListener('unhandledrejection',e=>showError(e.reason));
+
+  try{
+    const [cssParts,baseParts,f2Source,patchParts]=await Promise.all([
+      Promise.all(cssFiles.map(text)),
+      Promise.all(baseFiles.map(text)),
+      text('v9-f2.js'),
+      Promise.all(patchFiles.map(text))
+    ]);
+    const style=document.createElement('style');
+    style.textContent=cssParts.join('\n\n');
+    document.head.appendChild(style);
+
+    const needle='\nboot();\n})();';
+    if(!f2Source.includes(needle)) throw new Error('v19.2 boot marker missing.');
+    const injection=patchParts.join('\n\n');
+    const f2=f2Source.replace(needle,'\n\n'+injection+'\n\nboot();\n})();');
+    const gameJs=baseParts.join('')+f2;
+    const checks=[
+      ['var blPortraitHTML=function','portrait renderer'],
+      ['BL17_CAREER','career system'],
+      ['BL18_MECHANICS_AUDIT','v18 mechanics audit'],
+      ["const BL19_VERSION='19.0'",'v19 presentation core'],
+      ["const BL19_STABILITY='19.2'",'v19.2 stability layer'],
+      ['bl192RepairInspectDOM','inspector containment fix'],
+      ['bl192RuntimeCheck','runtime integrity check'],
+      ['function bl19EnemyArt','enemy presentation'],
+      ['function bl19HQScene','HQ growth scene'],
+      ['function bl19MapNode','world map']
+    ];
+    checks.forEach(([marker,label])=>{if(!gameJs.includes(marker))throw new Error('v19.2 '+label+' missing.');});
+
+    const script=document.createElement('script');
+    script.textContent=gameJs;
+    document.body.appendChild(script);
+
+    setTimeout(()=>{
+      const ok=document.querySelector('.startPanel,.topbar');
+      const loading=document.getElementById('loading');
+      if(ok&&loading) loading.remove();
+      else if(!ok) showError('The v19.2 engine loaded but did not render its UI.');
+    },450);
+  }catch(err){showError(err);}
+})();
+</script>
+</body>
+</html>
