@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#08090a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<title>Grim Company — v19.3</title>
+<style>
+html,body{margin:0;min-height:100%;background:#08090a;color:#efe4cc;font-family:Georgia,serif}
+#loading{max-width:560px;margin:32px auto;padding:22px;line-height:1.5}
+#loading h2{margin:0 0 10px;font-size:30px}
+#loading p{color:#bcae94}
+#loaderr{white-space:pre-wrap;color:#cf927e;font:13px/1.4 ui-monospace,monospace}
+</style>
+</head>
+<body>
+<div id="loading"><h2>Opening Grim Company v19.3…</h2><p>Loading the global-calendar and daily-orders build.</p><div id="loaderr"></div></div>
+<div id="app"></div>
+<div class="bottomnav"><div class="inner" id="nav"></div></div>
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+<script>
+(async function(){
+  'use strict';
+  const commit='714c4e1dea0b8ee3f5396d9732476f9f5c072561';
+  const root='https://raw.githubusercontent.com/jonknox117/Crown-Game/'+commit+'/grimdark-company/';
+  const cssFiles=['v9.css','v10.css','v11.css','v14.css','v15.css','v16.css','v17.css','v18.css','v19.css','v19-2.css','v19-stability.css','v19-3-grim-company.css'];
+  const baseFiles=['v9-a.js','v9-b.js','v9-c.js','v9-d1.js','v9-d2.js','v9-d3.js','v9-d4.js','v9-e1.js','v9-e2.js','v9-f1.js'];
+  const patchFiles=['v10.js','v10-hotfix.js','v14-gameplay.js','v15-svg-portraits.js','v16-living-company.js','v17-career-svg.js','v18-living-veterans.js','v18-mechanics-audit.js','v19-polish.js','v19-polish-2.js','v19-stability.js','v19-stability-2.js','v19-stability-checks.js','v19-3-grim-company.js','v19-3-clarity.js'];
+
+  async function text(path){
+    const r=await fetch(root+path,{cache:'no-store',mode:'cors'});
+    if(!r.ok) throw new Error(path+' — HTTP '+r.status);
+    return r.text();
+  }
+  function showError(err){
+    const box=document.getElementById('loaderr');
+    if(box) box.textContent=String(err&&err.stack||err);
+  }
+  window.addEventListener('error',e=>showError(e.error||e.message));
+  window.addEventListener('unhandledrejection',e=>showError(e.reason));
+
+  try{
+    const [cssParts,baseParts,f2Source,patchParts]=await Promise.all([
+      Promise.all(cssFiles.map(text)),
+      Promise.all(baseFiles.map(text)),
+      text('v9-f2.js'),
+      Promise.all(patchFiles.map(text))
+    ]);
+    const style=document.createElement('style');
+    style.textContent=cssParts.join('\n\n');
+    document.head.appendChild(style);
+
+    const needle='\nboot();\n})();';
+    if(!f2Source.includes(needle)) throw new Error('v19.3 boot marker missing.');
+    const injection=patchParts.join('\n\n');
+    const f2=f2Source.replace(needle,'\n\n'+injection+'\n\nboot();\n})();');
+    const gameJs=baseParts.join('')+f2;
+    const checks=[
+      ['var blPortraitHTML=function','portrait renderer'],
+      ['BL17_CAREER','career system'],
+      ['BL18_MECHANICS_AUDIT','v18 mechanics audit'],
+      ["const BL19_STABILITY='19.2'",'v19.2 stability layer'],
+      ["const GC193_VERSION='19.3'",'Grim Company calendar core'],
+      ['function gc193AdvanceDay','global day resolver'],
+      ['function gc193HealAdventurer','healing system'],
+      ['function gc193PatrolRegion','patrol order'],
+      ['function gc193ScoutRegion','scout order'],
+      ['function gc193SkullSvg','Grim Company SVG logo'],
+      ['function gc193SelfCheck','v19.3 runtime integrity check']
+    ];
+    checks.forEach(([marker,label])=>{if(!gameJs.includes(marker))throw new Error('v19.3 '+label+' missing.');});
+
+    const script=document.createElement('script');
+    script.textContent=gameJs;
+    document.body.appendChild(script);
+
+    setTimeout(()=>{
+      const ok=document.querySelector('.startPanel,.topbar');
+      const loading=document.getElementById('loading');
+      if(ok&&loading) loading.remove();
+      else if(!ok) showError('Grim Company v19.3 loaded but did not render its UI.');
+    },500);
+  }catch(err){showError(err);}
+})();
+</script>
+</body>
+</html>
