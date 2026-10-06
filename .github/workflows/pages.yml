@@ -8,7 +8,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: pages-v20-1
+  group: pages-v20-1-1
   cancel-in-progress: true
 jobs:
   deploy:
@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Build Broken Lantern v20.1 mobile bundle
+      - name: Build Broken Lantern v20.1.1 mobile bundle
         run: python3 scripts/build_broken_lantern_mobile.py
       - name: Validate Broken Lantern JavaScript
         run: |
@@ -47,6 +47,9 @@ jobs:
           grep -q "autoCombatTicks=true" grimdark-company/play/index.html
           grep -q "pushMomentum=true" grimdark-company/play/index.html
           grep -q "carriageHorsesLead=true" grimdark-company/play/index.html
+          grep -q "GC201_BALANCE='20.1.1'" grimdark-company/play/index.html
+          grep -q "GC201_STARTING_SILVER=160" grimdark-company/play/index.html
+          grep -q "riskWeightedTickDanger=true" grimdark-company/play/index.html
           grep -q "name=\"startRegion\"" grimdark-company/play/index.html
           test -f grimdark-company/play-201/index.html
       - name: Browser startup smoke test
@@ -101,9 +104,9 @@ jobs:
                   raise SystemExit('Browser smoke test hit ledger startup failure: ' + text[:800])
               raise SystemExit('Browser smoke test did not render Grim Company UI. App text: ' + text[:800])
           if 'Choose your first region' not in text and 'topbar' not in rendered:
-              raise SystemExit('v20.1 start-region selector did not render.')
+              raise SystemExit('v20.1.1 start-region selector did not render.')
           if 'startPanel' in rendered and 'Risk 1 contracts' not in text:
-              raise SystemExit('v20.1 fair-start promise did not render.')
+              raise SystemExit('v20.1.1 fair-start promise did not render.')
           print('Browser startup smoke test passed:', sorted(rendered))
           PY
       - name: Setup Pages
