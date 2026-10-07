@@ -106,8 +106,8 @@ gc330PersonCard=function(a){
  const html=_gc360PersonCard(a);
  return html.replace(/Risk \d+ qualified/g,'Risk '+gc360RiskCap(a)+' eligible');
 };
-const _gc360Parties=gc330CompanyParties;
-if(typeof _gc360Parties==='function')gc330CompanyParties=function(){
+const _gc360Parties=gc330PartiesScreen;
+gc330PartiesScreen=function(){
  return _gc360Parties().replace('Experienced captains and veteran cores determine','Career-ranked captains and supporting crews determine');
 };
 // Keep legacy level benchmark as a *difficulty reference*, not a contract qualification rule.
