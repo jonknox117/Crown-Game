@@ -11,7 +11,8 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: pages-v21-5-3
+  # Stable concurrency key: new releases must cancel older Pages runs.
+  group: pages-v21-5-2
   cancel-in-progress: true
 jobs:
   deploy:
