@@ -243,6 +243,7 @@ jobs:
           grep -q "__GC360_RARITY_TEST" grimdark-company/play/index.html
           grep -q "__GC360_CLASS_TEST" grimdark-company/play/index.html
           grep -q "__GC360_COMBAT_TEST" grimdark-company/play/index.html
+          grep -q "__GC360_FINAL_TEST" grimdark-company/play/index.html
           test -f grimdark-company/play-206/index.html
           test -f grimdark-company/play-207/index.html
           test -f grimdark-company/play-208/index.html
@@ -367,9 +368,10 @@ jobs:
                 foundingVisibility:window.__GC354_TEST&&window.__GC354_TEST(),
                 rarityGate:window.__GC360_RARITY_TEST&&window.__GC360_RARITY_TEST(),
                 classCatalog:window.__GC360_CLASS_TEST&&window.__GC360_CLASS_TEST(),
-                classCombat:window.__GC360_COMBAT_TEST&&window.__GC360_COMBAT_TEST()
+                classCombat:window.__GC360_COMBAT_TEST&&window.__GC360_COMBAT_TEST(),
+                independentRarity:window.__GC360_FINAL_TEST&&window.__GC360_FINAL_TEST()
               };
-              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok&&out.freelancer&&out.freelancer.ok&&out.stakes&&out.stakes.ok&&out.decisionLock&&out.decisionLock.ok&&out.interface&&out.interface.ok&&out.qol&&out.qol.ok&&out.freelanceCrew&&out.freelanceCrew.ok&&out.presence&&out.presence.ok&&out.stability&&out.stability.ok&&out.fastStability&&out.fastStability.ok&&out.phoneStability&&out.phoneStability.ok&&out.focusStability&&out.focusStability.ok&&out.longSession&&out.longSession.ok&&out.clockHotfix&&out.clockHotfix.ok&&out.liveUi&&out.liveUi.ok&&out.liveExpedition&&out.liveExpedition.ok&&out.motionPolish&&out.motionPolish.ok&&out.smoothQol&&out.smoothQol.ok&&out.decisionTapShield&&out.decisionTapShield.ok&&out.stabilityQol&&out.stabilityQol.ok&&out.foundingVisibility&&out.foundingVisibility.ok&&out.rarityGate&&out.rarityGate.ok&&out.classCatalog&&out.classCatalog.ok&&out.classCombat&&out.classCombat.ok;
+              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok&&out.freelancer&&out.freelancer.ok&&out.stakes&&out.stakes.ok&&out.decisionLock&&out.decisionLock.ok&&out.interface&&out.interface.ok&&out.qol&&out.qol.ok&&out.freelanceCrew&&out.freelanceCrew.ok&&out.presence&&out.presence.ok&&out.stability&&out.stability.ok&&out.fastStability&&out.fastStability.ok&&out.phoneStability&&out.phoneStability.ok&&out.focusStability&&out.focusStability.ok&&out.longSession&&out.longSession.ok&&out.clockHotfix&&out.clockHotfix.ok&&out.liveUi&&out.liveUi.ok&&out.liveExpedition&&out.liveExpedition.ok&&out.motionPolish&&out.motionPolish.ok&&out.smoothQol&&out.smoothQol.ok&&out.decisionTapShield&&out.decisionTapShield.ok&&out.stabilityQol&&out.stabilityQol.ok&&out.foundingVisibility&&out.foundingVisibility.ok&&out.rarityGate&&out.rarityGate.ok&&out.classCatalog&&out.classCatalog.ok&&out.classCombat&&out.classCombat.ok&&out.independentRarity&&out.independentRarity.ok;
               document.body.setAttribute('data-all-tests',ok?'pass':'fail');
               var n=document.createElement('pre');n.id='all-test-output';n.textContent=JSON.stringify(out);document.body.appendChild(n);
             }catch(e){
