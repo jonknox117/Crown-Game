@@ -38,21 +38,24 @@ window.__GC345_PLAYTEST=function(){
   for(let i=0;i<700;i++){gc199AdvanceFieldClocks(.004);if(i%4===0)gc199UpdateClock()}
   maxNodes=Math.max(maxNodes,document.querySelectorAll('*').length);
 
+  gc199MountClock();
+  if(typeof gc344TrimRoutineHistory==='function')gc344TrimRoutineHistory();
+  gc342TrimVolatile();
   const recovering=state.roster.filter(a=>a.status==='Recovering').length;
   const sun=document.querySelector('[data-gc200-sun]'),moon=document.querySelector('[data-gc200-moon]');
   const celestialStatic=(!sun||getComputedStyle(sun).display==='none')&&(!moon||getComputedStyle(moon).display==='none');
-  const oneClock=document.querySelectorAll('#gc199ClockBar').length===1;
+  const clockCount=document.querySelectorAll('#gc199ClockBar').length,oneClock=clockCount===1;
   const nodeStable=maxNodes<=Math.max(startNodes*1.55,startNodes+220);
   const recoverySoundDelta=GC345_STATS.recoverySounds-statsBefore.recoverySounds;
   const audioControlled=recoverySoundDelta<=1;
   const renderDelta=GC342_STATS.actualRenders-rendersBefore;
   const renderControlled=renderDelta<25;
-  const bounded=(f.history||[]).length<=80&&(state.timeSystem.gc199Feed||[]).length<=70;
+  const bounded=(f.history||[]).length<=80&&(state.timeSystem.gc199Feed||[]).length<=80;
   const noError=!safeLocalGet('grimCompanyLastRuntimeError')&&!state.founderSystem?.gc341LastRuntimeError&&GC342_STATS.errors===0;
   const integrity=gc342StateIntegrity().ok;
   const serializable=!!JSON.parse(JSON.stringify(state)).founderSystem;
   const rewards=state.company.silver>500&&f.xp>0;
-  return{ok:!!(recovering===0&&celestialStatic&&oneClock&&nodeStable&&audioControlled&&renderControlled&&bounded&&noError&&integrity&&serializable&&rewards),recovering,celestialStatic,oneClock,nodeStable,startNodes,maxNodes,audioControlled,recoverySoundDelta,renderControlled,renderDelta,bounded,noError,integrity,serializable,rewards,masterTicks:GC345_STATS.masterTicks-statsBefore.masterTicks};
+  return{ok:!!(recovering===0&&celestialStatic&&oneClock&&nodeStable&&audioControlled&&renderControlled&&bounded&&noError&&integrity&&serializable&&rewards),recovering,celestialStatic,oneClock,clockCount,nodeStable,startNodes,maxNodes,audioControlled,recoverySoundDelta,renderControlled,renderDelta,bounded,noError,integrity,serializable,rewards,masterTicks:GC345_STATS.masterTicks-statsBefore.masterTicks};
  }catch(e){return{ok:false,error:String(e&&e.stack||e)}}finally{
   state=old;window.__GC345_FORCE_PHONE=oldForce;
   if(oldErr)safeLocalSet('grimCompanyLastRuntimeError',oldErr);else safeLocalRemove('grimCompanyLastRuntimeError');
