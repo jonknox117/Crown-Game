@@ -22,7 +22,7 @@ window.__GC280_TEST=function(){
   const leader=generateAdventurer('veyric');leader.name='Commander Test';leader.lvl=12;leader.status='Ready';state.roster.push(leader);
   const crew=[];for(let i=0;i<4;i++){const a=generateAdventurer('veyric');a.lvl=6;a.status='Ready';state.roster.push(a);crew.push(a)}
   const managed=makeParty('veyric','Managed Test Company');managed.members=crew.slice(0,3).map(a=>a.id);managed.captainId=crew[0].id;state.parties.push(managed);gc250EnsureRiskBoard('veyric');
-  const appointed=gc280Appoint('veyric',leader.id)===true,c=gc280CommandState('veyric');c.directive='Make Money';c.casualtyPolicy='Normal';c.autonomy=true;
+  const appointed=gc280Appoint('veyric',leader.id)===true,c=gc280CommandState('veyric');c.directive='Make Money';c.casualtyPolicy='Normal';c.autonomy=true;if(typeof gc370ChangeOrders==='function')gc370ChangeOrders('veyric',{priority:'Make Money',risk:'Normal',authority:'Full'});
   const acted=gc280CommandAct('veyric',true),realDispatch=!!managed.expedition&&!managed.members.includes(f.id),stanceReal=crew[3].dailyOrder==='Odd Jobs';
   const copy=normalizeState(JSON.parse(JSON.stringify(state))),saveSafe=copy.regions.veyric.gc280Command.commanderId===leader.id&&copy.roster.find(a=>a.id===leader.id)?.status==='Command';
   return{ok:!!(appointed&&acted&&realDispatch&&stanceReal&&saveSafe),appointed,acted,realDispatch,stanceReal,saveSafe,directive:c.directive,policy:gc280EffectivePolicy('veyric')};
