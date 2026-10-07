@@ -74,8 +74,8 @@ window.__GC300_TEST=function(){
   state=createState('Legacy Test','veyric');
   const a=generateAdventurer('veyric');a.name='Mara Test';state.roster=[a];
   const l=gc300Legacy(a);l.contracts=30;l.risk5=5;l.campaigns=3;l.bossKills=1;l.fieldSuccess=20;l.captainMissions=20;l.commandDays=31;l.nearDeaths=3;
-  gc300Evaluate(a);gc300RecordBoss(a,'Hadrik Test');l.scars.push('One-Eyed');
-  const d=derived(a),titles=l.titles.length>=5,accomplishments=l.accomplishments.length>=7,scarApplied=d.combat.resolve>=a.stats.resolve,copy=normalizeState(JSON.parse(JSON.stringify(state))),saveSafe=copy.roster[0].gc300Legacy.titles.length===l.titles.length;
+  gc300Evaluate(a);gc300RecordBoss(a,'Hadrik Test');const before=derived(a);l.scars.push('One-Eyed');
+  const d=derived(a),titles=l.titles.length>=5,accomplishments=l.accomplishments.length>=7,scarApplied=d.combat.resolve===before.combat.resolve+2,copy=normalizeState(JSON.parse(JSON.stringify(state))),saveSafe=copy.roster[0].gc300Legacy.titles.length===l.titles.length;
   return{ok:!!(titles&&accomplishments&&scarApplied&&saveSafe),titles:l.titles.length,accomplishments:l.accomplishments.length,active:l.activeTitle,scarApplied,saveSafe};
  }catch(e){return{ok:false,error:String(e&&e.stack||e)}}finally{state=old}
 };
