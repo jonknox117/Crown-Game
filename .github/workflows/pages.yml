@@ -8,7 +8,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: pages-v21-1
+  group: pages-v21-2
   cancel-in-progress: true
 jobs:
   deploy:
@@ -20,8 +20,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Build Grim Company v21.1 mobile bundle
-        run: python3 scripts/build_grim_company_v21_1.py
+      - name: Build Grim Company v21.2 mobile bundle
+        run: python3 scripts/build_grim_company_v21_2.py
 
       - name: Validate JavaScript and release markers
         run: |
@@ -38,6 +38,7 @@ jobs:
           grep -q "GC300_VERSION='21.0'" grimdark-company/play/index.html
           grep -q "GC301_VERSION='21.0.1'" grimdark-company/play/index.html
           grep -q "GC310_VERSION='21.1'" grimdark-company/play/index.html
+          grep -q "GC320_VERSION='21.2'" grimdark-company/play/index.html
           grep -q "playerCharacterIsRosterMember=true" grimdark-company/play/index.html
           grep -q "founderCharacterCreation=true" grimdark-company/play/index.html
           grep -q "modularPortraitSelection=true" grimdark-company/play/index.html
@@ -60,6 +61,14 @@ jobs:
           grep -q "personalContractShares=true" grimdark-company/play/index.html
           grep -q "sameMercenariesRecruitable=true" grimdark-company/play/index.html
           grep -q "shareEconomyNoWeeklyPayroll=true" grimdark-company/play/index.html
+          grep -q "founderDecisionGlobalPause=true" grimdark-company/play/index.html
+          grep -q "decisionAutoPopup=true" grimdark-company/play/index.html
+          grep -q "riskLockedByExperience=true" grimdark-company/play/index.html
+          grep -q "downedMortalDanger=true" grimdark-company/play/index.html
+          grep -q "retreatIsStrategic=true" grimdark-company/play/index.html
+          grep -q "independentWorkAfterFounding=true" grimdark-company/play/index.html
+          grep -q "founderFourStancesAlways=true" grimdark-company/play/index.html
+          grep -q "fairBeforePunishingAfter=true" grimdark-company/play/index.html
           grep -q "__GC230_TEST" grimdark-company/play/index.html
           grep -q "__GC240_TEST" grimdark-company/play/index.html
           grep -q "__GC250_TEST" grimdark-company/play/index.html
@@ -70,6 +79,7 @@ jobs:
           grep -q "__GC300_TEST" grimdark-company/play/index.html
           grep -q "__GC301_TEST" grimdark-company/play/index.html
           grep -q "__GC310_TEST" grimdark-company/play/index.html
+          grep -q "__GC320_TEST" grimdark-company/play/index.html
           test -f grimdark-company/play-206/index.html
           test -f grimdark-company/play-207/index.html
           test -f grimdark-company/play-208/index.html
@@ -78,6 +88,7 @@ jobs:
           test -f grimdark-company/play-210/index.html
           test -f grimdark-company/play-2101/index.html
           test -f grimdark-company/play-211/index.html
+          test -f grimdark-company/play-212/index.html
 
       - name: Browser startup smoke test
         run: |
@@ -129,10 +140,10 @@ jobs:
               for marker in ('founderRace','founderCulture','founderClass'):
                   if marker not in ids: raise SystemExit('v20.8 character creation missing control: '+marker)
           if 'companyName' in ids: raise SystemExit('v20.8 should not ask for a company name before play begins.')
-          print('v21.1 startup smoke passed:', sorted(rendered))
+          print('v21.2 startup smoke passed:', sorted(rendered))
           PY
 
-      - name: Full progression loot legacy and freelancer behavior smoke tests
+      - name: Full progression loot legacy freelancer and stakes behavior smoke tests
         run: |
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
           python3 - <<'PY'
@@ -152,9 +163,10 @@ jobs:
                 loot:window.__GC290_TEST&&window.__GC290_TEST(),
                 veteran:window.__GC300_TEST&&window.__GC300_TEST(),
                 partyLegacy:window.__GC301_TEST&&window.__GC301_TEST(),
-                freelancer:window.__GC310_TEST&&window.__GC310_TEST()
+                freelancer:window.__GC310_TEST&&window.__GC310_TEST(),
+                stakes:window.__GC320_TEST&&window.__GC320_TEST()
               };
-              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok&&out.freelancer&&out.freelancer.ok;
+              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok&&out.freelancer&&out.freelancer.ok&&out.stakes&&out.stakes.ok;
               document.body.setAttribute('data-all-tests',ok?'pass':'fail');
               var n=document.createElement('pre');n.id='all-test-output';n.textContent=JSON.stringify(out);document.body.appendChild(n);
             }catch(e){
