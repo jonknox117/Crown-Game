@@ -8,7 +8,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: pages-v21-3-1
+  group: pages-v21-3-2
   cancel-in-progress: true
 jobs:
   deploy:
@@ -20,8 +20,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Build Grim Company v21.3.1 mobile bundle
-        run: python3 scripts/build_grim_company_v21_3_1.py
+      - name: Build Grim Company v21.3.2 mobile bundle
+        run: python3 scripts/build_grim_company_v21_3_2.py
 
       - name: Validate JavaScript and release markers
         run: |
@@ -42,6 +42,7 @@ jobs:
           grep -q "GC321_VERSION='21.2.1'" grimdark-company/play/index.html
           grep -q "GC330_VERSION='21.3'" grimdark-company/play/index.html
           grep -q "GC331_VERSION='21.3.1'" grimdark-company/play/index.html
+          grep -q "GC332_VERSION='21.3.2'" grimdark-company/play/index.html
           grep -q "playerCharacterIsRosterMember=true" grimdark-company/play/index.html
           grep -q "founderCharacterCreation=true" grimdark-company/play/index.html
           grep -q "modularPortraitSelection=true" grimdark-company/play/index.html
@@ -90,6 +91,11 @@ jobs:
           grep -q "partyMembersTransferBetweenIdleParties=true" grimdark-company/play/index.html
           grep -q "partyUnavailableReasonsVisible=true" grimdark-company/play/index.html
           grep -q "expeditionUiUpdatesWithoutFullPageRender=true" grimdark-company/play/index.html
+          grep -q "freelanceCrewIsTemporary=true" grimdark-company/play/index.html
+          grep -q "freelanceCrewAlwaysHealthy=true" grimdark-company/play/index.html
+          grep -q "freelanceCrewRotates=true" grimdark-company/play/index.html
+          grep -q "injuredFreelancersNotForcedBack=true" grimdark-company/play/index.html
+          grep -q "sameThreeNotPreferred=true" grimdark-company/play/index.html
           grep -q "__GC230_TEST" grimdark-company/play/index.html
           grep -q "__GC240_TEST" grimdark-company/play/index.html
           grep -q "__GC250_TEST" grimdark-company/play/index.html
@@ -104,6 +110,7 @@ jobs:
           grep -q "__GC321_TEST" grimdark-company/play/index.html
           grep -q "__GC330_TEST" grimdark-company/play/index.html
           grep -q "__GC331_TEST" grimdark-company/play/index.html
+          grep -q "__GC332_TEST" grimdark-company/play/index.html
           test -f grimdark-company/play-206/index.html
           test -f grimdark-company/play-207/index.html
           test -f grimdark-company/play-208/index.html
@@ -116,6 +123,7 @@ jobs:
           test -f grimdark-company/play-2121/index.html
           test -f grimdark-company/play-213/index.html
           test -f grimdark-company/play-2131/index.html
+          test -f grimdark-company/play-2132/index.html
 
       - name: Browser startup smoke test
         run: |
@@ -167,10 +175,10 @@ jobs:
               for marker in ('founderRace','founderCulture','founderClass'):
                   if marker not in ids: raise SystemExit('v20.8 character creation missing control: '+marker)
           if 'companyName' in ids: raise SystemExit('v20.8 should not ask for a company name before play begins.')
-          print('v21.3.1 startup smoke passed:', sorted(rendered))
+          print('v21.3.2 startup smoke passed:', sorted(rendered))
           PY
 
-      - name: Full progression gameplay interface and QoL behavior smoke tests
+      - name: Full progression gameplay interface QoL and freelancer crew smoke tests
         run: |
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
           python3 - <<'PY'
@@ -194,9 +202,10 @@ jobs:
                 stakes:window.__GC320_TEST&&window.__GC320_TEST(),
                 decisionLock:window.__GC321_TEST&&window.__GC321_TEST(),
                 interface:window.__GC330_TEST&&window.__GC330_TEST(),
-                qol:window.__GC331_TEST&&window.__GC331_TEST()
+                qol:window.__GC331_TEST&&window.__GC331_TEST(),
+                freelanceCrew:window.__GC332_TEST&&window.__GC332_TEST()
               };
-              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok&&out.freelancer&&out.freelancer.ok&&out.stakes&&out.stakes.ok&&out.decisionLock&&out.decisionLock.ok&&out.interface&&out.interface.ok&&out.qol&&out.qol.ok;
+              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok&&out.freelancer&&out.freelancer.ok&&out.stakes&&out.stakes.ok&&out.decisionLock&&out.decisionLock.ok&&out.interface&&out.interface.ok&&out.qol&&out.qol.ok&&out.freelanceCrew&&out.freelanceCrew.ok;
               document.body.setAttribute('data-all-tests',ok?'pass':'fail');
               var n=document.createElement('pre');n.id='all-test-output';n.textContent=JSON.stringify(out);document.body.appendChild(n);
             }catch(e){
