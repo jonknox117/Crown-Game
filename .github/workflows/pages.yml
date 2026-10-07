@@ -56,7 +56,8 @@ jobs:
           grep -q "GC347_VERSION='21.4.7'" grimdark-company/play/index.html
           grep -q "GC348_VERSION='21.4.8'" grimdark-company/play/index.html
           grep -q "GC350_VERSION='21.5.0'" grimdark-company/play/index.html
-          grep -q "GC351_VERSION='21.5.1'" grimdark-company/play/index.html\n          grep -q "GC352_VERSION='21.5.2'" grimdark-company/play/index.html
+          grep -q "GC351_VERSION='21.5.1'" grimdark-company/play/index.html
+          grep -q "GC352_VERSION='21.5.2'" grimdark-company/play/index.html
           grep -q "playerCharacterIsRosterMember=true" grimdark-company/play/index.html
           grep -q "founderCharacterCreation=true" grimdark-company/play/index.html
           grep -q "modularPortraitSelection=true" grimdark-company/play/index.html
@@ -195,7 +196,10 @@ jobs:
           grep -q "duplicateToastGuard=true" grimdark-company/play/index.html
           grep -q "freebladeScrollMemory=true" grimdark-company/play/index.html
           grep -q "companyScrollMemoryPreserved=true" grimdark-company/play/index.html
-          grep -q "noTabSwitchRequiredForLiveProgress=true" grimdark-company/play/index.html\n          grep -q "decisionChoicesRejectCarryoverTaps=true" grimdark-company/play/index.html\n          grep -q "repeatedPushCannotChooseDecision=true" grimdark-company/play/index.html\n          grep -q "decisionGuardExtendsWhileTapping=true" grimdark-company/play/index.html
+          grep -q "noTabSwitchRequiredForLiveProgress=true" grimdark-company/play/index.html
+          grep -q "decisionChoicesRejectCarryoverTaps=true" grimdark-company/play/index.html
+          grep -q "repeatedPushCannotChooseDecision=true" grimdark-company/play/index.html
+          grep -q "decisionGuardExtendsWhileTapping=true" grimdark-company/play/index.html
           grep -q "__GC230_TEST" grimdark-company/play/index.html
           grep -q "__GC240_TEST" grimdark-company/play/index.html
           grep -q "__GC250_TEST" grimdark-company/play/index.html
@@ -221,7 +225,8 @@ jobs:
           grep -q "__GC347_TEST" grimdark-company/play/index.html
           grep -q "__GC348_TEST" grimdark-company/play/index.html
           grep -q "__GC350_TEST" grimdark-company/play/index.html
-          grep -q "__GC351_TEST" grimdark-company/play/index.html\n          grep -q "__GC352_TEST" grimdark-company/play/index.html
+          grep -q "__GC351_TEST" grimdark-company/play/index.html
+          grep -q "__GC352_TEST" grimdark-company/play/index.html
           test -f grimdark-company/play-206/index.html
           test -f grimdark-company/play-207/index.html
           test -f grimdark-company/play-208/index.html
@@ -245,7 +250,8 @@ jobs:
           test -f grimdark-company/play-2147/index.html
           test -f grimdark-company/play-2148/index.html
           test -f grimdark-company/play-2150/index.html
-          test -f grimdark-company/play-2151/index.html\n          test -f grimdark-company/play-2152/index.html
+          test -f grimdark-company/play-2151/index.html
+          test -f grimdark-company/play-2152/index.html
 
       - name: Browser startup smoke test
         run: |
@@ -336,7 +342,8 @@ jobs:
                 liveUi:window.__GC347_TEST&&window.__GC347_TEST(),
                 liveExpedition:window.__GC348_TEST&&window.__GC348_TEST(),
                 motionPolish:window.__GC350_TEST&&window.__GC350_TEST(),
-                smoothQol:window.__GC351_TEST&&window.__GC351_TEST(),\n                decisionTapShield:window.__GC352_TEST&&window.__GC352_TEST()
+                smoothQol:window.__GC351_TEST&&window.__GC351_TEST(),
+                decisionTapShield:window.__GC352_TEST&&window.__GC352_TEST()
               };
               var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok&&out.freelancer&&out.freelancer.ok&&out.stakes&&out.stakes.ok&&out.decisionLock&&out.decisionLock.ok&&out.interface&&out.interface.ok&&out.qol&&out.qol.ok&&out.freelanceCrew&&out.freelanceCrew.ok&&out.presence&&out.presence.ok&&out.stability&&out.stability.ok&&out.fastStability&&out.fastStability.ok&&out.phoneStability&&out.phoneStability.ok&&out.focusStability&&out.focusStability.ok&&out.longSession&&out.longSession.ok&&out.clockHotfix&&out.clockHotfix.ok&&out.liveUi&&out.liveUi.ok&&out.liveExpedition&&out.liveExpedition.ok&&out.motionPolish&&out.motionPolish.ok&&out.smoothQol&&out.smoothQol.ok&&out.decisionTapShield&&out.decisionTapShield.ok;
               document.body.setAttribute('data-all-tests',ok?'pass':'fail');
