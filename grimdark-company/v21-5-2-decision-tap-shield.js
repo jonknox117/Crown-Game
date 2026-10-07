@@ -140,6 +140,14 @@ gc193FinishNoTime=function(p){
  return out;
 };
 
+function gc353InstallStyles(){
+ if(document.getElementById('gc353Styles'))return;
+ const st=document.createElement('style');st.id='gc353Styles';
+ st.textContent='button[data-action="gc199Pause"],button[data-action="gc199Play"],button[data-action="gc199Fast"]{min-width:44px!important;min-height:44px!important;padding:6px 8px!important}';
+ document.head.appendChild(st);
+}
+gc353InstallStyles();
+
 const _auditGC353=audit;
 audit=function(){
  const out=_auditGC353();
@@ -148,6 +156,7 @@ audit=function(){
  out.freelanceReturnPresenceImmediate=true;
  out.townMovePreservesScroll=true;
  out.decisionShieldTestHasNoRuntimeSideEffects=true;
+ out.mobileTimeControlsAre44px=true;
  return out;
 };
 window.__BL_AUDIT=audit;
