@@ -210,9 +210,10 @@ window.__GC321_TEST=function(){
   const snap={day:state.company.day,dayProgress:state.timeSystem.gc199DayProgress,progress:p.expedition.progress,elapsed:p.expedition.elapsedDays,field:p.expedition.gc199FieldProgress,xp:f.xp,hp:f.hp};
   gc199AdvanceFieldClocks(.8);gc200ContinuousWork(.8);gc201AdvanceField(.8);gc201CombatTick(p,.8);gc199AdvanceWorldDay();if(typeof gc280CommandTick==='function')gc280CommandTick(.8);gc199SetMode('fast');
   const frozen=snap.day===state.company.day&&snap.dayProgress===state.timeSystem.gc199DayProgress&&snap.progress===p.expedition.progress&&snap.elapsed===p.expedition.elapsedDays&&snap.field===p.expedition.gc199FieldProgress&&snap.xp===f.xp&&snap.hp===f.hp&&gc199Mode()==='paused';
+  const pendingCopy=normalizeState(JSON.parse(JSON.stringify(state))),pendingSaveSafe=pendingCopy.timeSystem.gc199Mode==='paused'&&!!pendingCopy.parties.find(x=>x.expedition?.gc260PendingDecision);
   const d=p.expedition.gc260PendingDecision;gc260ResolveDecision(p.id,'self');
   const cleared=!p.expedition.gc260PendingDecision&&!gc321Locked(),resumed=gc199Mode()==='fast';
-  const copy=normalizeState(JSON.parse(JSON.stringify(state))),saveSafe=copy.timeSystem.gc199Mode==='fast';
-  return{ok:!!(pending&&modalNow&&paused&&frozen&&cleared&&resumed&&saveSafe),pending,modalNow,paused,frozen,cleared,resumed,saveSafe};
+  const copy=normalizeState(JSON.parse(JSON.stringify(state))),saveSafe=!copy.parties.some(x=>x.expedition?.gc260PendingDecision)&&!copy.timeSystem.gc321DecisionLock;
+  return{ok:!!(pending&&modalNow&&paused&&frozen&&cleared&&resumed&&pendingSaveSafe&&saveSafe),pending,modalNow,paused,frozen,cleared,resumed,pendingSaveSafe,saveSafe};
  }catch(e){return{ok:false,error:String(e&&e.stack||e)}}finally{gc201ContactRate=oldRate;state=old;try{document.getElementById('modal')?.classList.remove('show')}catch(_){}}
 };
