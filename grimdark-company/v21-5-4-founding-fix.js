@@ -2,8 +2,10 @@
 const GC354_VERSION='21.5.4';
 
 function gc354FoundingEarned(){
- const p=gc270Progression(),fb=p?.freeblade;
- return!!(gc270IsFreeblade()&&fb&&fb.successes>=GC270_REQUIRED_WINS&&state.company.silver>=GC270_FOUNDING_COST);
+ const p=gc270Progression(),fb=typeof gc310Freeblade==='function'?gc310Freeblade():p?.freeblade;
+ const reputationReady=typeof GC310_FOUNDING_REP!=='undefined'?(Number(fb?.reputation)||0)>=GC310_FOUNDING_REP:null;
+ const legacyReady=(Number(fb?.successes)||0)>=GC270_REQUIRED_WINS;
+ return!!(gc270IsFreeblade()&&fb&&(reputationReady===null?legacyReady:reputationReady)&&state.company.silver>=GC270_FOUNDING_COST);
 }
 
 gc270FoundingReady=function(){
@@ -12,8 +14,9 @@ gc270FoundingReady=function(){
 };
 
 gc270FoundingStatusHTML=function(){
- const fb=gc270Progression().freeblade,wins=Math.min(fb.successes,GC270_REQUIRED_WINS),silver=Math.min(state.company.silver,GC270_FOUNDING_COST);
- const earned=gc354FoundingEarned(),ready=gc270FoundingReady(),pct=Math.min(100,((wins/GC270_REQUIRED_WINS)+(silver/GC270_FOUNDING_COST))*50);
+ const fb=typeof gc310Freeblade==='function'?gc310Freeblade():gc270Progression().freeblade;
+ const useRep=typeof GC310_FOUNDING_REP!=='undefined',progress=useRep?Math.min(Number(fb?.reputation)||0,GC310_FOUNDING_REP):Math.min(Number(fb?.successes)||0,GC270_REQUIRED_WINS),need=useRep?GC310_FOUNDING_REP:GC270_REQUIRED_WINS,silver=Math.min(state.company.silver,GC270_FOUNDING_COST);
+ const earned=gc354FoundingEarned(),ready=gc270FoundingReady(),pct=Math.min(100,((progress/need)+(silver/GC270_FOUNDING_COST))*50);
  let action='';
  if(earned){
   action=ready
@@ -22,7 +25,8 @@ gc270FoundingStatusHTML=function(){
  }else{
   action='<div class="tiny muted">Survive a few jobs and save enough to lease a chapterhouse. You can keep working alone after the opportunity unlocks.</div>';
  }
- return'<div class="gc270Founding '+(earned?'ready':'')+'"><div class="statline"><div><span>FIRST MAJOR MILESTONE</span><b>'+(earned?'You can found a company.':'Build a name worth following.')+'</b></div><strong>'+wins+'/'+GC270_REQUIRED_WINS+'</strong></div><div class="tiny muted">Successful jobs '+fb.successes+'/'+GC270_REQUIRED_WINS+' • Silver '+Math.round(state.company.silver)+'/'+GC270_FOUNDING_COST+'</div><div class="bar goldbar"><i style="width:'+pct+'%"></i></div>'+action+'</div>';
+ const progressLabel=useRep?'Freeblade Reputation '+Math.round(Number(fb?.reputation)||0)+'/'+GC310_FOUNDING_REP:'Successful jobs '+(Number(fb?.successes)||0)+'/'+GC270_REQUIRED_WINS;
+ return'<div class="gc270Founding '+(earned?'ready':'')+'"><div class="statline"><div><span>FIRST MAJOR MILESTONE</span><b>'+(earned?'You can found a company.':'Build a name worth following.')+'</b></div><strong>'+Math.round(progress)+'/'+need+'</strong></div><div class="tiny muted">'+progressLabel+' • Silver '+Math.round(state.company.silver)+'/'+GC270_FOUNDING_COST+'</div><div class="bar goldbar"><i style="width:'+pct+'%"></i></div>'+action+'</div>';
 };
 
 const _auditGC354=audit;
@@ -40,8 +44,9 @@ window.__GC354_TEST=function(){
  const old=state;
  try{
   gc270CreateFreebladeState('veyric',{name:'Founding Test',race:'Human',culture:'Veyric',className:'March Ranger',gender:'Male',portrait:1});
-  const f=gc260Founder(),fb=gc270Progression().freeblade;
-  fb.successes=GC270_REQUIRED_WINS;state.company.silver=GC270_FOUNDING_COST+20;
+  const f=gc260Founder(),fb=typeof gc310Freeblade==='function'?gc310Freeblade():gc270Progression().freeblade;
+  if(typeof GC310_FOUNDING_REP!=='undefined')fb.reputation=GC310_FOUNDING_REP;else fb.successes=GC270_REQUIRED_WINS;
+  state.company.silver=GC270_FOUNDING_COST+20;
   f.status='Recovering';
   const recoveringReady=gc270FoundingReady();
   const recoveringHtml=gc270FoundingStatusHTML();
