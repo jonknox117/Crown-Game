@@ -45,7 +45,7 @@ window.__GC331_TEST=function(){
   p2.members.forEach(id=>{const x=state.roster.find(y=>y.id===id);if(x)x.status='Expedition'});
   const travelHTML=gc330ExpeditionCard(p2),pushVisible=/data-action="gc199Push"/.test(travelHTML)&&/PUSH PACE/.test(travelHTML);
   p2.expedition.battle={round:2,allies:[{name:a.name,charId:a.id,hp:18,maxHp:24,attack:7,guard:6,speed:5},{name:c.name,charId:c.id,hp:20,maxHp:20,attack:6,guard:5,speed:6}],enemies:[{name:'Road Reaver',hp:13,maxHp:22,attack:6,guard:4,speed:5}],log:['Round 1 — blades met.']};
-  const combatHTML=gc330ExpeditionCard(p2),combatVisible=/gc331CombatStage/.test(combatHTML)&&/battleGrid/.test(combatHTML)&&/LIVE AUTO-COMBAT/.test(combatHTML),pushLocked=/PUSH LOCKED — COMBAT/.test(combatHTML);
+  const combatHTML=gc330ExpeditionCard(p2),combatVisible=/gc331CombatStage/.test(combatHTML)&&/LIVE AUTO-COMBAT/.test(combatHTML)&&/Road Reaver/.test(combatHTML),pushLocked=/PUSH LOCKED — COMBAT/.test(combatHTML);
   p2.expedition=null;p2.members.forEach(id=>{const x=state.roster.find(y=>y.id===id);if(x&&x.status!=='Dead')x.status='Ready'});
   const fp=state.parties.find(p=>p.members.includes(f.id))||makeParty('veyric','Founder Party');if(!state.parties.includes(fp)){fp.members=[f.id];fp.captainId=f.id;state.parties.push(fp)}
   const fc=gc250FreshContractForRisk('veyric',1,[]);gc193EnsureContract(fc);f.status='Expedition';fp.expedition={contract:fc,progress:25,elapsedDays:.2,durationDays:1.5,expectedReturnDay:2,events:[],checks:[],battle:null,fought:false,complete:false,gcChecksDone:1,gc199FieldProgress:.1,gc201Momentum:0,gc201ContactExposure:.1,gc260BattleDecisionDone:true};
