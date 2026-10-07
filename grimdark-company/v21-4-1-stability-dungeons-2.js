@@ -28,7 +28,7 @@ window.__GC341_TEST=function(){
   const town=gc340TownHTML(),townClean=!town.includes(d.name)&&!town.includes('Discovered Sites');
   const screen=gc330ContractsScreen(),campaignPos=screen.indexOf('CAMPAIGN'),dungeonPos=screen.indexOf(d.name),contractPos=screen.indexOf('Available Contracts');
   const ordering=dungeonPos>=0&&contractPos>dungeonPos&&(campaignPos<0||campaignPos<dungeonPos);
-  const riskShown=new RegExp(`>${d.risk}<\\\\/b><small>RISK`).test(screen)||screen.includes(`RISK ${d.risk}`);
+  const riskShown=screen.includes(`<b>${d.risk}</b><small>RISK</small>`)||screen.includes(`RISK ${d.risk}`);
   gc340Move('train');gc340StartFocused('personalDrill');
   let soakError=null;
   try{
