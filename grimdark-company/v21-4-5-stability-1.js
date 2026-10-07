@@ -64,6 +64,7 @@ gc200ContinuousWork=function(deltaDays){
    const finished=GC345_RECOVERY_BATCH.slice();
    GC345_RECOVERY_CONTEXT=null;GC345_RECOVERY_BATCH=[];
    if(finished.length){
+    if(typeof gc344TrimRoutineHistory==='function')gc344TrimRoutineHistory();
     const now=Date.now();
     if(now-GC345_LAST_RECOVERY_SOUND>2200){
      GC345_LAST_RECOVERY_SOUND=now;GC345_STATS.recoverySounds++;
@@ -142,6 +143,27 @@ gc199UpdateClock=function(){
  if(state.ui?.tab==='company'&&now-GC345_LAST_PHONE_WORK>1800){GC345_LAST_PHONE_WORK=now;try{gc200UpdateWorkUI()}catch(_){}}
 };
 
+
+/* Preserve the actual clock DOM node across full renders. Older render wrappers
+   removed and recreated the sun/moon clock, which could visibly reset/flicker. */
+const _renderGC345StableClock=render;
+render=function(...args){
+ if(GC342_SIM_DEPTH>0)return _renderGC345StableClock(...args);
+ const oldClock=document.getElementById('gc199ClockBar');
+ if(oldClock)oldClock.remove();
+ const out=_renderGC345StableClock(...args);
+ if(state){
+  const top=document.querySelector('.topbar'),host=document.getElementById('app');
+  if(oldClock&&(top||host)){
+   if(top)top.insertAdjacentElement('afterend',oldClock);else host.insertAdjacentElement('afterbegin',oldClock);
+   gc199UpdateClock();
+  }else if(!document.getElementById('gc199ClockBar')){
+   gc199MountClock();
+  }
+ }
+ return out;
+};
+
 function gc345InstallStyles(){
  if(document.getElementById('gc345Styles'))return;
  const st=document.createElement('style');st.id='gc345Styles';
@@ -165,6 +187,7 @@ audit=function(){
  out.fastAudioRateLimited=true;
  out.phoneSunMoonMotionRemoved=true;
  out.phoneClockMinimalUpdates=true;
+ out.clockDomPreservedAcrossRenders=true;
  out.perTickStructuralFingerprintRemoved=true;
  out.volatileTrimThrottled=true;
  return out;
