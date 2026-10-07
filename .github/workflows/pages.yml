@@ -1,4 +1,4 @@
-# clean v21.4.6 deploy
+# v21.4.7 live UI deploy
 # v21.4.6 clock hotfix deploy
 # v21.4.2 stability deploy
 name: Deploy Broken Lantern to Pages
@@ -11,7 +11,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: pages-v21-4-6
+  group: pages-v21-4-7
   cancel-in-progress: true
 jobs:
   deploy:
@@ -23,8 +23,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Build Grim Company v21.4.6 mobile bundle
-        run: python3 scripts/build_grim_company_v21_4_6.py
+      - name: Build Grim Company v21.4.7 mobile bundle
+        run: python3 scripts/build_grim_company_v21_4_7.py
 
       - name: Validate JavaScript and release markers
         run: |
@@ -53,6 +53,7 @@ jobs:
           grep -q "GC344_VERSION='21.4.4'" grimdark-company/play/index.html
           grep -q "GC345_VERSION='21.4.5'" grimdark-company/play/index.html
           grep -q "GC346_VERSION='21.4.6'" grimdark-company/play/index.html
+          grep -q "GC347_VERSION='21.4.7'" grimdark-company/play/index.html
           grep -q "playerCharacterIsRosterMember=true" grimdark-company/play/index.html
           grep -q "founderCharacterCreation=true" grimdark-company/play/index.html
           grep -q "modularPortraitSelection=true" grimdark-company/play/index.html
@@ -157,6 +158,15 @@ jobs:
           grep -q "singleCanonicalClock=true" grimdark-company/play/index.html
           grep -q "duplicateClockSelfHealing=true" grimdark-company/play/index.html
           grep -q "clockSurvivesRepeatedRenders=true" grimdark-company/play/index.html
+          grep -q "visibleStatsUpdateWithoutNavigation=true" grimdark-company/play/index.html
+          grep -q "visibleProgressBarsUpdateWithoutNavigation=true" grimdark-company/play/index.html
+          grep -q "worldMetersUpdateWithoutNavigation=true" grimdark-company/play/index.html
+          grep -q "founderVitalsUpdateWithoutNavigation=true" grimdark-company/play/index.html
+          grep -q "contractAndExpeditionStateUpdateWithoutNavigation=true" grimdark-company/play/index.html
+          grep -q "freebladeMilestonesUpdateWithoutNavigation=true" grimdark-company/play/index.html
+          grep -q "liveUpdatesPreserveScroll=true" grimdark-company/play/index.html
+          grep -q "liveUpdatesSkipActiveInputsAndModals=true" grimdark-company/play/index.html
+          grep -q "liveUpdatesAvoidFullAppRender=true" grimdark-company/play/index.html
           grep -q "__GC230_TEST" grimdark-company/play/index.html
           grep -q "__GC240_TEST" grimdark-company/play/index.html
           grep -q "__GC250_TEST" grimdark-company/play/index.html
@@ -179,6 +189,7 @@ jobs:
           grep -q "__GC344_TEST" grimdark-company/play/index.html
           grep -q "__GC345_PLAYTEST" grimdark-company/play/index.html
           grep -q "__GC346_TEST" grimdark-company/play/index.html
+          grep -q "__GC347_TEST" grimdark-company/play/index.html
           test -f grimdark-company/play-206/index.html
           test -f grimdark-company/play-207/index.html
           test -f grimdark-company/play-208/index.html
@@ -199,6 +210,7 @@ jobs:
           test -f grimdark-company/play-2144/index.html
           test -f grimdark-company/play-2145/index.html
           test -f grimdark-company/play-2146/index.html
+          test -f grimdark-company/play-2147/index.html
 
       - name: Browser startup smoke test
         run: |
@@ -250,10 +262,10 @@ jobs:
               for marker in ('founderRace','founderCulture','founderClass'):
                   if marker not in ids: raise SystemExit('v20.8 character creation missing control: '+marker)
           if 'companyName' in ids: raise SystemExit('v20.8 should not ask for a company name before play begins.')
-          print('v21.4.6 startup smoke passed:', sorted(rendered))
+          print('v21.4.7 startup smoke passed:', sorted(rendered))
           PY
 
-      - name: Full progression gameplay clock hotfix long-session stability tests
+      - name: Full progression gameplay live UI and long-session stability tests
         run: |
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
           python3 - <<'PY'
@@ -285,9 +297,10 @@ jobs:
                 phoneStability:window.__GC343_TEST&&window.__GC343_TEST(),
                 focusStability:window.__GC344_TEST&&window.__GC344_TEST(),
                 longSession:window.__GC345_PLAYTEST&&window.__GC345_PLAYTEST(),
-                clockHotfix:window.__GC346_TEST&&window.__GC346_TEST()
+                clockHotfix:window.__GC346_TEST&&window.__GC346_TEST(),
+                liveUi:window.__GC347_TEST&&window.__GC347_TEST()
               };
-              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok&&out.freelancer&&out.freelancer.ok&&out.stakes&&out.stakes.ok&&out.decisionLock&&out.decisionLock.ok&&out.interface&&out.interface.ok&&out.qol&&out.qol.ok&&out.freelanceCrew&&out.freelanceCrew.ok&&out.presence&&out.presence.ok&&out.stability&&out.stability.ok&&out.fastStability&&out.fastStability.ok&&out.phoneStability&&out.phoneStability.ok&&out.focusStability&&out.focusStability.ok&&out.longSession&&out.longSession.ok&&out.clockHotfix&&out.clockHotfix.ok;
+              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok&&out.freelancer&&out.freelancer.ok&&out.stakes&&out.stakes.ok&&out.decisionLock&&out.decisionLock.ok&&out.interface&&out.interface.ok&&out.qol&&out.qol.ok&&out.freelanceCrew&&out.freelanceCrew.ok&&out.presence&&out.presence.ok&&out.stability&&out.stability.ok&&out.fastStability&&out.fastStability.ok&&out.phoneStability&&out.phoneStability.ok&&out.focusStability&&out.focusStability.ok&&out.longSession&&out.longSession.ok&&out.clockHotfix&&out.clockHotfix.ok&&out.liveUi&&out.liveUi.ok;
               document.body.setAttribute('data-all-tests',ok?'pass':'fail');
               var n=document.createElement('pre');n.id='all-test-output';n.textContent=JSON.stringify(out);document.body.appendChild(n);
             }catch(e){
