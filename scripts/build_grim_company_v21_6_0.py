@@ -13,6 +13,7 @@ patch_files = [
  'v21-6-0-combat-hooks.js',
  'v21-6-0-class-ui.js',
  'v21-6-0-combat-tests.js',
+ 'v21-6-0-final-consistency.js',
 ]
 patch = '\n\n'.join((game / name).read_text(encoding='utf-8') for name in patch_files)
 def inject(source):
@@ -30,6 +31,7 @@ required = [
  '__GC360_RARITY_TEST',
  '__GC360_CLASS_TEST',
  '__GC360_COMBAT_TEST',
+ '__GC360_FINAL_TEST',
  'GC360_ABILITIES',
 ]
 missing = [s for s in required if s not in source]
