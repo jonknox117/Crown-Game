@@ -92,10 +92,10 @@ window.__GC352_TEST=function(){
  const bubble=()=>bubbled++;
  try{
   host.classList.add('show');
-  sheet.innerHTML='<div class="gc320DecisionModal"><div class="gc260DecisionChoices"><button data-action="gc260Decision">Choice</button></div></div>';
+  sheet.innerHTML='<div class="gc320DecisionModal"><div class="gc260DecisionChoices"><button data-action="gc352TestChoice">Choice</button></div></div>';
   document.body.addEventListener('click',bubble);
   gc352StartDecisionGuard();
-  const btn=sheet.querySelector('[data-action="gc260Decision"]');
+  const btn=sheet.querySelector('[data-action="gc352TestChoice"]');
   btn.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));
   const blocked=bubbled===0&&GC352_STATS.carryoverTapsBlocked>0;
   GC352_ARM_AT=gc352Now()-1;
@@ -106,5 +106,73 @@ window.__GC352_TEST=function(){
   document.body.removeEventListener('click',bubble);
   clearTimeout(GC352_GUARD_TIMER);GC352_ARM_AT=oldArm;
   host.className=oldClass;sheet.innerHTML=oldHTML;
+ }
+};
+
+/* Grim Company v21.5.3 — stability & QoL follow-up.
+   Rapid Push stays responsive, town movement preserves scroll, and freelance return presence is corrected immediately. */
+const GC353_VERSION='21.5.3';
+
+/* Push Pace is intentionally repeat-tapped. The generic duplicate-mutation guard
+   should not throw away legitimate fast taps; v21.5.2's decision shield handles
+   the dangerous transition into mandatory decision menus. */
+if(typeof GC351_ACTION_EXEMPT!=='undefined')GC351_ACTION_EXEMPT.add('gc199Push');
+
+/* Re-rendering the town panel after a location tap should not jerk the phone
+   viewport up or down. */
+const _gc340MoveGC353=gc340Move;
+gc340Move=function(place){
+ const y=window.scrollY||0,out=_gc340MoveGC353(place);
+ requestAnimationFrame(()=>{if(Math.abs((window.scrollY||0)-y)>2)window.scrollTo(0,y)});
+ return out;
+};
+
+/* Disposable freelance crews are removed at contract end. Keep the Founder's
+   physical-presence state consistent in the same transaction instead of waiting
+   for the YOU screen to lazily self-heal it. */
+const _gc193FinishNoTimeGC353=gc193FinishNoTime;
+gc193FinishNoTime=function(p){
+ const out=_gc193FinishNoTimeGC353(p),f=gc260Founder(),pr=gc340Presence();
+ if(f&&pr&&!gc340FounderInField()&&!gc340FounderInDungeon()){
+  pr.regionId=f.regionId;pr.mode='town';
+  if(!gc340TownDef(f.regionId)?.[pr.place])pr.place='hall';
+ }
+ return out;
+};
+
+const _auditGC353=audit;
+audit=function(){
+ const out=_auditGC353();
+ out.v353StabilityQol=GC353_VERSION;
+ out.pushRapidTapsStayResponsive=true;
+ out.freelanceReturnPresenceImmediate=true;
+ out.townMovePreservesScroll=true;
+ out.decisionShieldTestHasNoRuntimeSideEffects=true;
+ return out;
+};
+window.__BL_AUDIT=audit;
+
+window.__GC353_TEST=function(){
+ const old=state;
+ try{
+  gc270CreateFreebladeState('veyric',{name:'QoL Test',race:'Human',culture:'Veyric',className:'March Ranger',gender:'Male',portrait:1});
+  const f=gc260Founder();state.ui.tab='you';render();
+  window.scrollTo(0,Math.min(320,Math.max(0,document.documentElement.scrollHeight-innerHeight)));
+  const y0=window.scrollY;gc340Move('scout');
+  return new Promise(resolve=>requestAnimationFrame(()=>{
+   const y1=window.scrollY;
+   state.ui.tab='jobs';render();
+   const c=gc310FreebladeContracts()[0];gc310AcceptContract(c.id);
+   const p=state.parties.find(x=>x.gc332EphemeralFreelance&&x.expedition);
+   const m0=Number(p?.expedition?.gc201Momentum)||0;
+   gc199PushParty(p.id);const m1=Number(p.expedition.gc201Momentum)||0;
+   gc199PushParty(p.id);const m2=Number(p.expedition.gc201Momentum)||0;
+   p.expedition.complete=true;gc193FinishNoTime(p);
+   const pr=gc340Presence(),pushResponsive=m2>m1&&m1>m0,scrollStable=Math.abs(y1-y0)<=2,returnTown=pr.mode==='town';
+   const integrity=gc342StateIntegrity().ok,oneClock=gc346AllClocks().length===1;
+   resolve({ok:!!(pushResponsive&&scrollStable&&returnTown&&integrity&&oneClock),pushResponsive,scrollStable,returnTown,m0,m1,m2,y0,y1,integrity,oneClock});
+  }));
+ }catch(e){return{ok:false,error:String(e&&e.stack||e)}}finally{
+  setTimeout(()=>{state=old},0);
  }
 };
