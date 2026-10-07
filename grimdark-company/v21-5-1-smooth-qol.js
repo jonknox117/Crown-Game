@@ -288,6 +288,7 @@ window.__GC351_TEST=function(){
   const doubleTapBlocked=GC351_STATS.actionsBlocked>blocked0;
 
   state.ui.tab='you';render();gc340Move('train');gc340StartFocused('personalDrill');
+  if(typeof gc344RefreshFocusHost==='function')gc344RefreshFocusHost();
   gc351TargetedPatch();
   const bar=()=>document.querySelector('[data-gc340-activitybar]')?.style.width||'';
   const b0=bar();gc199AdvanceFieldClocks(.03);gc351TargetedPatch();const b1=bar();
