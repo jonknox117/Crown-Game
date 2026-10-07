@@ -1,4 +1,4 @@
-# v21.5.3 stability qol deploy
+# v21.5.4 founding visibility deploy
 # v21.4.6 clock hotfix deploy
 # v21.4.2 stability deploy
 name: Deploy Broken Lantern to Pages
@@ -24,8 +24,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Build Grim Company v21.5.3 mobile bundle
-        run: python3 scripts/build_grim_company_v21_5_2.py
+      - name: Build Grim Company v21.5.4 mobile bundle
+        run: python3 scripts/build_grim_company_v21_5_4.py
 
       - name: Validate JavaScript and release markers
         run: |
@@ -60,6 +60,7 @@ jobs:
           grep -q "GC351_VERSION='21.5.1'" grimdark-company/play/index.html
           grep -q "GC352_VERSION='21.5.2'" grimdark-company/play/index.html
           grep -q "GC353_VERSION='21.5.3'" grimdark-company/play/index.html
+          grep -q "GC354_VERSION='21.5.4'" grimdark-company/play/index.html
           grep -q "playerCharacterIsRosterMember=true" grimdark-company/play/index.html
           grep -q "founderCharacterCreation=true" grimdark-company/play/index.html
           grep -q "modularPortraitSelection=true" grimdark-company/play/index.html
@@ -234,6 +235,7 @@ jobs:
           grep -q "__GC351_TEST" grimdark-company/play/index.html
           grep -q "__GC352_TEST" grimdark-company/play/index.html
           grep -q "__GC353_TEST" grimdark-company/play/index.html
+          grep -q "__GC354_TEST" grimdark-company/play/index.html
           test -f grimdark-company/play-206/index.html
           test -f grimdark-company/play-207/index.html
           test -f grimdark-company/play-208/index.html
@@ -260,6 +262,7 @@ jobs:
           test -f grimdark-company/play-2151/index.html
           test -f grimdark-company/play-2152/index.html
           test -f grimdark-company/play-2153/index.html
+          test -f grimdark-company/play-2154/index.html
 
       - name: Browser startup smoke test
         run: |
@@ -311,7 +314,7 @@ jobs:
               for marker in ('founderRace','founderCulture','founderClass'):
                   if marker not in ids: raise SystemExit('v20.8 character creation missing control: '+marker)
           if 'companyName' in ids: raise SystemExit('v20.8 should not ask for a company name before play begins.')
-          print('v21.5.3 startup smoke passed:', sorted(rendered))
+          print('v21.5.4 startup smoke passed:', sorted(rendered))
           PY
 
       - name: Full progression gameplay smoothness QoL motion and stability tests
@@ -351,9 +354,11 @@ jobs:
                 liveExpedition:window.__GC348_TEST&&window.__GC348_TEST(),
                 motionPolish:window.__GC350_TEST&&window.__GC350_TEST(),
                 smoothQol:window.__GC351_TEST&&window.__GC351_TEST(),
-                decisionTapShield:window.__GC352_TEST&&window.__GC352_TEST()
+                decisionTapShield:window.__GC352_TEST&&window.__GC352_TEST(),
+                stabilityQol:window.__GC353_TEST&&window.__GC353_TEST(),
+                foundingVisibility:window.__GC354_TEST&&window.__GC354_TEST()
               };
-              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok&&out.freelancer&&out.freelancer.ok&&out.stakes&&out.stakes.ok&&out.decisionLock&&out.decisionLock.ok&&out.interface&&out.interface.ok&&out.qol&&out.qol.ok&&out.freelanceCrew&&out.freelanceCrew.ok&&out.presence&&out.presence.ok&&out.stability&&out.stability.ok&&out.fastStability&&out.fastStability.ok&&out.phoneStability&&out.phoneStability.ok&&out.focusStability&&out.focusStability.ok&&out.longSession&&out.longSession.ok&&out.clockHotfix&&out.clockHotfix.ok&&out.liveUi&&out.liveUi.ok&&out.liveExpedition&&out.liveExpedition.ok&&out.motionPolish&&out.motionPolish.ok&&out.smoothQol&&out.smoothQol.ok&&out.decisionTapShield&&out.decisionTapShield.ok;
+              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok&&out.freelancer&&out.freelancer.ok&&out.stakes&&out.stakes.ok&&out.decisionLock&&out.decisionLock.ok&&out.interface&&out.interface.ok&&out.qol&&out.qol.ok&&out.freelanceCrew&&out.freelanceCrew.ok&&out.presence&&out.presence.ok&&out.stability&&out.stability.ok&&out.fastStability&&out.fastStability.ok&&out.phoneStability&&out.phoneStability.ok&&out.focusStability&&out.focusStability.ok&&out.longSession&&out.longSession.ok&&out.clockHotfix&&out.clockHotfix.ok&&out.liveUi&&out.liveUi.ok&&out.liveExpedition&&out.liveExpedition.ok&&out.motionPolish&&out.motionPolish.ok&&out.smoothQol&&out.smoothQol.ok&&out.decisionTapShield&&out.decisionTapShield.ok&&out.stabilityQol&&out.stabilityQol.ok&&out.foundingVisibility&&out.foundingVisibility.ok;
               document.body.setAttribute('data-all-tests',ok?'pass':'fail');
               var n=document.createElement('pre');n.id='all-test-output';n.textContent=JSON.stringify(out);document.body.appendChild(n);
             }catch(e){
