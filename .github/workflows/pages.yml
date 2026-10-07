@@ -408,6 +408,9 @@ jobs:
         with:
           path: '.'
 
+      - name: Allow Pages artifact registration
+        run: sleep 5
+
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
