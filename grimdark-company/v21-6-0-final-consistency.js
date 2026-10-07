@@ -94,7 +94,7 @@ window.__GC360_FINAL_TEST=function(){
   const veteran=gc320IndependentEligible({risk:5}).ok;
   const panel=gc320IndependentCard({risk:5,id:'fake',type:'Job',species:'Bandit',title:'Test',desc:'Test',reward:50,enemyCount:5,regionId:'veyric'});
   const textCorrect=panel.includes('Legendary+ career rarity')&&!panel.includes('Lv.15');
-  const p=makeParty('veyric','Rarity Captain');p.members=[f.id];p.captainId=f.id;state.parties.push(p);
+  const p=makeParty('veyric','Rarity Captain');const support=generateAdventurer('veyric');support.status='Ready';support.missions=40;support.lvl=1;state.roster.push(support);p.members=[f.id,support.id];p.captainId=f.id;state.parties.push(p);
   const delegatedVeteran=gc280RiskAllowed('veyric',p,5);
   f.missions=0;f.lvl=20;
   const delegatedNovice=!gc280RiskAllowed('veyric',p,5);
