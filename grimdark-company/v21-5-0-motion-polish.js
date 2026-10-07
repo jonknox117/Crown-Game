@@ -178,12 +178,12 @@ window.__GC350_TEST=function(){
   const viz=document.querySelector('[data-gc350-viz="train"]');
   const bar=document.querySelector('[data-gc340-activitybar]');
   const activePlace=document.querySelector('.gc340Place.train.active');
-  const actionGlyph=document.querySelector('.gc340FocusAction[data-type="personalDrill"]')||document.querySelector('.gc340FocusAction[data-type]');
   const pulse=gc350EnsureTapNode();
   const onePulse=document.querySelectorAll('#gc350TapPulse').length===1;
   const running=document.body.classList.contains('gc350Running');
   const barAnim=bar?getComputedStyle(bar).animationName!=='none':false;
   gc340CancelFocused();if(typeof gc344RefreshFocusHost==='function')gc344RefreshFocusHost();
+  const actionGlyph=document.querySelector('.gc340FocusAction[data-type="personalDrill"]')||document.querySelector('.gc340FocusAction[data-type]');
   const btn=document.querySelector('.gc340FocusAction[data-type="personalDrill"]');
   const before=GC350_STATS.tapPulses;
   if(btn){
