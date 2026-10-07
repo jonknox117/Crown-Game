@@ -67,10 +67,17 @@ supportAction=function(actor,p){
  return _supportActionGC360Guard(actor,p);
 };
 
+/* Delegated commanders must obey the same career qualification.
+   Their casualty policy still influences preferences, not legal access. */
+gc280RiskAllowed=function(regionId,p,risk){
+ return gc320PartyQualification(p,{risk}).ok;
+};
+
 const _auditGC360F=audit;
 audit=function(){
  const a=_auditGC360F();
  a.independentWorkUsesCareerRarity=true;
+ a.delegatedCommandUsesCareerRarity=true;
  a.basicRepositionCostsAction=true;
  a.lastStandOneUsePerBattle=true;
  return a;
@@ -87,6 +94,10 @@ window.__GC360_FINAL_TEST=function(){
   const veteran=gc320IndependentEligible({risk:5}).ok;
   const panel=gc320IndependentCard({risk:5,id:'fake',type:'Job',species:'Bandit',title:'Test',desc:'Test',reward:50,enemyCount:5,regionId:'veyric'});
   const textCorrect=panel.includes('Legendary+ career rarity')&&!panel.includes('Lv.15');
-  return{ok:novice&&veteran&&textCorrect,novice,veteran,textCorrect};
+  const p=makeParty('veyric','Rarity Captain');p.members=[f.id];p.captainId=f.id;state.parties.push(p);
+  const delegatedVeteran=gc280RiskAllowed('veyric',p,5);
+  f.missions=0;f.lvl=20;
+  const delegatedNovice=!gc280RiskAllowed('veyric',p,5);
+  return{ok:novice&&veteran&&textCorrect&&delegatedVeteran&&delegatedNovice,novice,veteran,textCorrect,delegatedVeteran,delegatedNovice};
  }catch(e){return{ok:false,error:String(e&&e.stack||e)}}finally{state=old}
 };
