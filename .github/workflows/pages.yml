@@ -233,9 +233,7 @@ jobs:
           SERVER_PID=$!
           trap 'kill $SERVER_PID 2>/dev/null || true; rm -f grimdark-company/play/ui-tests.html' EXIT
           sleep 1
-          "$BROWSER" --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=9000 \\
-            --dump-dom http://127.0.0.1:8769/grimdark-company/play/ui-tests.html \\
-            >/tmp/bl-ui-dom.html 2>/tmp/bl-ui-chrome.log
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=9000 --dump-dom http://127.0.0.1:8769/grimdark-company/play/ui-tests.html >/tmp/bl-ui-dom.html 2>/tmp/bl-ui-chrome.log
           if ! grep -q 'data-ui-test="pass"' /tmp/bl-ui-dom.html; then
             echo "::error::Grim Company mobile UI self-check failed"
             grep -o '<pre id="ui-test-output">[^<]*' /tmp/bl-ui-dom.html || true
