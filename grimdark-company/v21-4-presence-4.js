@@ -57,9 +57,9 @@ window.__GC340_TEST=function(){
  const old=state;
  try{
   state=createState('Presence Test','veyric');state.regions.veyric.hq.established=true;gc270Progression().phase='company';state.company.silver=400;
-  const f=gc260CreateFounderRecord('veyric',{name:'Presence Founder',race:'Human',culture:'Veyric',className:'March Ranger',gender:'Male',portrait:1},true);f.status='Ready';f.lvl=10;f.dailyOrder='Scout';
+  const f=gc260CreateFounderRecord('veyric',{name:'Presence Founder',race:'Human',culture:'Veyric',className:'March Ranger',gender:'Male',portrait:1},true);f.status='Ready';f.lvl=10;f.missions=40;f.dailyOrder='Scout';
   const p=makeParty('veyric','Delvers'),crew=[];
-  for(let i=0;i<3;i++){const a=generateAdventurer('veyric');a.status='Ready';a.lvl=10;state.roster.push(a);crew.push(a)}
+  for(let i=0;i<3;i++){const a=generateAdventurer('veyric');a.status='Ready';a.lvl=10;a.missions=40;state.roster.push(a);crew.push(a)}
   p.members=[f.id,...crew.map(a=>a.id)];p.captainId=f.id;p.missions=5;state.parties.push(p);
   const pr=gc340Presence();gc340Move('scout');
   const town=gc340TownHTML(),townOK=['March Watch','Lantern Market','Muster Yard','Pilgrim House','Greyhaven Chapterhouse'].every(x=>town.includes(x));
