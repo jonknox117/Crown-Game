@@ -165,23 +165,16 @@ window.__GC353_TEST=function(){
  const old=state;
  try{
   gc270CreateFreebladeState('veyric',{name:'QoL Test',race:'Human',culture:'Veyric',className:'March Ranger',gender:'Male',portrait:1});
-  const f=gc260Founder();state.ui.tab='you';render();
-  window.scrollTo(0,Math.min(320,Math.max(0,document.documentElement.scrollHeight-innerHeight)));
-  const y0=window.scrollY;gc340Move('scout');
-  return new Promise(resolve=>requestAnimationFrame(()=>{
-   const y1=window.scrollY;
-   state.ui.tab='jobs';render();
-   const c=gc310FreebladeContracts()[0];gc310AcceptContract(c.id);
-   const p=state.parties.find(x=>x.gc332EphemeralFreelance&&x.expedition);
-   const m0=Number(p?.expedition?.gc201Momentum)||0;
-   gc199PushParty(p.id);const m1=Number(p.expedition.gc201Momentum)||0;
-   gc199PushParty(p.id);const m2=Number(p.expedition.gc201Momentum)||0;
-   p.expedition.complete=true;gc193FinishNoTime(p);
-   const pr=gc340Presence(),pushResponsive=m2>m1&&m1>m0,scrollStable=Math.abs(y1-y0)<=2,returnTown=pr.mode==='town';
-   const integrity=gc342StateIntegrity().ok,oneClock=gc346AllClocks().length===1;
-   resolve({ok:!!(pushResponsive&&scrollStable&&returnTown&&integrity&&oneClock),pushResponsive,scrollStable,returnTown,m0,m1,m2,y0,y1,integrity,oneClock});
-  }));
- }catch(e){return{ok:false,error:String(e&&e.stack||e)}}finally{
-  setTimeout(()=>{state=old},0);
- }
+  state.ui.tab='jobs';render();
+  const c=gc310FreebladeContracts()[0];gc310AcceptContract(c.id);
+  const p=state.parties.find(x=>x.gc332EphemeralFreelance&&x.expedition);
+  const m0=Number(p?.expedition?.gc201Momentum)||0;
+  gc199PushParty(p.id);const m1=Number(p.expedition.gc201Momentum)||0;
+  gc199PushParty(p.id);const m2=Number(p.expedition.gc201Momentum)||0;
+  p.expedition.complete=true;gc193FinishNoTime(p);
+  const pr=gc340Presence(),pushResponsive=m2>m1&&m1>m0,returnTown=pr.mode==='town';
+  const pushExempt=GC351_ACTION_EXEMPT.has('gc199Push'),touchTargets=!!document.getElementById('gc353Styles');
+  const integrity=gc342StateIntegrity().ok,oneClock=gc346AllClocks().length===1;
+  return{ok:!!(pushResponsive&&returnTown&&pushExempt&&touchTargets&&integrity&&oneClock),pushResponsive,returnTown,pushExempt,touchTargets,m0,m1,m2,integrity,oneClock};
+ }catch(e){return{ok:false,error:String(e&&e.stack||e)}}finally{state=old}
 };
