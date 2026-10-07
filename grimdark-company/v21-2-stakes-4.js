@@ -46,7 +46,7 @@ window.__GC320_TEST=function(){
   p.members=crew.map(a=>a.id);p.captainId=crew[0].id;state.parties.push(p);
   const c={id:'stakes-risk4',risk:4,regionId:'veyric',check:'scout',title:'Stakes Test',enemyCount:8};
   const blocked=!gc320PartyQualification(p,c).ok;
-  crew[0].lvl=10;crew[1].lvl=10;crew[2].lvl=10;crew[3].lvl=2;
+  crew[0].missions=25;crew[1].missions=25;crew[2].missions=25;crew[3].missions=0;
   const qualified=gc320PartyQualification(p,c).ok;
   const ladder=[1,2,3,4,5].map(gc320RiskLevel).join(',')==='1,3,6,10,15';
   const stanceHTML=gc320FounderStancesHTML(),stances=GC320_STANCES.every(x=>stanceHTML.includes(x));
