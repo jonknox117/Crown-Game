@@ -65,8 +65,8 @@ function gc340DungeonEntry(did){
  if(gc340Presence()?.activity)return toast('Finish or cancel your focused town activity first.');
  if(f.status!=='Ready')return toast('You must be Ready before entering a dungeon.');
  if(gc270IsFreeblade()){
-  const need=gc320RiskLevel(d.risk),ok=f.lvl>=need;
-  return modal(`<div class="sheetHead"><div><h3>${esc(d.name)}</h3><div class="tiny muted">Risk ${d.risk} • boss: ${esc(d.bossName)}</div></div><button class="x" data-action="close">×</button></div><div class="notice">You are still a freelancer. A fresh healthy expedition crew will be assembled for this delve; it is not a standing party.</div><button class="btn goldbtn wide" data-action="gc340DungeonEnter" data-id="${d.id}" data-party="freelance" ${ok?'':'disabled'}>${ok?'ASSEMBLE CREW & ENTER':`NEED LEVEL ${need}`}</button>`);
+  const need=gc320RiskLevel(d.risk),ok=typeof gc360Rank==='function'?gc360Rank(f)>=d.risk-1:f.lvl>=need;
+  return modal(`<div class="sheetHead"><div><h3>${esc(d.name)}</h3><div class="tiny muted">Risk ${d.risk} • boss: ${esc(d.bossName)}</div></div><button class="x" data-action="close">×</button></div><div class="notice">You are still a freelancer. A fresh healthy expedition crew will be assembled for this delve; it is not a standing party.</div><button class="btn goldbtn wide" data-action="gc340DungeonEnter" data-id="${d.id}" data-party="freelance" ${ok?'':'disabled'}>${ok?'ASSEMBLE CREW & ENTER':typeof gc360RiskName==='function'?`NEED ${gc360RiskName(d.risk)} CAREER`:`NEED LEVEL ${need}`}</button>`);
  }
  const parties=state.parties.filter(p=>!p.expedition&&p.members.includes(f.id)&&p.members.length&&partyMembers(p).every(a=>a.status==='Ready'));
  if(!parties.length)return toast('Put yourself in an idle staffed party before entering.');
@@ -86,7 +86,7 @@ function gc340StartRun(d,p,freeblade=false,tempIds=[]){
 function gc340EnterDungeon(did,pid){
  const d=gc340DungeonById(did),f=gc260Founder();if(!d||!f||d.cleared)return;
  if(pid==='freelance'){
-  const need=gc320RiskLevel(d.risk);if(f.lvl<need)return toast(`Need Level ${need}.`);
+  const need=gc320RiskLevel(d.risk),qualified=typeof gc360Rank==='function'?gc360Rank(f)>=d.risk-1:f.lvl>=need;if(!qualified)return toast(typeof gc360RiskName==='function'?`Need ${gc360RiskName(d.risk)} career rarity.`:`Need Level ${need}.`);
   const fake=gc340DungeonContract(d,d.rooms[0]),p=gc332CreateFreelanceCrew(fake);if(!p)return toast('Could not assemble a freelance delve.');
   const crew=gc310AssembleCrew(fake,p),ids=crew.map(a=>a.id);p.gc340FreebladeDungeon=true;return gc340StartRun(d,p,true,ids);
  }
