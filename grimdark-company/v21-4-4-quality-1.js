@@ -158,9 +158,9 @@ window.__GC344_TEST=function(){
   f.status='Ready';f.lvl=5;f.dailyOrder='Train';state.ui.tab='you';gc340Presence().place='train';
   render();
   const r0=GC342_STATS.actualRenders,s0=state.company.silver,x0=f.xp;
-  for(let i=0;i<30;i++){gc340StartFocused('personalDrill');gc340TickFocused(1)}
+  for(let i=0;i<30;i++){gc340StartFocused('personalDrill');gc199AdvanceFieldClocks(.20)}
   gc340Presence().place='odd';f.dailyOrder='Odd Jobs';
-  for(let i=0;i<30;i++){gc340StartFocused('lucrativeJob');gc340TickFocused(1)}
+  for(let i=0;i<30;i++){gc340StartFocused('lucrativeJob');gc199AdvanceFieldClocks(.20)}
   const renderDelta=GC342_STATS.actualRenders-r0;
   const rewards=(f.xp>x0)&&(state.company.silver>s0);
   const bounded=Array.isArray(f.history)&&f.history.length<=80&&(state.timeSystem.gc199Feed||[]).length<=70;
