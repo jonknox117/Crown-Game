@@ -72,14 +72,14 @@ function gc341DungeonActiveParty(d){
 }
 function gc341DungeonCard(d,freeblade=false){
  const prog=gc341DungeonProgress(d),active=gc341DungeonActiveParty(d),f=gc260Founder(),need=gc320RiskLevel(d.risk);
- const companyQualified=freeblade?(f?.lvl||1)>=need:state.parties.filter(p=>!p.expedition&&p.members.length&&gc320PartyQualification(p,{risk:d.risk}).ok).length;
+ const companyQualified=freeblade?(typeof gc360Rank==='function'?gc360Rank(f)>=d.risk-1:(f?.lvl||1)>=need):state.parties.filter(p=>!p.expedition&&p.members.length&&gc320PartyQualification(p,{risk:d.risk}).ok).length;
  const status=d.cleared?'CLEARED':active?'IN PROGRESS':companyQualified?'AVAILABLE':'UNDERQUALIFIED';
  return`<div class="card gc341DungeonCard risk${d.risk} ${d.cleared?'cleared':''} ${active?'active':''}">
    <div class="gc330ContractTop"><div><span>DUNGEON • ${esc(status)}</span><h3>${esc(d.name)}</h3></div><div class="gc330RiskBadge"><b>${d.risk}</b><small>RISK</small></div></div>
    <div class="gc341DungeonBoss"><span>BOSS</span><b>${esc(d.bossName)}</b></div>
    <div class="gc330ContractFacts"><div><span>EXPLORED</span><b>${prog.cleared}/${prog.total}</b></div><div><span>PROGRESS</span><b>${prog.pct}%</b></div><div><span>HOARD</span><b>${d.cleared?'CLAIMED':'UNKNOWN'}</b></div></div>
    <div class="bar goldbar"><i style="width:${prog.pct}%"></i></div>
-   <div class="gc330QualificationLine ${companyQualified?'ready':'blocked'}"><b>${active?`${esc(active.name)} inside`:d.cleared?'Site permanently cleared':freeblade?(companyQualified?'You are experienced enough to enter':`Need Level ${need}`):(companyQualified?`${companyQualified} ${companyQualified===1?'party':'parties'} qualified`:'No qualified party')}</b><span>Persistent map • traps • mobs • loot • boss hoard</span></div>
+   <div class="gc330QualificationLine ${companyQualified?'ready':'blocked'}"><b>${active?`${esc(active.name)} inside`:d.cleared?'Site permanently cleared':freeblade?(companyQualified?'You are experienced enough to enter':(typeof gc360RiskName==='function'?`Need ${gc360RiskName(d.risk)} career`:`Need Level ${need}`)):(companyQualified?`${companyQualified} ${companyQualified===1?'party':'parties'} qualified`:'No qualified party')}</b><span>Persistent map • traps • mobs • loot • boss hoard</span></div>
    <div class="actions">${active?`<button class="btn primary" data-action="nav" data-tab="you">Open Dungeon</button>`:d.cleared?'':`<button class="btn ${companyQualified?'primary':''}" data-action="gc340DungeonEntry" data-id="${d.id}" ${companyQualified?'':'disabled'}>${freeblade?'Assemble Crew':'Choose Party'}</button>`}</div>
   </div>`;
 }
