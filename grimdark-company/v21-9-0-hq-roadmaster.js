@@ -124,7 +124,8 @@ gc193FinishNoTime=function(p){
   const arm=Number(hq(rid).upgrades.Armory)||0;
   if(arm>0&&e.contract){
    e.gc390SpoilsApplied=true;
-   e.contract.cacheChance=clamp((Number(e.contract.cacheChance)||0)+arm*.035,0,.95);
+   /* Expedition-local clone: never permanently stack the bonus on a board contract. */
+   e.contract={...e.contract,cacheChance:clamp((Number(e.contract.cacheChance)||0)+arm*.035,0,.95)};
   }
  }
  return _gc193FinishNoTimeGC390(p);
