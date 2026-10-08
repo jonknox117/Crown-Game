@@ -124,7 +124,7 @@ window.__GC381_TEST=function(){
    stage:document.querySelector('.gc380Stage')?.dataset.gc380Stage||null,
    file:document.querySelector('.gc380Artwork')?.getAttribute('src')||null
   });
-  gc270Progression().phase='freeblade';
+  gc270Progression().phase='freeblade';gc270EnsureJobs();
   state.ui.tab='you';pr.place='hall';pr.mode='town';render();checks.hall=snap();
   for(const [p,key] of [['odd','market'],['train','musterYard'],['scout','marchWatch'],['recover','pilgrimHouse']]){
    pr.place=p;render();checks[key]=snap();
