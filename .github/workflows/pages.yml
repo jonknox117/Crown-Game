@@ -10,6 +10,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  issues: write
 concurrency:
   # Stable concurrency key: new releases must cancel older Pages runs.
   group: pages-v21-5-2
@@ -590,6 +591,27 @@ jobs:
             exit 1
           fi
           grep -o '<pre id="report">[^<]*' /tmp/bl-svg-dom.html || true
+
+      - name: Report release failure for diagnosis
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import html,re
+          report=['Deployment verification failed.', 'Run: https://github.com/jonknox117/Crown-Game/actions/runs/' + __import__('os').environ.get('GITHUB_RUN_ID','?')]
+          for file in ['/tmp/bl-tests-dom.html','/tmp/bl-svg-dom.html','/tmp/bl-tests-chrome.log','/tmp/bl-svg-chrome.log']:
+              p=Path(file)
+              if not p.exists():continue
+              content=p.read_text(errors='replace')
+              if file.endswith('.html'):
+                  match=re.search(r'<pre id="(?:all-test-output|report)">([^<]*)',content)
+                  content=html.unescape(match.group(1)) if match else content[-1200:]
+              report.extend(['', file, content[:12000]])
+          Path('/tmp/grim-release-error.txt').write_text('\n'.join(report),encoding='utf-8')
+          PY
+          gh issue create --repo "$GITHUB_REPOSITORY" --title "Grim Company automated release failure ${GITHUB_SHA:0:8}" --body-file /tmp/grim-release-error.txt || true
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
