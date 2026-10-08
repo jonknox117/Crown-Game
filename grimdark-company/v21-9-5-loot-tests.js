@@ -32,7 +32,7 @@ window.__GC395_TEST=function(){
    !!document.querySelector('.gc395Item [data-action="itemInfo"]')&&
    !!document.querySelector('.gc395Totals b')?.textContent.includes('0');
   checks.itemRegion=document.querySelector('.gc395Item')?.textContent.includes('Veyric')===true;
-  const equipmentBtn=document.querySelector('.gc395Footer [data-action="gc395Equipment"]');
+  const equipmentBtn=document.querySelector('.gc395Footer [data-action="gear"]');
   if(equipmentBtn)processAction(equipmentBtn);
   checks.equipment=!!document.getElementById('modal')?.classList.contains('show');
   close();
