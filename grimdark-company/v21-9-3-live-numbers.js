@@ -35,7 +35,23 @@ function gc393RoomLive(){
    changed=gc393SetText(panel.querySelector('p'),msg)||changed;
   }
  }
- const focus=pr.activity,small=panel.querySelector('.gc340Activity small');
+ const focus=pr.activity;
+ /* Focus starts can be handled by an older render wrapper that preserves
+    the previous town card. Mount the small activity block without rebuilding
+    the page, and hide stale action buttons until it finishes. */
+ if(focus&&!panel.querySelector('.gc340Activity')){
+  const actions=panel.querySelector('.gc340FocusGrid');
+  if(actions)actions.insertAdjacentHTML('beforebegin',gc340ActivityHTML());
+  else panel.insertAdjacentHTML('beforeend',gc340ActivityHTML());
+  changed=true;
+ }
+ const actionGrid=panel.querySelector('.gc340FocusGrid');
+ if(actionGrid)actionGrid.style.display=focus?'none':'';
+ if(!focus){
+  const stale=panel.querySelector('.gc340Activity');
+  if(stale){stale.remove();changed=true}
+ }
+ const small=panel.querySelector('.gc340Activity small');
  if(focus&&small){
   changed=gc393SetText(small,Math.max(0,focus.remainingDays*24).toFixed(1)+'h remaining • normal company simulation continues')||changed;
   changed=gc393SetWidth(panel.querySelector('[data-gc340-activitybar]'),
