@@ -68,14 +68,14 @@ window.__GC393_TEST=function(){
   state.ui.tab='you';render();
   results.assignedOnMap=document.querySelector('.gc393RoomPost[data-stance="Train"] [data-gc393-post]')?.textContent.includes(manager.name)===true;
   state.ui.tab='company';state.ui.gc330CompanySub='overview';render();
-  manager.dailyOrder='Train';f.dailyOrder='Odd Jobs';gc200Work(manager).gc201TrainFraction=.21;
+  manager.dailyOrder='Train';f.dailyOrder='Odd Jobs';manager.xp=Math.floor(xpNeed(manager.lvl)*.21);
   gc351TargetedPatch();
-  const stanceNode=Array.from(document.querySelectorAll('.gc201Stance')).find(x=>x.querySelector('.gc201StanceHead b')?.textContent==='TRAIN');
-  gc200Work(manager).gc201TrainFraction=.72;
+  const stanceNode=Array.from(document.querySelectorAll('.gc201Stance')).find(x=>x.querySelector('.gc201StanceHead b')?.textContent.includes('TRAIN'));
+  manager.xp=Math.floor(xpNeed(manager.lvl)*.72);
   gc351TargetedPatch();
   const pct=stanceNode?.querySelector(':scope > i em')?.style.width;
   results.stanceDiag={node:!!stanceNode,connected:!!stanceNode?.isConnected,pct,raw:stanceNode?.outerHTML.slice(0,520)||null,team:gc201Team('veyric','Train').map(x=>x.name)};
-  results.liveStance=!!stanceNode&&stanceNode.isConnected&&Math.abs(parseFloat(pct)-72)<.1;
+  results.liveStance=!!stanceNode&&stanceNode.isConnected&&Math.abs(parseFloat(pct)-Math.floor(xpNeed(manager.lvl)*.72)/xpNeed(manager.lvl)*100)<.1;
   const clone=normalizeState(JSON.parse(JSON.stringify(state)));
   results.saveSafe=clone.regions.veyric.hq.gc390Posts.Train===manager.id&&gc342StateIntegrity().ok;
   const failed=Object.keys(results).filter(key=>!results[key]);
