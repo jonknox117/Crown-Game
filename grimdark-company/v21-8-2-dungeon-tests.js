@@ -37,7 +37,7 @@ window.__GC382_TEST=function(){
   processAction(leave);
   const escaped=!p.expedition&&!p.gc340DungeonRun&&gc340SyncPresence().mode==='town'&&!gc321Locked();
   const lootRecovered=state.company.silver===beforeSilver+86;
-  const nav=[...document.querySelectorAll('#nav button')].length===4;
+  const nav=[...document.querySelectorAll('#nav button')].length===5;
   const integrity=gc342StateIntegrity().ok;
   return{ok:!!(locked&&inline&&mapDisabled&&saved&&selected&&fallback&&escaped&&lootRecovered&&nav&&integrity),
    locked,inline,mapDisabled,saved,selected,fallback,escaped,lootRecovered,nav,integrity};
