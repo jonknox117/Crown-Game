@@ -16,10 +16,54 @@ concurrency:
   group: pages-v21-5-2
   cancel-in-progress: true
 jobs:
-  deploy:
+  publish:
+    name: Build and publish playable Grim Company
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Build current playable bundle
+        run: python3 scripts/build_grim_company_v21_10_1.py
+      - name: Check scripts and current version
+        run: |
+          node --check /tmp/broken-lantern-v9.js
+          grep -q "GC411_VERSION='21.10.1'" grimdark-company/play/index.html
+          grep -q "gc411RepairSignedPeople" grimdark-company/play/index.html
+          test -s grimdark-company/play-21101/index.html
+      - name: Browser launch smoke
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('grimdark-company/play/index.html')
+          t=p.read_text(encoding='utf-8')
+          probe='''<script>setTimeout(function(){var app=document.getElementById('app');var ok=!!(app&&app.children.length)&&!document.body.innerText.includes('The ledger failed to open.');document.body.setAttribute('data-launch-smoke',ok?'pass':'fail');},2500);</script>'''
+          Path('grimdark-company/play/launch-smoke.html').write_text(t.replace('</body>',probe+'</body>'),encoding='utf-8')
+          PY
+          BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          test -n "$BROWSER" || { echo "::error::No browser available for launch smoke"; exit 1; }
+          python3 -m http.server 8791 --bind 127.0.0.1 >/tmp/grim-launch-server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID 2>/dev/null || true; rm -f grimdark-company/play/launch-smoke.html' EXIT
+          sleep 1
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=8000 --dump-dom http://127.0.0.1:8791/grimdark-company/play/launch-smoke.html > /tmp/grim-launch-dom.html 2>/tmp/grim-launch-chrome.log
+          grep -q 'data-launch-smoke="pass"' /tmp/grim-launch-dom.html || { echo "::error::Game failed launch smoke"; grep -o 'The ledger failed to open[^<]*' /tmp/grim-launch-dom.html || true; exit 1; }
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload playable site
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: '.'
+      - name: Allow Pages artifact registration
+        run: sleep 5
+      - name: Deploy playable site
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  regressions:
+    name: Full nonblocking gameplay and visual QA
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -613,17 +657,3 @@ jobs:
           PY
           gh issue create --repo "$GITHUB_REPOSITORY" --title "Grim Company automated release failure ${GITHUB_SHA:0:8}" --body-file /tmp/grim-release-error.txt || true
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload site
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: '.'
-
-      - name: Allow Pages artifact registration
-        run: sleep 5
-
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@v4
