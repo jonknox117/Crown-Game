@@ -7,8 +7,8 @@ if(typeof GC193_FACILITIES!=='undefined'){
  const old=GC193_FACILITIES.indexOf('Salvager’s Lodge');
  if(old>=0)GC193_FACILITIES.splice(old,1);
 }
-const GC390_STANCES=['Scout','Patrol','Train','Recover'];
-const GC390_LABEL={Scout:'Recon Captain',Patrol:'Patrol Marshal',Train:'Drillmaster',Recover:'Chief Healer'};
+const GC390_STANCES=['Scout','Odd Jobs','Train','Recover'];
+const GC390_LABEL={Scout:'Recon Captain','Odd Jobs':'Market Steward',Train:'Drillmaster',Recover:'Chief Healer'};
 function gc390Stables(regionId){return clamp(Number(state?.regions?.[regionId]?.hq?.upgrades?.['Roadmaster Stables'])||0,0,4)}
 function gc390PushCap(p){return .80+gc390Stables(p?.expedition?.contract?.regionId||p?.regionId||state.currentRegion)*.05}
 function gc390Rank(a){return a&&typeof gc360Rank==='function'?gc360Rank(a):0}
@@ -98,14 +98,14 @@ function gc390HQStaffPanel(rid=state.currentRegion){
    return '<button class="card gc390Post" data-action="gc390PickPost" data-region="'+rid+'" data-stance="'+st+'">'+
     '<span>'+esc(st.toUpperCase())+' • '+esc(GC390_LABEL[st])+'</span><b>'+esc(person?.name||standby?.name||'Unassigned')+'</b>'+
     '<small>'+(person?'Active • ':standby?'Unavailable • ':'Open position • ')+'Effective output '+Math.round(bonus*100)+'%'+(gain?' (+'+gain+'%)':'')+'</small><em>CHANGE LEADER ›</em></button>';
-  }).join('')+'</div><p>Scout improves contract intelligence; Patrol improves local security; Train accelerates XP; Recover improves healing and injury recovery. Stationed leaders remain available for field work, but their HQ bonus ends while away.</p></section>';
+  }).join('')+'</div><p>Scout improves contract intelligence; Odd Jobs improves earnings and local community ties; Train accelerates XP; Recover improves healing and injury recovery. Stationed leaders remain available for field work, but their HQ bonus ends while away.</p></section>';
 }
 /* The director leads; each stance's specialist adds their own bonus.
    Delegate via existing simulation functions to preserve their side effects. */
 const _gc201ScoutRegionGC390=gc201ScoutRegion;
 gc201ScoutRegion=function(rid,delta){return _gc201ScoutRegionGC390(rid,delta*gc390WorkBonus(rid,'Scout'))};
 const _gc201PatrolRegionGC390=gc201PatrolRegion;
-gc201PatrolRegion=function(rid,delta){return _gc201PatrolRegionGC390(rid,delta*gc390WorkBonus(rid,'Patrol'))};
+gc201PatrolRegion=function(rid,delta){return _gc201PatrolRegionGC390(rid,delta*gc390WorkBonus(rid,'Odd Jobs'))};
 const _gc201TrainRegionGC390=gc201TrainRegion;
 gc201TrainRegion=function(rid,delta){return _gc201TrainRegionGC390(rid,delta*gc390WorkBonus(rid,'Train'))};
 const _gc201RecoveryTickGC390=gc201RecoveryTick;
