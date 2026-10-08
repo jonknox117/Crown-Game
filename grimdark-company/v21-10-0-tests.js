@@ -40,7 +40,7 @@ window.__GC410_TEST=function(){
   b.gc410NextManualAt=Date.now()-1;gc410PatchCombatFocus();
   const cooled=document.querySelector('.gc410Enemy:not(:disabled)');
   r.reenabled=!!cooled;
-  if(cooled)processAction(cooled);
+  if(cooled)gc410HitTarget(p.id,enemies[0].id);
   r.secondTap=b.gc410ManualHits===2;
   f.hp=0;u.gc320Downed={round:3,exposure:0,base:.1};b.gc410NextManualAt=0;
   r.downedBlocksTap=gc410HitTarget(p.id,enemies[1].id)===false;
@@ -75,7 +75,7 @@ window.__GC410_TEST=function(){
   gc410BattleStart(p);
   r.initialPassive=b.log.some(x=>x.includes('loaded opening bolt'))&&b.enemies.some(x=>x.gc360StaggerUntil>=1);
   f.className=u.className='Battle Chaplain';u.gc410Passive={};v.gc320Downed=null;
-  const tooDangerous={...enemies[0],attack:10000,accuracy:10000};
+  const tooDangerous={...enemies[0],attack:10000,accuracy:10000,gc360StaggerUntil:0,gc360BlindUntil:0,gc360CurseUntil:0};
   const oldMath=Math.random;Math.random=()=>0;
   try{
    v.hp=1;enemyAttack(tooDangerous,v,p);
