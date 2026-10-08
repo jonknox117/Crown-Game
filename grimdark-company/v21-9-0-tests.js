@@ -14,16 +14,17 @@ window.__GC390_TEST=function(){
   pr.place='hall';
   const a=generateAdventurer('veyric');a.status='Ready';a.lvl=20;a.missions=40;state.roster.push(a);
   const b=generateAdventurer('veyric');b.status='Ready';b.lvl=5;b.missions=5;state.roster.push(b);
+  a.dailyOrder='Odd Jobs';
   const posted=gc390SetPost('veyric','Train',a.id)===true;
   const postedBonus=gc390WorkBonus('veyric','Train');
   const expected=gc390Power(f,'director')*gc390Power(a,'stance');
-  const stacking=posted&&Math.abs(postedBonus-expected)<.0001&&a.dailyOrder==='Train';
+  const stacking=posted&&Math.abs(postedBonus-expected)<.0001&&a.dailyOrder==='Odd Jobs';
   const allSeparate=GC390_STANCES.every(x=>gc390WorkBonus('veyric',x)>=founderBonus);
   const reassigned=gc390SetPost('veyric','Scout',a.id)===true&&gc390EnsurePosts('veyric').Train===null&&gc390EnsurePosts('veyric').Scout===a.id;
   gc390SetPost('veyric','Train',b.id);
   const difference=gc390WorkBonus('veyric','Scout')>gc390WorkBonus('veyric','Train');
   a.status='Expedition';
-  const absentLeader=gc390StanceLead('veyric','Scout')===null;
+  const expeditionLeaderActive=gc390StanceLead('veyric','Scout')?.id===a.id;
   a.status='Ready';a.dailyOrder='Scout';
   const stableCount=HQ_DEFS['Roadmaster Stables'].max===4;
   const q=makeParty('veyric','Roadmaster Test');q.members=[b.id];q.captainId=b.id;
@@ -59,8 +60,8 @@ window.__GC390_TEST=function(){
   state.ui.tab='company';state.ui.gc330CompanySub='hq';render();
   const staffUI=!!document.querySelector('.gc390HQPanel')&&document.querySelectorAll('.gc390Post').length===4;
   const integrity=gc342StateIntegrity().ok;
-  const ok=!!(founderDirector?.a.id===f.id&&founderBonus>1&&absentFounder&&stacking&&allSeparate&&reassigned&&difference&&absentLeader&&stableCount&&normalCap&&firstPush&&noRebuild&&sameNode&&upgradedCap&&twoX&&wagonTwoX&&upgradeShown&&unstacked&&saved&&managerOnly&&balanced&&managedAway&&staffUI&&integrity);
-  return{ok,founderBonus,absentFounder,stacking,allSeparate,reassigned,difference,absentLeader,normalCap,firstPush,noRebuild,sameNode,upgradedCap,twoX,wagonTwoX,upgradeShown,unstacked,saved,managerOnly,balanced,managedAway,staffUI,integrity};
+  const ok=!!(founderDirector?.a.id===f.id&&founderBonus>1&&absentFounder&&stacking&&allSeparate&&reassigned&&difference&&expeditionLeaderActive&&stableCount&&normalCap&&firstPush&&noRebuild&&sameNode&&upgradedCap&&twoX&&wagonTwoX&&upgradeShown&&unstacked&&saved&&managerOnly&&balanced&&managedAway&&staffUI&&integrity);
+  return{ok,founderBonus,absentFounder,stacking,allSeparate,reassigned,difference,expeditionLeaderActive,normalCap,firstPush,noRebuild,sameNode,upgradedCap,twoX,wagonTwoX,upgradeShown,unstacked,saved,managerOnly,balanced,managedAway,staffUI,integrity};
  }catch(e){return{ok:false,error:String(e&&e.stack||e)}}
  finally{state=old;GC390_PUSH_GUARD_TO=oldGuard;try{render()}catch(_){}}
 };
