@@ -18432,10 +18432,18 @@ window.__GC412_TEST=function(){
   r.inspectHealth=section?.nextElementSibling?.querySelector('.statline b')?.textContent===a.hp+'/'+derived(a).maxHp+' HP';
   document.getElementById('modal')?.classList.remove('show');
   gc193OrdersModal();
-  const row=[...document.querySelectorAll('#sheet .gc193OrderRow')].find(x=>x.querySelector('[data-action="gcOrderPick"]')?.dataset.id===a.id);
+  const row=[...document.querySelectorAll('#sheet .gc202AssignRow')].find(x=>x.querySelector('[data-gc202-vitals]')?.dataset.gc202Vitals===a.id);
+  const hpLabel=row?.querySelector('[data-gc202-hp]');
+  const hpBar=row?.querySelector('[data-gc202-hpbar]');
+  const formerHP=hpLabel?.textContent,formerBar=hpBar?.style.width;
+  const statusLabel=row?.querySelector('.gc202AssignTop strong');
   a.hp=Math.max(1,a.hp-3);
+  a.dailyOrder='Odd Jobs';
   gc412PatchModal();
-  r.ordersHealth=row?.textContent.includes(a.hp+'/'+derived(a).maxHp+' HP')===true;
+  r.ordersHealth=!!row&&hpLabel?.textContent!==formerHP&&
+    hpLabel?.textContent===gc202VitalState(a).hp&&hpBar?.style.width!==formerBar;
+  r.ordersStance=statusLabel?.textContent===gc193OrderLabel(a)&&
+    !!row?.querySelector('[data-action="gc202SetStance"][data-value="Odd Jobs"]')?.classList.contains('active');
   r.saveSafe=gc342StateIntegrity().ok&&normalizeState(JSON.parse(JSON.stringify(state)))?.roster?.some(x=>x.id===a.id);
   const failed=Object.entries(r).filter(([k,v])=>!v).map(([k])=>k);
   return{ok:failed.length===0,failed,...r,diag:window.__GC412_STATS()};
