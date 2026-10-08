@@ -1,4 +1,4 @@
-# v21.7.0 regional command 2.0 deploy
+# v21.8.0 chapterhouse grand visual stage
 # v21.4.6 clock hotfix deploy
 # v21.4.2 stability deploy
 name: Deploy Broken Lantern to Pages
@@ -24,8 +24,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Build Grim Company v21.7.0 mobile bundle
-        run: python3 scripts/build_grim_company_v21_7_0.py
+      - name: Build Grim Company v21.8.0 mobile bundle
+        run: python3 scripts/build_grim_company_v21_8_0.py
 
       - name: Validate JavaScript and release markers
         run: |
@@ -63,6 +63,9 @@ jobs:
           grep -q "GC354_VERSION='21.5.4'" grimdark-company/play/index.html
           grep -q "GC360_VERSION='21.6.0'" grimdark-company/play/index.html
           grep -q "GC370_VERSION='21.7.0'" grimdark-company/play/index.html
+          grep -q "GC380_VERSION='21.8.0'" grimdark-company/play/index.html
+          grep -q "chapterhouseArtExternalSvg=true" grimdark-company/play/index.html
+          grep -q "noCompressedSceneAtlas=true" grimdark-company/play/index.html
           grep -q "managerStandingOrders=true" grimdark-company/play/index.html
           grep -q "managerApprovalsAndTreasuryReserve=true" grimdark-company/play/index.html
           grep -q "contractAccessBasedOnCareerRarity=true" grimdark-company/play/index.html
@@ -248,6 +251,17 @@ jobs:
           grep -q "__GC360_COMBAT_TEST" grimdark-company/play/index.html
           grep -q "__GC360_FINAL_TEST" grimdark-company/play/index.html
           grep -q "__GC370_TEST" grimdark-company/play/index.html
+          grep -q "__GC380_TEST" grimdark-company/play/index.html
+          test -f grimdark-company/art/chapterhouse-grand.svg
+          python3 - <<'PY'
+          from xml.etree import ElementTree
+          from pathlib import Path
+          path=Path('grimdark-company/art/chapterhouse-grand.svg')
+          doc=ElementTree.parse(path)
+          assert doc.getroot().attrib.get('viewBox')=='0 0 1200 820'
+          assert path.stat().st_size>18000
+          print('Standalone scalable artwork validated:',path.stat().st_size,'bytes')
+          PY
           test -f grimdark-company/play-206/index.html
           test -f grimdark-company/play-207/index.html
           test -f grimdark-company/play-208/index.html
@@ -277,6 +291,7 @@ jobs:
           test -f grimdark-company/play-2154/index.html
           test -f grimdark-company/play-2160/index.html
           test -f grimdark-company/play-2170/index.html
+          test -f grimdark-company/play-2180/index.html
 
       - name: Browser startup smoke test
         run: |
@@ -328,7 +343,7 @@ jobs:
               for marker in ('founderRace','founderCulture','founderClass'):
                   if marker not in ids: raise SystemExit('v20.8 character creation missing control: '+marker)
           if 'companyName' in ids: raise SystemExit('v20.8 should not ask for a company name before play begins.')
-          print('v21.7.0 startup smoke passed:', sorted(rendered))
+          print('v21.8.0 startup smoke passed:', sorted(rendered))
           PY
 
       - name: Full progression gameplay smoothness QoL motion and stability tests
@@ -375,9 +390,10 @@ jobs:
                 classCatalog:window.__GC360_CLASS_TEST&&window.__GC360_CLASS_TEST(),
                 classCombat:window.__GC360_COMBAT_TEST&&window.__GC360_COMBAT_TEST(),
                 independentRarity:window.__GC360_FINAL_TEST&&window.__GC360_FINAL_TEST(),
-                regionalCommand:window.__GC370_TEST&&window.__GC370_TEST()
+                regionalCommand:window.__GC370_TEST&&window.__GC370_TEST(),
+                grandStage:window.__GC380_TEST&&window.__GC380_TEST()
               };
-              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok&&out.freelancer&&out.freelancer.ok&&out.stakes&&out.stakes.ok&&out.decisionLock&&out.decisionLock.ok&&out.interface&&out.interface.ok&&out.qol&&out.qol.ok&&out.freelanceCrew&&out.freelanceCrew.ok&&out.presence&&out.presence.ok&&out.stability&&out.stability.ok&&out.fastStability&&out.fastStability.ok&&out.phoneStability&&out.phoneStability.ok&&out.focusStability&&out.focusStability.ok&&out.longSession&&out.longSession.ok&&out.clockHotfix&&out.clockHotfix.ok&&out.liveUi&&out.liveUi.ok&&out.liveExpedition&&out.liveExpedition.ok&&out.motionPolish&&out.motionPolish.ok&&out.smoothQol&&out.smoothQol.ok&&out.decisionTapShield&&out.decisionTapShield.ok&&out.stabilityQol&&out.stabilityQol.ok&&out.foundingVisibility&&out.foundingVisibility.ok&&out.rarityGate&&out.rarityGate.ok&&out.classCatalog&&out.classCatalog.ok&&out.classCombat&&out.classCombat.ok&&out.independentRarity&&out.independentRarity.ok&&out.regionalCommand&&out.regionalCommand.ok;
+              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok&&out.freelancer&&out.freelancer.ok&&out.stakes&&out.stakes.ok&&out.decisionLock&&out.decisionLock.ok&&out.interface&&out.interface.ok&&out.qol&&out.qol.ok&&out.freelanceCrew&&out.freelanceCrew.ok&&out.presence&&out.presence.ok&&out.stability&&out.stability.ok&&out.fastStability&&out.fastStability.ok&&out.phoneStability&&out.phoneStability.ok&&out.focusStability&&out.focusStability.ok&&out.longSession&&out.longSession.ok&&out.clockHotfix&&out.clockHotfix.ok&&out.liveUi&&out.liveUi.ok&&out.liveExpedition&&out.liveExpedition.ok&&out.motionPolish&&out.motionPolish.ok&&out.smoothQol&&out.smoothQol.ok&&out.decisionTapShield&&out.decisionTapShield.ok&&out.stabilityQol&&out.stabilityQol.ok&&out.foundingVisibility&&out.foundingVisibility.ok&&out.rarityGate&&out.rarityGate.ok&&out.classCatalog&&out.classCatalog.ok&&out.classCombat&&out.classCombat.ok&&out.independentRarity&&out.independentRarity.ok&&out.regionalCommand&&out.regionalCommand.ok&&out.grandStage&&out.grandStage.ok;
               document.body.setAttribute('data-all-tests',ok?'pass':'fail');
               var n=document.createElement('pre');n.id='all-test-output';n.textContent=JSON.stringify(out);document.body.appendChild(n);
             }catch(e){
@@ -431,6 +447,57 @@ jobs:
             exit 1
           fi
           grep -o '<pre id="ui-test-output">[^<]*' /tmp/bl-ui-dom.html || true
+
+      - name: Verify chapterhouse art loads sharply on mobile
+        run: |
+          BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('grimdark-company/play/index.html')
+          html=p.read_text(encoding='utf-8')
+          probe=r'''<script>
+          setTimeout(function(){
+            try{
+              state=createState('Art Quality Test','veyric');
+              state.regions.veyric.hq.established=true;
+              var f=gc260CreateFounderRecord('veyric',{name:'Stage Tester',race:'Human',culture:'Veyric',className:'March Ranger',gender:'Male',portrait:1},true);
+              f.status='Ready';gc270Progression().phase='company';
+              state.ui.tab='you';gc340Presence().mode='town';gc340Presence().place='hall';render();
+              setTimeout(function(){
+                try{
+                  var stage=document.querySelector('.gc380Stage'),img=stage&&stage.querySelector('img');
+                  var nav=document.getElementById('nav'),rect=stage&&stage.getBoundingClientRect();
+                  var data={
+                    stage:!!stage,loaded:!!img&&img.complete&&img.naturalWidth>=1200,
+                    svgAsset:img?.currentSrc.includes('chapterhouse-grand.svg'),
+                    coversTopHalf:!!rect&&rect.height>=window.innerHeight*.32&&rect.height<=window.innerHeight*.60,
+                    objectFit:img&&getComputedStyle(img).objectFit==='cover',
+                    sticky:stage&&getComputedStyle(stage).position==='sticky',
+                    nav:!!nav&&nav.querySelectorAll('button').length>=4,
+                    noOverflow:document.documentElement.scrollWidth<=window.innerWidth+2,
+                    preserveControls:!!document.querySelector('[data-action="gc340Move"]')
+                  };
+                  data.ok=Object.keys(data).filter(k=>k!=='ok').every(k=>data[k]===true);
+                  document.body.setAttribute('data-grand-stage',data.ok?'pass':'fail');
+                  var n=document.createElement('pre');n.id='grand-stage-output';n.textContent=JSON.stringify(data);document.body.appendChild(n);
+                }catch(e){document.body.setAttribute('data-grand-stage','error');var n=document.createElement('pre');n.id='grand-stage-output';n.textContent=String(e&&e.stack||e);document.body.appendChild(n)}
+              },1000);
+            }catch(e){document.body.setAttribute('data-grand-stage','error');var n=document.createElement('pre');n.id='grand-stage-output';n.textContent=String(e&&e.stack||e);document.body.appendChild(n)}
+          },900);
+          </script>'''
+          Path('grimdark-company/play/art-test.html').write_text(html.replace('</body>',probe+'</body>'),encoding='utf-8')
+          PY
+          python3 -m http.server 8772 --bind 127.0.0.1 >/tmp/bl-art-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID 2>/dev/null || true; rm -f grimdark-company/play/art-test.html' EXIT
+          sleep 1
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=12000 --dump-dom http://127.0.0.1:8772/grimdark-company/play/art-test.html >/tmp/bl-art-dom.html 2>/tmp/bl-art-chrome.log
+          if ! grep -q 'data-grand-stage="pass"' /tmp/bl-art-dom.html; then
+            echo "::error::Chapterhouse art failed phone fit or image loading check"
+            grep -o '<pre id="grand-stage-output">[^<]*' /tmp/bl-art-dom.html || true
+            exit 1
+          fi
+          grep -o '<pre id="grand-stage-output">[^<]*' /tmp/bl-art-dom.html || true
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
