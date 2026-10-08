@@ -55,16 +55,21 @@ function gc382DungeonWithdraw(pid){
  if(!dungeon){e.gc382Withdrawing=false;return toast('Dungeon data is missing. Your save has not been changed.')}
  e.events=e.events||[];
  e.events.push('The expedition was abandoned on a mandatory decision. The party attempts an emergency withdrawal.');
+ const resume=e.gc320ResumeMode||state.timeSystem?.gc321DecisionLock?.resumeMode||'paused';
  e.gc260PendingDecision=null;
  delete e.gc320ResumeMode;
  gc321ClearStaleLock();
  const m=document.getElementById('modal');if(m)m.classList.remove('show');
+ let result;
  if(e.battle){
   /* resolveBattle owns the mortality and wound calculation for downed units.
      Never call gc340ExitDungeon directly while a battle exists. */
-  return resolveBattle(p,false);
+  result=resolveBattle(p,false);
+ }else{
+  result=gc340ExitDungeon(p,'emergency withdrawal before resolving a dungeon decision');
  }
- return gc340ExitDungeon(p,'emergency withdrawal before resolving a dungeon decision');
+ gc320ResumeAfterDecision(resume);
+ return result;
 }
 
 /* Other retreat buttons must not bypass the downed-character mortality system. */
