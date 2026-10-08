@@ -149,7 +149,7 @@ window.__GC381_TEST=function(){
   const folded=!!document.querySelector('.gc380Folded');
   if(button)processAction(button);
   const expanded=!document.querySelector('.gc380Folded');
-  const nav=document.querySelectorAll('#nav button').length===4;
+  const nav=document.querySelectorAll('#nav button').length===5;
   const unique=Object.values(GC381_SCENES).length===8&&new Set(Object.values(GC381_SCENES).map(x=>x.file)).size===8;
   const vitality=gc342StateIntegrity().ok;
   return{ok:routed&&before&&folded&&expanded&&nav&&unique&&vitality,routed,before,folded,expanded,nav,unique,vitality,checks};
