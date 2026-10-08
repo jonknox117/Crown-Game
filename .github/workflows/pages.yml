@@ -1,4 +1,4 @@
-# v21.8.0 chapterhouse grand visual stage
+# v21.8.1 grand multi-scene visual stage
 # v21.4.6 clock hotfix deploy
 # v21.4.2 stability deploy
 name: Deploy Broken Lantern to Pages
@@ -24,8 +24,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Build Grim Company v21.8.0 mobile bundle
-        run: python3 scripts/build_grim_company_v21_8_0.py
+      - name: Build Grim Company v21.8.1 mobile bundle
+        run: python3 scripts/build_grim_company_v21_8_1.py
 
       - name: Validate JavaScript and release markers
         run: |
@@ -64,6 +64,8 @@ jobs:
           grep -q "GC360_VERSION='21.6.0'" grimdark-company/play/index.html
           grep -q "GC370_VERSION='21.7.0'" grimdark-company/play/index.html
           grep -q "GC380_VERSION='21.8.0'" grimdark-company/play/index.html
+          grep -q "GC381_VERSION='21.8.1'" grimdark-company/play/index.html
+          grep -q "sevenNewStandaloneSVGScenes=true" grimdark-company/play/index.html
           grep -q "chapterhouseArtExternalSvg=true" grimdark-company/play/index.html
           grep -q "noCompressedSceneAtlas=true" grimdark-company/play/index.html
           grep -q "managerStandingOrders=true" grimdark-company/play/index.html
@@ -252,6 +254,7 @@ jobs:
           grep -q "__GC360_FINAL_TEST" grimdark-company/play/index.html
           grep -q "__GC370_TEST" grimdark-company/play/index.html
           grep -q "__GC380_TEST" grimdark-company/play/index.html
+          grep -q "__GC381_TEST" grimdark-company/play/index.html
           test -f grimdark-company/art/chapterhouse-grand.svg
           python3 - <<'PY'
           from xml.etree import ElementTree
@@ -292,6 +295,7 @@ jobs:
           test -f grimdark-company/play-2160/index.html
           test -f grimdark-company/play-2170/index.html
           test -f grimdark-company/play-2180/index.html
+          test -f grimdark-company/play-2181/index.html
 
       - name: Browser startup smoke test
         run: |
@@ -343,7 +347,7 @@ jobs:
               for marker in ('founderRace','founderCulture','founderClass'):
                   if marker not in ids: raise SystemExit('v20.8 character creation missing control: '+marker)
           if 'companyName' in ids: raise SystemExit('v20.8 should not ask for a company name before play begins.')
-          print('v21.8.0 startup smoke passed:', sorted(rendered))
+          print('v21.8.1 startup smoke passed:', sorted(rendered))
           PY
 
       - name: Full progression gameplay smoothness QoL motion and stability tests
@@ -391,9 +395,10 @@ jobs:
                 classCombat:window.__GC360_COMBAT_TEST&&window.__GC360_COMBAT_TEST(),
                 independentRarity:window.__GC360_FINAL_TEST&&window.__GC360_FINAL_TEST(),
                 regionalCommand:window.__GC370_TEST&&window.__GC370_TEST(),
-                grandStage:window.__GC380_TEST&&window.__GC380_TEST()
+                grandStage:window.__GC380_TEST&&window.__GC380_TEST(),
+                multiScene:window.__GC381_TEST&&window.__GC381_TEST()
               };
-              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok&&out.freelancer&&out.freelancer.ok&&out.stakes&&out.stakes.ok&&out.decisionLock&&out.decisionLock.ok&&out.interface&&out.interface.ok&&out.qol&&out.qol.ok&&out.freelanceCrew&&out.freelanceCrew.ok&&out.presence&&out.presence.ok&&out.stability&&out.stability.ok&&out.fastStability&&out.fastStability.ok&&out.phoneStability&&out.phoneStability.ok&&out.focusStability&&out.focusStability.ok&&out.longSession&&out.longSession.ok&&out.clockHotfix&&out.clockHotfix.ok&&out.liveUi&&out.liveUi.ok&&out.liveExpedition&&out.liveExpedition.ok&&out.motionPolish&&out.motionPolish.ok&&out.smoothQol&&out.smoothQol.ok&&out.decisionTapShield&&out.decisionTapShield.ok&&out.stabilityQol&&out.stabilityQol.ok&&out.foundingVisibility&&out.foundingVisibility.ok&&out.rarityGate&&out.rarityGate.ok&&out.classCatalog&&out.classCatalog.ok&&out.classCombat&&out.classCombat.ok&&out.independentRarity&&out.independentRarity.ok&&out.regionalCommand&&out.regionalCommand.ok&&out.grandStage&&out.grandStage.ok;
+              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok&&out.freelancer&&out.freelancer.ok&&out.stakes&&out.stakes.ok&&out.decisionLock&&out.decisionLock.ok&&out.interface&&out.interface.ok&&out.qol&&out.qol.ok&&out.freelanceCrew&&out.freelanceCrew.ok&&out.presence&&out.presence.ok&&out.stability&&out.stability.ok&&out.fastStability&&out.fastStability.ok&&out.phoneStability&&out.phoneStability.ok&&out.focusStability&&out.focusStability.ok&&out.longSession&&out.longSession.ok&&out.clockHotfix&&out.clockHotfix.ok&&out.liveUi&&out.liveUi.ok&&out.liveExpedition&&out.liveExpedition.ok&&out.motionPolish&&out.motionPolish.ok&&out.smoothQol&&out.smoothQol.ok&&out.decisionTapShield&&out.decisionTapShield.ok&&out.stabilityQol&&out.stabilityQol.ok&&out.foundingVisibility&&out.foundingVisibility.ok&&out.rarityGate&&out.rarityGate.ok&&out.classCatalog&&out.classCatalog.ok&&out.classCombat&&out.classCombat.ok&&out.independentRarity&&out.independentRarity.ok&&out.regionalCommand&&out.regionalCommand.ok&&out.grandStage&&out.grandStage.ok&&out.multiScene&&out.multiScene.ok;
               document.body.setAttribute('data-all-tests',ok?'pass':'fail');
               var n=document.createElement('pre');n.id='all-test-output';n.textContent=JSON.stringify(out);document.body.appendChild(n);
             }catch(e){
@@ -503,6 +508,43 @@ jobs:
             exit 1
           fi
           grep -o '<pre id="grand-stage-output">[^<]*' /tmp/bl-art-dom.html || true
+
+      - name: Verify eight separate SVG scenes load on mobile
+        run: |
+          BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          names=['chapterhouse','market','muster-yard','march-watch','pilgrim-house','jobs-board','armory','world-map']
+          files=[n+'-grand.svg' for n in names]
+          src='''<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+          <style>body{background:#0a0a0b;color:#e8d7bd;margin:0}#scenes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}img{display:block;width:100%;height:220px;object-fit:cover}#report{white-space:pre-wrap}</style>
+          </head><body><div id="scenes">'''+''.join('<img src="../art/'+f+'" width="1200" height="820" alt="'+f+'">' for f in files)+'''</div><script>
+          setTimeout(function(){
+            var images=[...document.querySelectorAll('#scenes img')],list=images.map(function(i){
+              return{src:i.getAttribute('src'),ok:i.complete&&i.naturalWidth>=1200&&i.naturalHeight>=820,dimensions:i.naturalWidth+'x'+i.naturalHeight};
+            });
+            var fit=images.every(function(i){return getComputedStyle(i).objectFit==='cover'});
+            var noOverflow=document.documentElement.scrollWidth<=window.innerWidth+2;
+            var ok=list.length===8&&list.every(function(i){return i.ok})&&fit&&noOverflow;
+            document.body.setAttribute('data-svg-quality',ok?'pass':'fail');
+            var p=document.createElement('pre');p.id='report';p.textContent=JSON.stringify({ok,list,fit,noOverflow});document.body.appendChild(p);
+          },1500);
+          </script></body></html>'''
+          Path('grimdark-company/play/svg-quality-test.html').write_text(src,encoding='utf-8')
+          print('Checking eight independent vector scenes:',files)
+          PY
+          python3 -m http.server 8773 --bind 127.0.0.1 >/tmp/bl-svg-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID 2>/dev/null || true; rm -f grimdark-company/play/svg-quality-test.html' EXIT
+          sleep 1
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=10000 --dump-dom http://127.0.0.1:8773/grimdark-company/play/svg-quality-test.html >/tmp/bl-svg-dom.html 2>/tmp/bl-svg-chrome.log
+          if ! grep -q 'data-svg-quality="pass"' /tmp/bl-svg-dom.html; then
+            echo "::error::One or more SVG scenes failed to load with crisp intrinsic resolution"
+            grep -o '<pre id="report">[^<]*' /tmp/bl-svg-dom.html || true
+            exit 1
+          fi
+          grep -o '<pre id="report">[^<]*' /tmp/bl-svg-dom.html || true
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
