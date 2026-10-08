@@ -78,7 +78,8 @@ gc280AssignStances=function(){return false};
 gc280MaybeRecruit=function(){return null};
 gc280BuildParties=function(){return false};
 gc280RiskAllowed=function(r,p,risk){
- return gc413Ready(p,r)&&gc320PartyQualification(p,{risk}).ok;
+ /* General career eligibility also powers player-controlled contracts. */
+ return gc320PartyQualification(p,{risk}).ok;
 };
 function gc413Pool(r){
  const region=state.regions[r];
