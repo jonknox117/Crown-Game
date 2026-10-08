@@ -74,13 +74,14 @@ window.__GC410_TEST=function(){
   enemies.forEach(x=>{x.hp=x.maxHp=1500});
   gc410BattleStart(p);
   r.initialPassive=b.log.some(x=>x.includes('loaded opening bolt'))&&b.enemies.some(x=>x.gc360StaggerUntil>=1);
-  f.className=u.className='Battle Chaplain';u.gc410Passive={};v.gc320Downed=null;
-  const tooDangerous={...enemies[0],attack:10000,accuracy:10000,gc360StaggerUntil:0,gc360BlindUntil:0,gc360CurseUntil:0};
+  f.className=u.className='Battle Chaplain';u.gc410Passive={};v.gc320Downed=null;v.gc360LastStand=false;v.gc360WardCharges=0;v.gc360GuardUntil=0;v.gc360Protector=null;v.gc410Passive={firstAssault:true};v.className='Man-at-Arms';
+  const tooDangerous={...enemies[0],attack:10000,accuracy:10000,gc360StaggerUntil:0,gc360Stagger:0,gc360BlindUntil:0,gc360CurseUntil:0,gc360Doom:null};
   const oldMath=Math.random;Math.random=()=>0;
   try{
    v.hp=1;enemyAttack(tooDangerous,v,p);
   }finally{Math.random=oldMath}
   r.chaplainIntervention=!!u.gc410Passive?.mercy&&v.hp>0&&!v.gc320Downed;
+  r.chaplainTrace={hp:v.hp,down:!!v.gc320Downed,mercy:!!u.gc410Passive?.mercy,log:b.log.slice(-5)};
   /* UI must expose fast expedition actions without scrolling to an old card. */
   p.expedition.battle=null;f.status='Expedition';render();
   const quick=document.querySelector('.gc410FieldBar');
