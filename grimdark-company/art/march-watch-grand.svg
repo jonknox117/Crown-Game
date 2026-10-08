@@ -17,8 +17,8 @@
 .fire{transform-origin:50% 100%;animation:flicker 1.9s ease-in-out infinite alternate}.fire.alt{animation-delay:-.8s;animation-duration:2.5s}
 .flag{animation:wave 5.5s ease-in-out infinite alternate}.glint{animation:glimmer 4.4s ease-in-out infinite alternate}
 .drift{animation:float 8.4s ease-in-out infinite alternate}.drift.alt{animation-delay:-3s;animation-duration:11s}
-@keyframes flicker{0%{transform:scale(.9,.93);opacity:.74}70%{transform:scale(1.05,1.07);opacity:1}100%{transform:scale(.96,1);opacity:.85}}
-@keyframes wave{from{transform:skewX(-.7deg)}to{transform:skewX(1.1deg)}}
+@keyframes flicker{0%{opacity:.74}70%{opacity:1}100%{opacity:.85}}
+@keyframes wave{from{opacity:.87}to{opacity:1}}
 @keyframes glimmer{0%,100%{opacity:.38}55%{opacity:1}}
 @keyframes float{from{transform:translate(0,0);opacity:.25}to{transform:translate(12px,-18px);opacity:.67}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
