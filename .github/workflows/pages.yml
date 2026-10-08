@@ -1,4 +1,4 @@
-# v21.9.1 Chapterhouse leadership bonus UI
+# v21.9.2 freeblade Chapterhouse leadership
 # v21.4.6 clock hotfix deploy
 # v21.4.2 stability deploy
 name: Deploy Broken Lantern to Pages
@@ -24,8 +24,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Build Grim Company v21.9.1 mobile bundle
-        run: python3 scripts/build_grim_company_v21_9_1.py
+      - name: Build Grim Company v21.9.2 mobile bundle
+        run: python3 scripts/build_grim_company_v21_9_2.py
 
       - name: Validate JavaScript and release markers
         run: |
@@ -68,6 +68,8 @@ jobs:
           grep -q "GC382_VERSION='21.8.2'" grimdark-company/play/index.html
           grep -q "GC390_VERSION='21.9.0'" grimdark-company/play/index.html
           grep -q "GC391_VERSION='21.9.1'" grimdark-company/play/index.html
+          grep -q "GC392_VERSION='21.9.2'" grimdark-company/play/index.html
+          grep -q "freebladeHomeBenefitAppliedToWork=true" grimdark-company/play/index.html
           grep -q "directorBonusVisibleOnYouTab=true" grimdark-company/play/index.html
           grep -q "const GC201_PUSH_CAP=1.00;" grimdark-company/play/index.html
           grep -q "stanceLeadersScaleWithLevelAndRarity=true" grimdark-company/play/index.html
@@ -266,6 +268,7 @@ jobs:
           grep -q "__GC382_TEST" grimdark-company/play/index.html
           grep -q "__GC390_TEST" grimdark-company/play/index.html
           grep -q "__GC391_TEST" grimdark-company/play/index.html
+          grep -q "__GC392_TEST" grimdark-company/play/index.html
           test -f grimdark-company/art/chapterhouse-grand.svg
           python3 - <<'PY'
           from xml.etree import ElementTree
@@ -310,6 +313,7 @@ jobs:
           test -f grimdark-company/play-2182/index.html
           test -f grimdark-company/play-2190/index.html
           test -f grimdark-company/play-2191/index.html
+          test -f grimdark-company/play-2192/index.html
 
       - name: Browser startup smoke test
         run: |
@@ -361,7 +365,7 @@ jobs:
               for marker in ('founderRace','founderCulture','founderClass'):
                   if marker not in ids: raise SystemExit('v20.8 character creation missing control: '+marker)
           if 'companyName' in ids: raise SystemExit('v20.8 should not ask for a company name before play begins.')
-          print('v21.9.1 startup smoke passed:', sorted(rendered))
+          print('v21.9.2 startup smoke passed:', sorted(rendered))
           PY
 
       - name: Full progression gameplay smoothness QoL motion and stability tests
@@ -413,9 +417,10 @@ jobs:
                 multiScene:window.__GC381_TEST&&window.__GC381_TEST(),
                 dungeonRecovery:window.__GC382_TEST&&window.__GC382_TEST(),
                 roadmasterHQ:window.__GC390_TEST&&window.__GC390_TEST(),
-                chapterhouseStatus:window.__GC391_TEST&&window.__GC391_TEST()
+                chapterhouseStatus:window.__GC391_TEST&&window.__GC391_TEST(),
+                freebladeHome:window.__GC392_TEST&&window.__GC392_TEST()
               };
-              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok&&out.freelancer&&out.freelancer.ok&&out.stakes&&out.stakes.ok&&out.decisionLock&&out.decisionLock.ok&&out.interface&&out.interface.ok&&out.qol&&out.qol.ok&&out.freelanceCrew&&out.freelanceCrew.ok&&out.presence&&out.presence.ok&&out.stability&&out.stability.ok&&out.fastStability&&out.fastStability.ok&&out.phoneStability&&out.phoneStability.ok&&out.focusStability&&out.focusStability.ok&&out.longSession&&out.longSession.ok&&out.clockHotfix&&out.clockHotfix.ok&&out.liveUi&&out.liveUi.ok&&out.liveExpedition&&out.liveExpedition.ok&&out.motionPolish&&out.motionPolish.ok&&out.smoothQol&&out.smoothQol.ok&&out.decisionTapShield&&out.decisionTapShield.ok&&out.stabilityQol&&out.stabilityQol.ok&&out.foundingVisibility&&out.foundingVisibility.ok&&out.rarityGate&&out.rarityGate.ok&&out.classCatalog&&out.classCatalog.ok&&out.classCombat&&out.classCombat.ok&&out.independentRarity&&out.independentRarity.ok&&out.regionalCommand&&out.regionalCommand.ok&&out.grandStage&&out.grandStage.ok&&out.multiScene&&out.multiScene.ok&&out.dungeonRecovery&&out.dungeonRecovery.ok&&out.roadmasterHQ&&out.roadmasterHQ.ok&&out.chapterhouseStatus&&out.chapterhouseStatus.ok;
+              var ok=out.world&&out.world.ok&&out.campaign&&out.campaign.ok&&out.field&&out.field.ok&&out.founder&&out.founder.ok&&out.freeblade&&out.freeblade.ok&&out.command&&out.command.ok&&out.loot&&out.loot.ok&&out.veteran&&out.veteran.ok&&out.partyLegacy&&out.partyLegacy.ok&&out.freelancer&&out.freelancer.ok&&out.stakes&&out.stakes.ok&&out.decisionLock&&out.decisionLock.ok&&out.interface&&out.interface.ok&&out.qol&&out.qol.ok&&out.freelanceCrew&&out.freelanceCrew.ok&&out.presence&&out.presence.ok&&out.stability&&out.stability.ok&&out.fastStability&&out.fastStability.ok&&out.phoneStability&&out.phoneStability.ok&&out.focusStability&&out.focusStability.ok&&out.longSession&&out.longSession.ok&&out.clockHotfix&&out.clockHotfix.ok&&out.liveUi&&out.liveUi.ok&&out.liveExpedition&&out.liveExpedition.ok&&out.motionPolish&&out.motionPolish.ok&&out.smoothQol&&out.smoothQol.ok&&out.decisionTapShield&&out.decisionTapShield.ok&&out.stabilityQol&&out.stabilityQol.ok&&out.foundingVisibility&&out.foundingVisibility.ok&&out.rarityGate&&out.rarityGate.ok&&out.classCatalog&&out.classCatalog.ok&&out.classCombat&&out.classCombat.ok&&out.independentRarity&&out.independentRarity.ok&&out.regionalCommand&&out.regionalCommand.ok&&out.grandStage&&out.grandStage.ok&&out.multiScene&&out.multiScene.ok&&out.dungeonRecovery&&out.dungeonRecovery.ok&&out.roadmasterHQ&&out.roadmasterHQ.ok&&out.chapterhouseStatus&&out.chapterhouseStatus.ok&&out.freebladeHome&&out.freebladeHome.ok;
               document.body.setAttribute('data-all-tests',ok?'pass':'fail');
               var n=document.createElement('pre');n.id='all-test-output';n.textContent=JSON.stringify(out);document.body.appendChild(n);
             }catch(e){
