@@ -158,10 +158,9 @@ gc351TargetedPatch=function(...args){
  if(!state||document.hidden)return original;
  GC393_LIVE_STATS.ticks++;
  try{
-  const updated=gc393RoomLive()||gc393FreebladeLive()||gc393CompanyLive();
-  /* Execute all patch families on every heartbeat, not short-circuit OR. */
-  const two=gc393FreebladeLive(),three=gc393CompanyLive();
-  if(updated||two||three){GC393_LIVE_STATS.patches++;return true}
+  /* Run all three families once; do not short-circuit updates. */
+  const one=gc393RoomLive(),two=gc393FreebladeLive(),three=gc393CompanyLive();
+  if(one||two||three){GC393_LIVE_STATS.patches++;return true}
  }catch(e){
   GC393_LIVE_STATS.errors++;
   if(typeof gc341RuntimeError==='function')gc341RuntimeError('v21.9.3 live number patch',e);
