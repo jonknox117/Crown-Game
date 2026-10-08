@@ -141,18 +141,23 @@ enemyAttack=function(actor,target,p){
  if(target.className==='Houndmaster'&&target.hp/target.maxHp<.45&&!uFlag.houndGuard){
   uFlag.houndGuard=true;gc410Log(b,target.name+'’s hound takes the blow and protects its injured master.');return;
  }
+ const beforeHealth=new Map(b.allies.map(x=>[x.charId,{hp:x.hp,down:!!x.gc320Downed}]));
  const was=target.hp,out=_enemyAttackGC410(actor,target,p),taken=target.hp<was;
+ /* Earlier intercept and bodyguard wrappers may retarget inside their own
+    functions. Inspect the actual injured ally, not merely the argument. */
+ const chaplain=defenders.find(x=>x.className==='Battle Chaplain'&&!(x.gc410Passive||{}).mercy&&x.hp>0&&!x.gc320Downed);
+ const fallen=chaplain&&b.allies.find(x=>{
+  const before=beforeHealth.get(x.charId);
+  return before&&before.hp>0&&!before.down&&(x.hp<=0||!!x.gc320Downed);
+ });
+ if(chaplain&&fallen){
+  const instinct=chaplain.gc410Passive||(chaplain.gc410Passive={});
+  instinct.mercy=true;
+  delete fallen.gc320Downed;
+  fallen.hp=Math.max(1,Math.round(fallen.maxHp*.12));
+  gc410Log(b,chaplain.name+' invokes Mercy Before Death and saves '+fallen.name+' from being downed.');
+ }
  if(taken){
-  if(target.gc320Downed){
-   const chaplain=defenders.find(x=>x.className==='Battle Chaplain'&&!(x.gc410Passive||{}).mercy);
-   if(chaplain){
-    const instinct=chaplain.gc410Passive||(chaplain.gc410Passive={});
-    instinct.mercy=true;
-    delete target.gc320Downed;
-    target.hp=Math.max(1,Math.round(target.maxHp*.12));
-    gc410Log(b,chaplain.name+' invokes Mercy Before Death and saves '+target.name+' from being downed.');
-   }
-  }
   if(target.className==='Berserker'&&uFlag.bloodRound!==b.round){
    uFlag.bloodRound=b.round;gc410Chip(target,enemy,b,.48,'retaliates in a blood frenzy against');
   }
