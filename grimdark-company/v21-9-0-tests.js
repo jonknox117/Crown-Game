@@ -1,0 +1,66 @@
+/* Broken Lantern v21.9.0 behavioral regressions. */
+window.__GC390_TEST=function(){
+ const old=state,oldGuard=GC390_PUSH_GUARD_TO;
+ try{
+  state=createState('Leadership Test','veyric');
+  state.regions.veyric.hq.established=true;
+  gc270Progression().phase='company';state.company.silver=2000;
+  const f=gc260CreateFounderRecord('veyric',{name:'HQ Founder',race:'Human',culture:'Veyric',className:'March Ranger',gender:'Male',portrait:1},true);
+  f.status='Ready';f.lvl=20;f.missions=40;
+  const pr=gc340Presence();pr.mode='town';pr.place='hall';pr.regionId='veyric';
+  const founderDirector=gc390Director('veyric'),founderBonus=gc390WorkBonus('veyric','Train');
+  pr.place='scout';
+  const absentFounder=gc390Director('veyric')===null&&gc390WorkBonus('veyric','Train')===1;
+  pr.place='hall';
+  const a=generateAdventurer('veyric');a.status='Ready';a.lvl=20;a.missions=40;state.roster.push(a);
+  const b=generateAdventurer('veyric');b.status='Ready';b.lvl=5;b.missions=5;state.roster.push(b);
+  const posted=gc390SetPost('veyric','Train',a.id)===true;
+  const postedBonus=gc390WorkBonus('veyric','Train');
+  const expected=gc390Power(f,'director')*gc390Power(a,'stance');
+  const stacking=posted&&Math.abs(postedBonus-expected)<.0001&&a.dailyOrder==='Train';
+  const allSeparate=GC390_STANCES.every(x=>gc390WorkBonus('veyric',x)>=founderBonus);
+  const reassigned=gc390SetPost('veyric','Scout',a.id)===true&&gc390EnsurePosts('veyric').Train===null&&gc390EnsurePosts('veyric').Scout===a.id;
+  gc390SetPost('veyric','Train',b.id);
+  const difference=gc390WorkBonus('veyric','Scout')>gc390WorkBonus('veyric','Train');
+  a.status='Expedition';
+  const absentLeader=gc390StanceLead('veyric','Scout')===null;
+  a.status='Ready';a.dailyOrder='Scout';
+  const stableCount=HQ_DEFS['Roadmaster Stables'].max===4;
+  const q=makeParty('veyric','Roadmaster Test');q.members=[b.id];q.captainId=b.id;
+  q.expedition={contract:{id:'road-test',title:'Roadmaster Route',regionId:'veyric',type:'Escort',risk:1,enemyCount:1,check:'scout',species:'Bandits',reward:1},progress:0,elapsedDays:0,durationDays:4,events:[],battle:null,gc201Momentum:0,gc199FieldProgress:0};
+  state.parties.push(q);b.status='Expedition';
+  const normalCap=Math.abs(gc390PushCap(q)-.8)<.0001;
+  render();
+  const beforeElement=document.querySelector('[data-gc199-party="'+q.id+'"],[data-gc331-party="'+q.id+'"]');
+  gc199PushParty(q.id);
+  const firstPush=Math.abs(q.expedition.gc201Momentum-.12)<.0001;
+  const noRebuild=gc347RefreshVisibleBody(true)===false;
+  const sameNode=!beforeElement||beforeElement.isConnected;
+  gc390Stables('veyric');
+  state.regions.veyric.hq.upgrades['Roadmaster Stables']=4;
+  const upgradedCap=Math.abs(gc390PushCap(q)-1)<.0001;
+  for(let i=0;i<12;i++)gc199PushParty(q.id);
+  const twoX=Math.abs(q.expedition.gc201Momentum-1)<.0001;
+  const output=gc201TravelVisual(q);
+  const wagonTwoX=output.includes('2.00');
+  const upgradeShown=Object.keys(HQ_DEFS).includes('Roadmaster Stables');
+  const unstacked=GC193_FACILITIES.indexOf('Salvager’s Lodge')<0&&HQ_DEFS.Armory.desc.includes('caches')&&HQ_DEFS['Occult Archive'].desc.includes('research');
+  state.regions.veyric.hq.upgrades.Armory=3;
+  const copied=normalizeState(JSON.parse(JSON.stringify(state)));
+  const saved=copied.regions.veyric.hq.gc390Posts.Scout===a.id&&copied.regions.veyric.hq.upgrades['Roadmaster Stables']===4;
+  state.regions.skeld.hq.established=true;
+  gc270Progression().phase='network';
+  b.status='Ready';q.expedition=null;
+  const c=generateAdventurer('veyric');c.status='Ready';c.lvl=20;c.missions=40;state.roster.push(c);
+  const appointed=gc280Appoint('veyric',c.id)===true;
+  const manager=gc390Director('veyric'),managerOnly=appointed&&manager?.a.id===c.id&&manager.source==='Commander';
+  const balanced=Math.abs(gc390Power(f)-gc390Power(c))<.0001;
+  pr.place='scout';const managedAway=gc390Director('veyric')?.a.id===c.id;
+  state.ui.tab='company';state.ui.gc330CompanySub='hq';render();
+  const staffUI=!!document.querySelector('.gc390HQPanel')&&document.querySelectorAll('.gc390Post').length===4;
+  const integrity=gc342StateIntegrity().ok;
+  const ok=!!(founderDirector?.a.id===f.id&&founderBonus>1&&absentFounder&&stacking&&allSeparate&&reassigned&&difference&&absentLeader&&stableCount&&normalCap&&firstPush&&noRebuild&&sameNode&&upgradedCap&&twoX&&wagonTwoX&&upgradeShown&&unstacked&&saved&&managerOnly&&balanced&&managedAway&&staffUI&&integrity);
+  return{ok,founderBonus,absentFounder,stacking,allSeparate,reassigned,difference,absentLeader,normalCap,firstPush,noRebuild,sameNode,upgradedCap,twoX,wagonTwoX,upgradeShown,unstacked,saved,managerOnly,balanced,managedAway,staffUI,integrity};
+ }catch(e){return{ok:false,error:String(e&&e.stack||e)}}
+ finally{state=old;GC390_PUSH_GUARD_TO=oldGuard;try{render()}catch(_){}}
+};
