@@ -109,6 +109,16 @@ audit=function(){
  return a;
 };
 window.__BL_AUDIT=audit;
+/* Explicit test hook for mobile layout checks. No production gameplay effect:
+   it is called only from the temporary CI art-test page. */
+window.__GC380_LAYOUT_PROBE=function(){
+ state=createState('Art Quality Test','veyric');
+ state.regions.veyric.hq.established=true;
+ const f=gc260CreateFounderRecord('veyric',{name:'Stage Tester',race:'Human',culture:'Veyric',className:'March Ranger',gender:'Male',portrait:1},true);
+ f.status='Ready';gc270Progression().phase='company';
+ state.ui.tab='you';gc340Presence().mode='town';gc340Presence().place='hall';
+ render();return !!document.querySelector('.gc380Stage');
+};
 window.__GC380_TEST=function(){
  const old=state;
  try{
