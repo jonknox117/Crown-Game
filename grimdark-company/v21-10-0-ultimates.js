@@ -32,7 +32,7 @@ const GC410_ULTIMATE_DETAILS={
 function gc410UltimateName(a){return gc360Talents(a).find(x=>x.level===20)?.name||'Ultimate'}
 function gc410UltimateCanUse(ctx){
  const b=ctx?.b,actor=ctx?.actor;if(!b||!actor)return false;
- if(actor.gc410UltimateSpent)return false;
+ if(actor.gc410UltimateSpent===ctx?.a?.className)return false;
  return gc410Living(b).length>0;
 }
 const _gc360ShouldUseGC410=gc360ShouldUse;
@@ -143,10 +143,10 @@ function gc410UltimateEffect(ctx,p,skill){
 }
 const _gc360UseTalentGC410=gc360UseTalent;
 gc360UseTalent=function(t,ctx,p){
- if(t.level===20&&ctx?.actor?.gc410UltimateSpent)return false;
+ if(t.level===20&&ctx?.actor?.gc410UltimateSpent===ctx?.a?.className)return false;
  const worked=_gc360UseTalentGC410(t,ctx,p);
  if(worked&&t.level===20){
-  ctx.actor.gc410UltimateSpent=true;
+  ctx.actor.gc410UltimateSpent=ctx.a.className;
   gc410UltimateEffect(ctx,p,t);
  }
  return worked;
