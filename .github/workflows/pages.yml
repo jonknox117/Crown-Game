@@ -471,9 +471,12 @@ jobs:
                     sticky:stage&&getComputedStyle(stage).position==='sticky',
                     nav:!!nav&&nav.querySelectorAll('button').length>=4,
                     noOverflow:document.documentElement.scrollWidth<=window.innerWidth+2,
-                    preserveControls:!!document.querySelector('[data-action="gc340Move"]')
+                    preserveControls:!!document.querySelector('[data-action="gc340Move"]'),
+                    setup:window.__GC380_LAYOUT_RESULT||null,
+                    appState:document.querySelector('#app')?.className||'missing app',
+                    screenExists:!!document.querySelector('#app .screen')
                   };
-                  data.ok=Object.keys(data).filter(k=>k!=='ok').every(k=>data[k]===true);
+                  data.ok=Object.keys(data).filter(k=>k!=='ok').every(k=>data[k]===true||['setup','appState','screenExists'].includes(k));
                   document.body.setAttribute('data-grand-stage',data.ok?'pass':'fail');
                   var n=document.createElement('pre');n.id='grand-stage-output';n.textContent=JSON.stringify(data);document.body.appendChild(n);
                 }catch(e){document.body.setAttribute('data-grand-stage','error');var n=document.createElement('pre');n.id='grand-stage-output';n.textContent=String(e&&e.stack||e);document.body.appendChild(n)}
