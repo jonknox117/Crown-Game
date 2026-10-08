@@ -28,6 +28,7 @@ function gc410HitTarget(pid,eid){
   critBonus=Math.max(0,d?.special?.crit||0),damage=Math.max(2,Math.round(normal*GC410_STRIKE_RATIO*(1+critBonus*.25)));
  const dealt=Math.min(enemy.hp,damage);
  enemy.hp=Math.max(0,enemy.hp-damage);
+ if(enemy.hp<=0){f.kills=(Number(f.kills)||0)+1;b.log.push(enemy.name+' falls to a direct player strike.');}
  b.gc410ManualHits=(Number(b.gc410ManualHits)||0)+1;
  b.gc410ManualDamage=(Number(b.gc410ManualDamage)||0)+dealt;
  b.gc410NextManualAt=Date.now()+GC410_STRIKE_COOLDOWN_MS;
@@ -119,7 +120,7 @@ function gc410PatchCombatFocus(){
   const b=p.expedition.battle,actor=gc410AliveFounder(p),ready=gc410ReadyHit(p);
   const title=panel.querySelector('.gc410FightHead span');if(title)title.textContent='LIVE COMBAT • ROUND '+Math.max(1,b.round);
   const tag=panel.querySelector('.gc410FightTag');if(tag)tag.textContent=actor?'YOU ARE FIGHTING':'YOU ARE DOWN';
-  const numbers=panel.querySelectorAll('.gc410Enemy');if(numbers.length!==b.enemies.length)return gc410MountContext();
+  const numbers=panel.querySelectorAll('.gc410Enemy');if(numbers.length!==b.enemies.length){panel.outerHTML=gc410CombatFocusHTML(p);return true}
   numbers.forEach((node,i)=>{
    const u=b.enemies[i],pct=clamp(u.hp/Math.max(1,u.maxHp)*100,0,100);
    const value=node.querySelector('small'),bar=node.querySelector('.gc410EnemyBar i'),hint=node.querySelector('.gc410EnemyTap');
