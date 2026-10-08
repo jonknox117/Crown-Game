@@ -54,7 +54,7 @@ function gc380PatchStage(){
 const _renderGC380=render;
 render=function(...args){const out=_renderGC380(...args);gc380MountStage();return out};
 const _gc351TargetedPatchGC380=gc351TargetedPatch;
-gc351TargetedPatch=function(...args){const result=_gc351TargetedPatchGC380(...args);gc380PatchStage();return result};
+gc351TargetedPatch=function(...args){const result=_gc351TargetedPatchGC380(...args);gc380MountStage();return result};
 const _processActionGC380=processAction;
 processAction=function(el){
  if(el?.dataset?.action==='gc380ToggleStage'){
@@ -117,7 +117,7 @@ window.__GC380_LAYOUT_PROBE=function(){
  const f=gc260CreateFounderRecord('veyric',{name:'Stage Tester',race:'Human',culture:'Veyric',className:'March Ranger',gender:'Male',portrait:1},true);
  f.status='Ready';gc270Progression().phase='company';
  state.ui.tab='you';gc340Presence().mode='town';gc340Presence().place='hall';
- render();return !!document.querySelector('.gc380Stage');
+ render();const stage=document.querySelector('.gc380Stage');const diag={mounted:!!stage,scene:gc380SceneState()?.scene,host:!!gc380SceneHost(),tab:state.ui.tab,company:gc270IsCompany(),art:stage?.querySelector('img')?.getAttribute('src')};window.__GC380_LAYOUT_RESULT=diag;return diag;
 };
 window.__GC380_TEST=function(){
  const old=state;
