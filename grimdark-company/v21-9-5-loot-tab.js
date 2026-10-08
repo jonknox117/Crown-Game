@@ -47,7 +47,7 @@ function gc395SpoilsHTML(){
  '<small>'+esc(a.desc||a.cost||'Legendary treasure')+'</small></div>').join(''):
  '<div class="gc395Empty">No legendary artifacts collected yet.</div>')+'</div>'+
  '<div class="gc395Footer"><span>'+esc(gameRegion)+' • '+(free?'Personal spoils':'Company spoils')+'</span>'+
- '<button type="button" class="btn" data-action="gc395Equipment"'+(!f?' disabled':'')+'>MY EQUIPMENT ›</button></div>'+
+ '<button type="button" class="btn" data-action="gear" data-id="'+esc(f?.id||'')+'"'+(!f?' disabled':'')+'>MY EQUIPMENT ›</button></div>'+
  '</section>';
 }
 /* Both phase renderers have a final WORLD/REGION fallback branch. Reuse those
@@ -86,10 +86,6 @@ processAction=function(el){
   const id=el.dataset.id;
   if(!gc395AllCaches().some(c=>c.id===id))return toast('That chest has already been opened.');
   return openCache(id);
- }
- if(action==='gc395Equipment'){
-  const f=gc260Founder();if(!f)return;
-  return openEquipment(f.id);
  }
  return _processActionGC395(el);
 };
