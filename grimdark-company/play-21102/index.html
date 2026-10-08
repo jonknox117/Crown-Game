@@ -18286,6 +18286,29 @@ function gc412PatchModal(){
   const fresh=t.content.querySelector('.gc201StanceGrid');
   if(fresh&&gc412Reconcile(dashboard,fresh)){GC412_STATS.modalUpdates++;changed=true}
  }
+ /* Current HQ modal uses gc202AssignRow, not the retired order-row layout.
+    Update its real healing bars, training stance labels and active selections
+    without reopening the modal or replacing the selected card. */
+ if(typeof gc202UpdateVitals==='function')gc202UpdateVitals();
+ if(typeof gc202UpdateStances==='function')gc202UpdateStances();
+ sheet.querySelectorAll('.gc202AssignRow').forEach(row=>{
+  const id=row.querySelector('[data-gc202-vitals]')?.dataset.gc202Vitals||
+    row.querySelector('[data-action="gc202SetStance"]')?.dataset.id;
+  const a=state.roster.find(x=>x.id===id);
+  if(!a)return;
+  const label=row.querySelector('.gc202AssignTop strong');
+  const val=gc193OrderLabel(a);
+  if(label&&label.textContent!==val){label.textContent=val;changed=true}
+  const level=row.querySelector('.gc202AssignIdentity span');
+  const levelText=a.culture+' '+a.className+' • Lv.'+a.lvl;
+  if(level&&level.textContent!==levelText){level.textContent=levelText;changed=true}
+  row.querySelectorAll('[data-action="gc202SetStance"]').forEach(btn=>{
+   const selected=a.status==='Ready'&&a.dailyOrder===btn.dataset.value;
+   if(btn.classList.contains('active')!==selected){btn.classList.toggle('active',selected);changed=true}
+   const disabled=a.status!=='Ready';
+   if(btn.disabled!==disabled){btn.disabled=disabled;changed=true}
+  });
+ });
  sheet.querySelectorAll('.gc193OrderRow').forEach(row=>{
   const id=row.querySelector('[data-action="gcOrderPick"]')?.dataset.id;
   const a=state.roster.find(x=>x.id===id);if(!a)return;
