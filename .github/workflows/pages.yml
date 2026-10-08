@@ -33,23 +33,59 @@ jobs:
           grep -q "GC411_VERSION='21.10.1'" grimdark-company/play/index.html
           grep -q "gc411RepairSignedPeople" grimdark-company/play/index.html
           test -s grimdark-company/play-21101/index.html
-      - name: Browser launch smoke
+      - name: Browser startup smoke test
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          p=Path('grimdark-company/play/index.html')
-          t=p.read_text(encoding='utf-8')
-          probe='''<script>setTimeout(function(){var app=document.getElementById('app');var ok=!!(app&&app.children.length)&&!document.body.innerText.includes('The ledger failed to open.');document.body.setAttribute('data-launch-smoke',ok?'pass':'fail');},2500);</script>'''
-          Path('grimdark-company/play/launch-smoke.html').write_text(t.replace('</body>',probe+'</body>'),encoding='utf-8')
-          PY
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
-          test -n "$BROWSER" || { echo "::error::No browser available for launch smoke"; exit 1; }
-          python3 -m http.server 8791 --bind 127.0.0.1 >/tmp/grim-launch-server.log 2>&1 &
+          if [ -z "$BROWSER" ]; then
+            echo "::error::No Chrome/Chromium executable found on runner"
+            exit 1
+          fi
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/bl-http.log 2>&1 &
           SERVER_PID=$!
-          trap 'kill $SERVER_PID 2>/dev/null || true; rm -f grimdark-company/play/launch-smoke.html' EXIT
+          trap 'kill $SERVER_PID 2>/dev/null || true' EXIT
           sleep 1
-          "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=8000 --dump-dom http://127.0.0.1:8791/grimdark-company/play/launch-smoke.html > /tmp/grim-launch-dom.html 2>/tmp/grim-launch-chrome.log
-          grep -q 'data-launch-smoke="pass"' /tmp/grim-launch-dom.html || { echo "::error::Game failed launch smoke"; grep -o 'The ledger failed to open[^<]*' /tmp/grim-launch-dom.html || true; exit 1; }
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=9000 \
+            --dump-dom http://127.0.0.1:8765/grimdark-company/play/ \
+            >/tmp/bl-dom.html 2>/tmp/bl-chrome.log
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+
+          class AppParser(HTMLParser):
+              def __init__(self):
+                  super().__init__(); self.depth=None; self.classes=[]; self.text=[]; self.ids=[]
+              def handle_starttag(self, tag, attrs):
+                  attrs=dict(attrs)
+                  if self.depth is None and tag=='div' and attrs.get('id')=='app':
+                      self.depth=1; return
+                  if self.depth is not None:
+                      self.depth += 1
+                      if attrs.get('class'): self.classes.extend(attrs['class'].split())
+                      if attrs.get('id'): self.ids.append(attrs['id'])
+              def handle_endtag(self, tag):
+                  if self.depth is not None:
+                      self.depth -= 1
+                      if self.depth==0: self.depth=None
+              def handle_data(self, data):
+                  if self.depth is not None: self.text.append(data)
+
+          dom=Path('/tmp/bl-dom.html').read_text(encoding='utf-8', errors='replace')
+          p=AppParser(); p.feed(dom)
+          text=' '.join(p.text); classes=set(p.classes); ids=set(p.ids)
+          rendered={'startPanel','topbar'} & classes
+          if not rendered:
+              print('APP TEXT:', text[:1800])
+              print('CHROME STDERR:', Path('/tmp/bl-chrome.log').read_text(encoding='utf-8', errors='replace')[-1800:])
+              raise SystemExit('Grim Company UI did not render.')
+          if 'startPanel' in rendered:
+              for marker in ('Choose where your story begins','Create Yourself','BEGIN AS A FREEBLADE'):
+                  if marker not in text: raise SystemExit('v20.8 opening missing text: '+marker)
+              for marker in ('founderRace','founderCulture','founderClass'):
+                  if marker not in ids: raise SystemExit('v20.8 character creation missing control: '+marker)
+          if 'companyName' in ids: raise SystemExit('v20.8 should not ask for a company name before play begins.')
+          print('v21.10.1 startup smoke passed:', sorted(rendered))
+          PY
+
       - name: Checkout legacy Pages branch for compatibility
         uses: actions/checkout@v6
         with:
