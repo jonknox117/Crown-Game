@@ -15,6 +15,8 @@ const _gc347RefreshVisibleBodyGC390=gc347RefreshVisibleBody;
 gc347RefreshVisibleBody=function(force=false){
  if(gc390PushBusy()&&state&&!gc321Locked()&&!state.parties.some(p=>p.expedition?.battle&&gc260FounderInParty(p))){
   GC390_PUSH_STATS.suppressedRebuilds++;
+  /* Count avoided work in the existing smoothness telemetry as well. */
+  if(typeof GC351_STATS!=='undefined')GC351_STATS.fullHtmlAvoided++;
   return false;
  }
  return _gc347RefreshVisibleBodyGC390(force);
