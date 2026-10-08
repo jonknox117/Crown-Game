@@ -130,7 +130,7 @@ const _processActionGC321=processAction;
 processAction=function(el){
  if(gc321Locked()){
   const a=el?.dataset?.action;
-  if(a==='gc260Decision'||a==='gc320Casualty'||a==='gc340DungeonChoice')return _processActionGC321(el);
+  if(a==='gc260Decision'||a==='gc320Casualty'||a==='gc340DungeonChoice'||a==='gc382DungeonWithdraw')return _processActionGC321(el);
   gc321EnsureModal();return;
  }
  return _processActionGC321(el);
