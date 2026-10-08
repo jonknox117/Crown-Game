@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="format-detection" content="telephone=no" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<title>Grim Company v21.10.2 — Live Progress QoL</title>
+<title>Grim Company v21.10.3 — Automatic Party Management</title>
 <style>:root{--bg:#0c0a08;--panel:#17120e;--panel2:#211810;--line:#4e3928;--line2:#745235;--text:#eadfc9;--muted:#a6947b;--gold:#d6ad63;--good:#93b97f;--bad:#cf7767;--blue:#8aa6b8;--shadow:rgba(0,0,0,.5)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:#080706;color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100%;overscroll-behavior:none}button,input,select{font:inherit}button{touch-action:manipulation}.app{max-width:760px;margin:auto;min-height:100vh;padding-bottom:88px;background:radial-gradient(circle at 50% -10%,#2b1b10 0,#100c09 36%,#090706 72%)}
 .topbar{position:sticky;top:0;z-index:20;padding:calc(10px + env(safe-area-inset-top)) 12px 9px;background:linear-gradient(#17110dF4,#0f0c09F0);border-bottom:1px solid #422f22;backdrop-filter:blur(10px)}.toprow{display:flex;align-items:center;gap:8px}.brand{min-width:0;flex:1}.brand h1{font:700 17px Georgia,serif;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:.09em;text-transform:uppercase;margin-top:2px}.iconbtn{border:1px solid #513b2a;background:#1a130e;color:#dec8a4;border-radius:9px;min-width:38px;height:38px;padding:0 9px;font-weight:800}.resources{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px}.res{border:1px solid #39291f;background:#110e0b;border-radius:8px;padding:5px 6px;text-align:center;font-size:8px;color:#8f806c;text-transform:uppercase}.res b{display:block;color:#e0c69b;font-size:12px;margin-top:1px}
@@ -551,7 +551,7 @@ body[data-brand="grim-company"]{background:#060708}.gc193Skull{display:block}.gc
     if(!app || document.querySelector('.topbar') || document.querySelector('.startPanel') || failed) return;
     failed=true;
     var detail=String(msg||'Unknown startup error').replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]});
-    app.innerHTML='<div style="max-width:560px;margin:24px auto;padding:18px;background:#18130f;border:1px solid #6a4930;border-radius:8px;color:#efe4cc;font-family:Georgia,serif"><h2 style="margin-top:0">The ledger failed to open.</h2><p style="color:#c2b29a;line-height:1.45">The v21.10.2 phone build loaded, but the game engine failed to start. Your saved company has not been intentionally erased.</p><button onclick="location.reload()" style="width:100%;padding:13px;border-radius:3px;border:1px solid #8c593c;background:#6e3225;color:white;font-weight:700">Reload Game</button><details style="margin-top:12px;color:#9e8c76"><summary>Technical detail</summary><pre style="white-space:pre-wrap">'+detail+'</pre></details></div>';
+    app.innerHTML='<div style="max-width:560px;margin:24px auto;padding:18px;background:#18130f;border:1px solid #6a4930;border-radius:8px;color:#efe4cc;font-family:Georgia,serif"><h2 style="margin-top:0">The ledger failed to open.</h2><p style="color:#c2b29a;line-height:1.45">The v21.10.3 phone build loaded, but the game engine failed to start. Your saved company has not been intentionally erased.</p><button onclick="location.reload()" style="width:100%;padding:13px;border-radius:3px;border:1px solid #8c593c;background:#6e3225;color:white;font-weight:700">Reload Game</button><details style="margin-top:12px;color:#9e8c76"><summary>Technical detail</summary><pre style="white-space:pre-wrap">'+detail+'</pre></details></div>';
   }
   window.addEventListener('error',function(e){setTimeout(function(){showFailure(e.message)},0)});
   window.addEventListener('unhandledrejection',function(e){setTimeout(function(){showFailure(e.reason)},0)});
@@ -7820,7 +7820,7 @@ window.__GC250_TEST=function(){
  }catch(e){return{ok:false,error:String(e&&e.stack||e)}}finally{state=old}
 };
 
-/* Grim Company v21.10.2 — Live Progress QoL
+/* Grim Company v21.10.3 — Automatic Party Management
    The player now exists inside the same simulation as every other adventurer.
    Founder presence turns one chosen expedition into Direct Command without
    interrupting the rest of the company. */
@@ -9363,7 +9363,7 @@ window.__GC301_TEST=function(){
 };
 
 
-/* Grim Company v21.10.2 — Live Progress QoL: persistent mercenary pool and full-contract freeblade crews. */
+/* Grim Company v21.10.3 — Automatic Party Management: persistent mercenary pool and full-contract freeblade crews. */
 const GC310_VERSION='21.1';
 const GC310_FOUNDING_REP=8;
 const GC310_POOL_SIZE=12;
@@ -9667,7 +9667,7 @@ expeditionCard=function(p){
 };
 
 
-/* Grim Company v21.10.2 — Live Progress QoL presentation and verification. */
+/* Grim Company v21.10.3 — Automatic Party Management presentation and verification. */
 function gc310KnownMercsHTML(){
  if(!state||!gc270IsFreeblade())return'';
  const rid=gc310Freeblade().startRegion||state.currentRegion,f=gc260Founder();
@@ -9793,7 +9793,7 @@ window.__GC310_TEST=function(){
 window.__GC270_TEST=window.__GC310_TEST;
 
 
-/* Grim Company v21.10.2 — Live Progress QoL: fair qualification, unavoidable founder decisions, and permanent personal stances. */
+/* Grim Company v21.10.3 — Automatic Party Management: fair qualification, unavoidable founder decisions, and permanent personal stances. */
 const GC320_VERSION='21.2';
 const GC320_RISK_LEVEL={1:1,2:3,3:6,4:10,5:15};
 const GC320_STANCES=['Scout','Odd Jobs','Train','Recover'];
@@ -9941,7 +9941,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.2 — Live Progress QoL: DOWNED state, mortal danger, retreat and casualty choices. */
+/* Grim Company v21.10.3 — Automatic Party Management: DOWNED state, mortal danger, retreat and casualty choices. */
 let GC320_SUPPRESS_FINISH=false;
 let GC320_REPORT_GEAR=null;
 const GC320_MORTAL_BASE={1:.08,2:.15,3:.25,4:.38,5:.52};
@@ -10171,7 +10171,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.2 — Live Progress QoL: independent mercenary work remains available after founding. */
+/* Grim Company v21.10.3 — Automatic Party Management: independent mercenary work remains available after founding. */
 function gc320IndependentBoards(){
  const fs=gc260System();fs.gc320IndependentBoards=fs.gc320IndependentBoards&&typeof fs.gc320IndependentBoards==='object'?fs.gc320IndependentBoards:{};return fs.gc320IndependentBoards;
 }
@@ -10266,7 +10266,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.2 — Live Progress QoL presentation, audit and behavior checks. */
+/* Grim Company v21.10.3 — Automatic Party Management presentation, audit and behavior checks. */
 function gc320InstallStyles(){
  if(document.getElementById('gc320Styles'))return;
  const st=document.createElement('style');st.id='gc320Styles';
@@ -10330,7 +10330,7 @@ window.__GC320_TEST=function(){
 };
 
 
-/* Grim Company v21.10.2 — Live Progress QoL hotfix.
+/* Grim Company v21.10.3 — Automatic Party Management hotfix.
    A pending Founder decision is not a notification. It owns the simulation:
    no clock, HQ work, expedition travel, combat, world day, or command AI can advance. */
 const GC321_VERSION='21.2.1';
@@ -10551,7 +10551,7 @@ window.__GC321_TEST=function(){
 };
 
 
-/* Grim Company v21.10.2 — Live Progress QoL: information architecture and navigation. */
+/* Grim Company v21.10.3 — Automatic Party Management: information architecture and navigation. */
 const GC330_VERSION='21.3';
 const GC330_PRIMARY=[
  ['you','♙','YOU'],
@@ -10641,7 +10641,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.2 — Live Progress QoL: clean core screens and visual priority. */
+/* Grim Company v21.10.3 — Automatic Party Management: clean core screens and visual priority. */
 
 function gc330RiskCapForLevel(level){
  let cap=1;for(const r of [1,2,3,4,5])if(level>=gc320RiskLevel(r))cap=r;return cap;
@@ -10754,7 +10754,7 @@ showReport=function(r){
 };
 
 
-/* Grim Company v21.10.2 — Live Progress QoL: cohesive visual system, terminology cleanup and UI checks. */
+/* Grim Company v21.10.3 — Automatic Party Management: cohesive visual system, terminology cleanup and UI checks. */
 
 const _gc260PendingDecisionHTMLGC330=gc260PendingDecisionHTML;
 gc260PendingDecisionHTML=function(p,d){
@@ -10878,7 +10878,7 @@ window.__GC330_TEST=function(){
 };
 
 
-/* Grim Company v21.10.2 — Live Progress QoL.
+/* Grim Company v21.10.3 — Automatic Party Management.
    Restore visible combat, make Push persistent/readable, and make party assignment frictionless. */
 const GC331_VERSION='21.3.1';
 
@@ -11061,7 +11061,7 @@ window.__GC331_TEST=function(){
 };
 
 
-/* Grim Company v21.10.2 — Live Progress QoL.
+/* Grim Company v21.10.3 — Automatic Party Management.
    A freelancer is not a permanent party leader. Every personal freelance contract
    assembles a fresh, healthy temporary crew from the wider regional market. */
 const GC332_VERSION='21.3.2';
@@ -11469,7 +11469,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.2 — Live Progress QoL support and progressive NPC autonomy. */
+/* Grim Company v21.10.3 — Automatic Party Management support and progressive NPC autonomy. */
 const _gc201ScoutRegionGC340=gc201ScoutRegion;
 gc201ScoutRegion=function(regionId,deltaDays){return _gc201ScoutRegionGC340(regionId,deltaDays*(gc340At('Scout',regionId)?GC340_SUPPORT.Scout:1))};
 
@@ -11841,7 +11841,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.2 — Live Progress QoL presentation, mobile polish and regression coverage. */
+/* Grim Company v21.10.3 — Automatic Party Management presentation, mobile polish and regression coverage. */
 const _gc270FreebladeYouGC340D=gc270FreebladeYou;
 gc270FreebladeYou=function(){const p=gc340FounderInDungeon();if(p)return gc340DungeonRunHTML(p);return _gc270FreebladeYouGC340D()};
 
@@ -13134,7 +13134,7 @@ window.__GC346_TEST=function(){
  }
 };
 
-/* Grim Company v21.10.2 — Live Progress QoL pass.
+/* Grim Company v21.10.3 — Automatic Party Management pass.
    The visible game must follow simulation state without requiring tab changes. */
 const GC347_VERSION='21.4.7';
 let GC347_TOUCHING=false;
@@ -18450,6 +18450,417 @@ window.__GC412_TEST=function(){
  }catch(e){return{ok:false,error:String(e&&e.stack||e),results:r}}
  finally{state=prior;window.__GC345_FORCE_PHONE=oldForce;document.getElementById('modal')?.classList.remove('show');try{render()}catch(_){}}
 };
+
+
+/* Grim Company v21.10.3 — managers run the player's parties, not the roster.
+   Strict dispatch readiness, three predictable policies, no automatic hiring,
+   party formation, captain replacement, or HQ duty changes. */
+const GC413_VERSION='21.10.3';
+const GC413_RISK={Conservative:'Cautious',Normal:'Balanced',Ruthless:'Aggressive'};
+const GC413_DESC={
+ Conservative:'Favor safer jobs. Wait if every qualified job looks too dangerous.',
+ Normal:'Match career-qualified jobs to the existing crew’s combat strength.',
+ Ruthless:'Seek the highest career-qualified risks, even when the odds look rough.'
+};
+function gc413Orders(r,s=state){
+ const c=gc280CommandState(r,s);if(!c)return null;
+ const x=gc370Config(r,s);
+ if(!x)return null;
+ if(x.gc413Version!==GC413_VERSION){
+  /* Old approvals, hiring requests and charters belong to the superseded
+     manager workflow; never execute them after migration. */
+  x.requests=[];
+  x.gc413Version=GC413_VERSION;
+ }
+ x.risk=GC280_POLICIES.includes(x.risk)?x.risk:'Normal';
+ x.priority='Balanced';x.authority='Full';
+ c.directive='Balanced';c.casualtyPolicy=x.risk;
+ return x;
+}
+const _normalizeStateGC413=normalizeState;
+normalizeState=function(s){
+ s=_normalizeStateGC413(s);
+ if(s)REGION_ORDER.forEach(r=>gc413Orders(r,s));
+ return s;
+};
+const _createStateGC413=createState;
+createState=function(...args){
+ const s=_createStateGC413(...args);
+ if(s)REGION_ORDER.forEach(r=>gc413Orders(r,s));
+ return s;
+};
+/* Appoint only unassigned people. Promoting a party captain is the player's
+   decision, not an excuse to silently remove somebody from an existing crew. */
+const _gc280EligibleCommandersGC413=gc280EligibleCommanders;
+gc280EligibleCommanders=function(r){
+ return _gc280EligibleCommandersGC413(r).filter(a=>
+  !state.parties.some(p=>(p.members||[]).includes(a.id)));
+};
+const _gc280AppointGC413=gc280Appoint;
+gc280Appoint=function(r,id){
+ if(state.parties.some(p=>(p.members||[]).includes(id))){
+  toast('Remove this adventurer from their party before appointing them manager.');
+  return false;
+ }
+ const result=_gc280AppointGC413(r,id);
+ if(result){gc413Orders(r);save()}
+ return result;
+};
+function gc413Ready(p,r){
+ if(!p||p.regionId!==r||p.expedition||p.gc413Manual||p.gc340DungeonRun?.active)return false;
+ const ids=p.members||[];
+ if(!ids.length||!p.captainId||!ids.includes(p.captainId))return false;
+ if(ids.includes(state.company.founderId))return false;
+ const crew=partyMembers(p);
+ if(crew.length!==ids.length)return false;
+ return crew.every(a=>{
+  if(a.status!=='Ready'||a.regionId!==r||a.injury)return false;
+  const max=derived(a).maxHp;
+  return Number(a.hp)>=max-.001;
+ });
+}
+function gc413PartyState(p,r){
+ if(p.expedition)return 'Working';
+ if((p.members||[]).includes(state.company.founderId)||p.gc413Manual)return 'Manual';
+ if(!(p.members||[]).length)return 'Waiting';
+ if(partyMembers(p).some(a=>a.status==='Recovering'||a.status==='Ready'&&Number(a.hp)<derived(a).maxHp-.001||!!a.injury))
+  return 'Recovering';
+ return gc413Ready(p,r)?'Waiting':'Unavailable';
+}
+/* Never edit dailyOrder, party membership, captain, or treasury here. */
+gc280AssignStances=function(){return false};
+gc280MaybeRecruit=function(){return null};
+gc280BuildParties=function(){return false};
+gc280RiskAllowed=function(r,p,risk){
+ return gc413Ready(p,r)&&gc320PartyQualification(p,{risk}).ok;
+};
+function gc413Pool(r){
+ const region=state.regions[r];
+ if(!region)return[];
+ const contracts=[...(region.contracts||[])];
+ const active=gc240CampaignState(r)?.active;
+ if(active?.currentContract&&!active.inFieldPartyId)contracts.push(active.currentContract);
+ const seen=new Set();
+ return contracts.filter(c=>{
+  if(!c?.id||seen.has(c.id))return false;
+  seen.add(c.id);return true;
+ });
+}
+function gc413Score(r,p,c){
+ const x=gc413Orders(r),mode=x?.risk||'Normal',leader=gc280Commander(r),t=gc370Talent(leader);
+ const risk=clamp(Number(c.risk)||1,1,5),avg=gc280PartyAverageLevel(p);
+ const gap=gc194RiskLevel(risk)-avg,unknown=Number(c.unknown)||0,reward=Number(c.reward)||0;
+ if(mode==='Conservative'&&gap>0)return null;
+ if(mode==='Normal'&&gap>(t.personnel?3:2))return null;
+ let value=mode==='Conservative'? -risk*110-gap*14+reward*.045-unknown*15:
+  mode==='Ruthless'?risk*120-gap*3+reward*.09-unknown*2:
+  risk*22-Math.abs(gap)*27+reward*.14-unknown*8;
+ if(t.assessment&&c.check){
+  const b=bestUtility(p,c.check);
+  if(b?.a)value+=(Number(b.value)||0)*.75;
+ }
+ if(t.adaptation&&unknown>=3)value-=mode==='Ruthless'?12:unknown*10;
+ return value;
+}
+function gc413PickContract(r,p){
+ if(!gc413Ready(p,r))return null;
+ const choices=gc413Pool(r).filter(c=>gc320PartyQualification(p,c).ok)
+  .map(c=>({c,score:gc413Score(r,p,c)})).filter(x=>x.score!==null);
+ choices.sort((a,b)=>b.score-a.score||Number(b.c.reward||0)-Number(a.c.reward||0)||String(a.c.id).localeCompare(String(b.c.id)));
+ return choices[0]?.c||null;
+}
+/* Override the legacy approval-based dispatch route. Dispatch uses the real
+   expedition engine and existing manager perks. Any failure leaves the party
+   intact and waiting for the next opportunity. */
+gc280Dispatch=function(r,p,c){
+ if(!gc280NetworkUnlocked()||!gc280Commander(r)||!gc280CommandState(r).autonomy||!c||
+   !gc413Ready(p,r)||!gc320PartyQualification(p,c).ok||
+   !gc413Pool(r).some(x=>x.id===c.id))return false;
+ const ok=gc370DispatchDirect(r,p,c);
+ if(ok)p.gc413LastDispatch=Number(state.company.day)||0;
+ return ok;
+};
+gc280PickContract=gc413PickContract;
+gc280CommandAct=function(r){
+ if(!gc280NetworkUnlocked())return false;
+ const c=gc280CommandState(r),manager=gc280Commander(r),region=state.regions[r];
+ if(!region?.hq?.established||!c.autonomy||manager?.status!=='Command')return false;
+ const t=gc370Talent(manager),cap=t.master||t.coordination?2:1;
+ const parties=state.parties.filter(p=>gc413Ready(p,r))
+  .sort((a,b)=>(Number(a.gc413LastDispatch)||0)-(Number(b.gc413LastDispatch)||0)
+   ||a.id.localeCompare(b.id));
+ let sent=0;
+ for(const p of parties){
+  const contract=gc413PickContract(r,p);
+  if(contract&&gc280Dispatch(r,p,contract))sent++;
+  if(sent>=cap)break;
+ }
+ return sent>0;
+};
+/* Simple status is live in both regional strips and the management sheet. */
+function gc413Totals(r){
+ const parties=state.parties.filter(p=>p.regionId===r);
+ const counts={Working:0,Recovering:0,Waiting:0,Manual:0,Unavailable:0};
+ parties.forEach(p=>{counts[gc413PartyState(p,r)]++});
+ return counts;
+}
+function gc413PartyRows(r){
+ const parties=state.parties.filter(p=>p.regionId===r);
+ return parties.map(p=>{
+  const stateName=gc413PartyState(p,r),manual=!!p.gc413Manual;
+  const owner=(p.members||[]).includes(state.company.founderId);
+  const note=stateName==='Working'?'On contract':stateName==='Recovering'?'Waiting for full recovery':
+   stateName==='Manual'?'Controlled by you':stateName==='Unavailable'?'Crew/captain unavailable':
+   gc413Ready(p,r)?'Ready for a suitable contract':'No complete crew';
+  return '<div class="gc413Party" data-gc413-party="'+esc(p.id)+'"><div><b>'+esc(p.name)+'</b>'+
+    '<small>'+esc(stateName)+' • '+esc(note)+'</small></div>'+
+    (!owner?'<button type="button" class="btn ghost" data-action="gc413Party" data-region="'+r+'" data-id="'+esc(p.id)+'">'+
+    (manual?'ENABLE AUTO':'MANUAL')+'</button>':'<span>PLAYER PARTY</span>')+'</div>';
+ }).join('')||'<div class="gc413Empty">Build a party to begin automatic contracting.</div>';
+}
+function gc413Board(r){
+ const t=gc413Totals(r),x=gc413Orders(r),c=gc280CommandState(r);
+ return '<div class="gc413ManagerBoard" data-gc413-region="'+r+'"><div class="gc413Totals">'+
+  [['Working',t.Working],['Recovering',t.Recovering],['Waiting',t.Waiting]].map(([label,value])=>
+  '<div><b>'+value+'</b><span>'+label.toUpperCase()+'</span></div>').join('')+'</div>'+
+  '<p>Managers dispatch only your existing, fully healed parties. Captains, crew and HQ stances stay exactly as you assigned them. Parties you mark Manual are never sent automatically.</p>'+
+  '<div class="gc413PartyList">'+gc413PartyRows(r)+'</div>'+
+  (t.Manual||t.Unavailable?'<small>'+t.Manual+' manually controlled • '+t.Unavailable+' otherwise unavailable</small>':'')+'</div>';
+}
+function gc413PolicyControls(r){
+ const x=gc413Orders(r);
+ return '<div class="gc413Policies">'+GC280_POLICIES.map(v=>
+  '<button type="button" class="gc413Policy '+(x.risk===v?'selected':'')+'" data-action="gc413Policy" data-region="'+r+'" data-value="'+v+'"><b>'+GC413_RISK[v]+'</b><small>'+esc(GC413_DESC[v])+'</small></button>'
+ ).join('')+'</div>';
+}
+function gc413ManagerPerks(manager){
+ const t=gc370Talent(manager);
+ const items=[
+  ['Lv.5','Emergency treatment kit',t.prep],
+  ['Lv.10','Improved risk assessment',t.personnel],
+  ['Lv.15','Crisis withdrawal plan',t.contingency],
+  ['Lv.20','Coordinate two expeditions',t.master],
+  ['Uncommon','Advance scouting',t.logistics],
+  ['Rare','Crew-skill contract matching',t.assessment],
+  ['Super Rare','Coordinate two expeditions',t.coordination],
+  ['Legendary','Identify dangerous unknowns',t.adaptation]
+ ];
+ return '<div class="gc413Talents">'+items.map(([req,label,on])=>
+  '<div class="'+(on?'active':'')+'"><span>'+req+'</span><b>'+esc(label)+'</b></div>').join('')+'</div>';
+}
+gc280OpenCommand=function(r){
+ if(!gc280NetworkUnlocked())return toast('Regional command unlocks after your second headquarters.');
+ if(!state.regions[r]?.hq?.established)return false;
+ const c=gc280CommandState(r),x=gc413Orders(r),manager=gc280Commander(r),eligible=gc280EligibleCommanders(r);
+ let html='<div class="sheetHead"><div><h3>'+esc(state.regions[r].hq.name)+'</h3><div class="tiny muted">Party Dispatch Management</div></div><button class="x" data-action="close">×</button></div>';
+ if(manager){
+  html+='<div class="card gc413Hero">'+blPortraitHTML(manager,'blPortraitLarge')+'<div><b>'+esc(manager.name)+'</b><small>Lv.'+manager.lvl+' • '+esc(gc360RankName(manager))+' • Command '+gc280CommandScore(manager)+'</small></div></div>';
+ }else{
+  html+='<div class="card"><b>Appoint a regional manager</b><p>The appointee must be unassigned. Existing parties will not be reorganized.</p>';
+  if(eligible.length)html+='<select class="field" id="gc413ManagerPick">'+eligible.map(a=>
+   '<option value="'+esc(a.id)+'">'+esc(a.name)+' • Lv.'+a.lvl+' '+esc(gc360RankName(a))+'</option>').join('')+'</select>';
+  else html+='<small>No unassigned, ready adventurers in this region.</small>';
+  html+='</div>';
+ }
+ html+='<div class="sectionTitle"><h3>Risk Policy</h3><span>one setting</span></div>'+gc413PolicyControls(r);
+ if(!manager&&eligible.length)html+='<button class="btn goldbtn wide" data-action="gc413Appoint" data-region="'+r+'">APPOINT MANAGER</button>';
+ if(manager){
+  html+='<div class="gc413Switch"><b>'+(c.autonomy?'AUTOMATION ON':'AUTOMATION PAUSED')+'</b>'+
+   '<button class="btn '+(c.autonomy?'ghost':'primary')+'" data-action="gc280Toggle" data-region="'+r+'">'+(c.autonomy?'PAUSE AUTO DISPATCH':'RESUME AUTO DISPATCH')+'</button></div>';
+  html+='<div class="sectionTitle"><h3>Existing Parties</h3><span>live status</span></div>'+gc413Board(r);
+  html+='<div class="sectionTitle"><h3>Manager Expertise</h3><span>level and rarity</span></div>'+gc413ManagerPerks(manager);
+  const performance=x.performance;
+  html+='<div class="gc413Record">'+performance.dispatches+' missions dispatched • '+performance.retreats+' crisis withdrawals • '+performance.aidKits+' field kits used</div>';
+  html+='<button class="btn ghost wide" data-action="gc280Release" data-region="'+r+'">RELIEVE MANAGER</button>';
+ }
+ modal(html);return true;
+};
+function gc413SetPolicy(r,v){
+ if(!GC280_POLICIES.includes(v)||!state.regions[r]?.hq?.established)return false;
+ const x=gc413Orders(r),c=gc280CommandState(r);if(!x||!c)return false;
+ x.risk=v;c.casualtyPolicy=v;
+ if(gc280Commander(r))gc370Record(r,'orders','Dispatch policy set to '+GC413_RISK[v]+'.');
+ save();gc280OpenCommand(r);return true;
+}
+function gc413ToggleParty(r,id){
+ const p=state.parties.find(p=>p.id===id&&p.regionId===r);
+ if(!p||(p.members||[]).includes(state.company.founderId))return false;
+ p.gc413Manual=!p.gc413Manual;save();gc280OpenCommand(r);return true;
+}
+const _processActionGC413=processAction;
+processAction=function(el){
+ const action=el?.dataset?.action,r=el?.dataset?.region;
+ if(action==='gc413Policy')return gc413SetPolicy(r,el.dataset.value);
+ if(action==='gc413Party')return gc413ToggleParty(r,el.dataset.id);
+ if(action==='gc413Appoint'){
+  const id=document.getElementById('gc413ManagerPick')?.value;
+  if(id&&gc280Appoint(r,id))return gc280OpenCommand(r);
+  return false;
+ }
+ return _processActionGC413(el);
+};
+gc280CommandStrip=function(r){
+ if(!gc280NetworkUnlocked()||!state?.regions?.[r]?.hq?.established)return'';
+ const c=gc280CommandState(r),manager=gc280Commander(r),t=gc413Totals(r);
+ return '<div class="card gc280CommandStrip '+(manager&&c.autonomy?'active':'')+'"><div><span>PARTY MANAGEMENT</span>'+
+  '<b>'+esc(manager?.name||'Direct control')+'</b><small>'+
+  (manager?GC413_RISK[gc413Orders(r).risk]+' • '+(c.autonomy?'AUTO DISPATCH':'PAUSED'):'No manager appointed')+
+  '</small><em>'+t.Working+' working • '+t.Recovering+' recovering • '+t.Waiting+' waiting</em></div>'+
+  '<button class="btn '+(manager?'ghost':'goldbtn')+'" data-action="gc280Open" data-region="'+r+'">'+(manager?'Manage':'Appoint')+'</button></div>';
+};
+/* Live updates inside the open management sheet, without reopening it and
+   interrupting the player's scrolling or button presses. */
+const _gc412PatchModalGC413=gc412PatchModal;
+gc412PatchModal=function(...args){
+ const out=_gc412PatchModalGC413(...args);
+ if(!state||document.hidden)return out;
+ const sheet=document.getElementById('sheet'),modalRoot=document.getElementById('modal');
+ if(!modalRoot?.classList.contains('show'))return out;
+ const board=sheet?.querySelector('.gc413ManagerBoard');if(!board)return out;
+ if(document.activeElement?.matches?.('input,select,textarea'))return out;
+ const r=board.dataset.gc413Region;
+ if(!r||!state.regions[r])return out;
+ const t=document.createElement('template');t.innerHTML=gc413Board(r);
+ const next=t.content.querySelector('.gc413ManagerBoard');if(!next)return out;
+ if(board.innerHTML!==next.innerHTML){
+  /* Small localized replacement only. No full page or modal redraw. */
+  board.innerHTML=next.innerHTML;
+  return true;
+ }
+ return out;
+};
+function gc413InstallStyle(){
+ if(document.getElementById('gc413CSS'))return;
+ const style=document.createElement('style');style.id='gc413CSS';
+ style.textContent=[
+ '.gc413Hero{display:flex;gap:12px;align-items:center}.gc413Hero>div:last-child{min-width:0}.gc413Hero b,.gc413Hero small{display:block}.gc413Hero small{font-size:10px;color:#bda98a;margin-top:5px}',
+ '.gc413Policies{display:grid;gap:8px}.gc413Policy{width:100%;min-height:66px;text-align:left!important;background:#191715;border:1px solid #655039;border-radius:7px;padding:10px 12px;color:#e6d4b4}.gc413Policy.selected{border-color:#d4aa63;background:#332818}.gc413Policy b,.gc413Policy small{display:block}.gc413Policy b{font:700 14px Georgia,serif}.gc413Policy small{font-size:10px;color:#bda98d;margin-top:4px;line-height:1.5}',
+ '.gc413Switch{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:13px;border:1px solid #51412d;padding:10px}.gc413Switch b{font-size:10px}.gc413Switch button{min-height:44px}',
+ '.gc413ManagerBoard>p{color:#b4a48e;font-size:11px;line-height:1.55}.gc413Totals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.gc413Totals>div{text-align:center;padding:12px 3px;background:#201b15;border-radius:5px}.gc413Totals b,.gc413Totals span{display:block}.gc413Totals b{font:700 23px Georgia,serif;color:#e6c88d}.gc413Totals span{font-size:8px;color:#b69c75}',
+ '.gc413Party{display:flex;justify-content:space-between;gap:10px;align-items:center;border-bottom:1px solid #453a2c;padding:11px 2px}.gc413Party>div{min-width:0;flex:1}.gc413Party b,.gc413Party small{display:block}.gc413Party b{font-size:12px}.gc413Party small{font-size:9px;line-height:1.4;color:#baa587;margin-top:5px}.gc413Party button{min-width:92px;min-height:42px;font-size:9px}.gc413Party>span{font-size:8px;color:#a79372}.gc413ManagerBoard>small{display:block;color:#b7a17e;margin-top:9px}.gc413Empty{font-size:11px;color:#988c7b;padding:13px}',
+ '.gc413Talents{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.gc413Talents>div{padding:9px;background:#191815;border:1px solid #41392c;opacity:.48}.gc413Talents>div.active{border-color:#86683e;opacity:1}.gc413Talents span,.gc413Talents b{display:block}.gc413Talents span{font-size:8px;color:#be995f}.gc413Talents b{font-size:10px;color:#e1cfb1;margin-top:4px}.gc413Record{margin:12px 0;font-size:10px;color:#c7b393}',
+ '@media(max-width:355px){.gc413Switch{flex-direction:column;align-items:stretch}.gc413Talents{grid-template-columns:1fr}}'
+ ].join('');
+ document.head.appendChild(style);
+}
+gc413InstallStyle();
+const _auditGC413=audit;
+audit=function(){
+ const o=_auditGC413();
+ o.managerDispatchesOnlyPlayerBuiltParties=true;
+ o.managerNeverRearrangesTeamsOrCaptains=true;
+ o.managerRequiresFullHPAndRecovery=true;
+ o.managerRiskIsThreeSimplePolicies=true;
+ o.managerRespectsManualParties=true;
+ return o;
+};
+window.__BL_AUDIT=audit;
+
+
+/* v21.10.3 — real expedition behavior, save migration, party ownership. */
+window.__GC413_TEST=function(){
+ const before=state,r={};
+ try{
+  state=createState('Simple Manager Regression','veyric');
+  state.regions.veyric.hq.established=true;
+  state.regions.skeld.hq.established=true;
+  gc270Progression().phase='network';
+  state.company.silver=2200;
+  const founder=gc260CreateFounderRecord('veyric',{
+   name:'Owner',race:'Human',culture:'Veyric',className:'March Ranger',gender:'Male',portrait:1
+  },true);
+  founder.status='Ready';
+  const leader=generateAdventurer('veyric');
+  leader.name='Manager';leader.status='Ready';leader.lvl=20;leader.missions=40;
+  state.roster.push(leader);
+  const make=(name,count=3)=>{
+   const crew=[];
+   for(let i=0;i<count;i++){
+    const a=generateAdventurer('veyric');
+    a.status='Ready';a.dailyOrder='Train';a.lvl=20;a.missions=40;
+    a.hp=derived(a).maxHp;
+    state.roster.push(a);crew.push(a);
+   }
+   const p=makeParty('veyric',name);
+   p.members=crew.map(a=>a.id);p.captainId=crew[0].id;state.parties.push(p);
+   return{p,crew};
+  };
+  const active=make('Working Crew'),healing=make('Recovery Crew'),manual=make('Manual Crew'),waiting=make('Available Crew');
+  const player=makeParty('veyric','Founder Crew');player.members=[founder.id];player.captainId=founder.id;state.parties.push(player);
+  manual.p.gc413Manual=true;
+  const board=gc250EnsureRiskBoard('veyric');
+  r.contractsAvailable=board.length>=5;
+  const beforeComposition=state.parties.map(p=>({id:p.id,members:p.members.join(','),captain:p.captainId}));
+  const beforeRosterSize=state.roster.length,beforeParties=state.parties.length,
+   beforeJobs=state.roster.map(a=>[a.id,a.dailyOrder]);
+  r.memberCannotBeAppointed=gc280Appoint('veyric',active.crew[0].id)===false;
+  const appointed=gc280Appoint('veyric',leader.id)===true;
+  r.appointed=appointed;
+  const x=gc413Orders('veyric'),c=gc280CommandState('veyric');
+  r.threeModes=['Conservative','Normal','Ruthless'].every(v=>!!GC413_RISK[v]);
+  const sample=waiting.p;
+  x.risk='Conservative';
+  const conservative=gc413PickContract('veyric',sample)?.risk||0;
+  x.risk='Normal';
+  const normal=gc413PickContract('veyric',sample)?.risk||0;
+  x.risk='Ruthless';
+  const ruthless=gc413PickContract('veyric',sample)?.risk||0;
+  r.riskPreference=conservative===1&&ruthless===5&&normal>=conservative&&normal<=ruthless;
+  x.risk='Normal';
+  /* All members must finish healing — even a fractional HP shortfall blocks. */
+  const patient=healing.crew[1];patient.hp=derived(patient).maxHp-.5;
+  r.blocksNotFullHP=!gc413Ready(healing.p,'veyric')&&gc413PartyState(healing.p,'veyric')==='Recovering';
+  const sampleContract=gc413PickContract('veyric',sample);
+  r.blocksUnhealedDirect=!gc280Dispatch('veyric',healing.p,sampleContract);
+  c.autonomy=true;
+  const sent=gc280CommandAct('veyric');
+  r.healthyDispatched=sent&&!!active.p.expedition&&!!active.p.expedition.gc370ManagerId;
+  r.unhealedStayed=healing.p.expedition===null||!healing.p.expedition;
+  r.manualUntouched=!manual.p.expedition;
+  r.founderUntouched=!player.expedition;
+  r.noAutohire=beforeRosterSize===state.roster.length;
+  r.noAutocharter=beforeParties===state.parties.length;
+  r.noReorganization=beforeComposition.every(b=>{
+   const p=state.parties.find(x=>x.id===b.id);
+   return p&&p.members.join(',')===b.members&&p.captainId===b.captain;
+  });
+  r.noJobReassignment=beforeJobs.every(([id,job])=>state.roster.find(a=>a.id===id)?.dailyOrder===job);
+  patient.hp=derived(patient).maxHp;
+  r.readyWhenFull=gc413Ready(healing.p,'veyric');
+  const sentAfterRecovery=gc280CommandAct('veyric');
+  r.recoveredDispatched=sentAfterRecovery&&!!healing.p.expedition;
+  const remaining=waiting.p;
+  c.autonomy=false;
+  const beforePending=!!remaining.expedition;
+  gc280CommandAct('veyric');
+  r.pauseRespected=!beforePending&&!remaining.expedition;
+  c.autonomy=true;remaining.gc413Manual=true;
+  gc280CommandAct('veyric');
+  r.manualToggleRespected=!remaining.expedition;
+  remaining.gc413Manual=false;
+  gc280OpenCommand('veyric');
+  const sheet=document.getElementById('sheet');
+  r.simpleUI=!!sheet?.querySelector('.gc413ManagerBoard')&&sheet.querySelectorAll('[data-action="gc413Policy"]').length===3&&
+    !sheet.querySelector('#gc370Priority')&&!sheet.querySelector('[data-action="gc370Approve"]');
+  r.counts=gc413Totals('veyric').Working>=2&&gc413Totals('veyric').Recovering===0;
+  r.perks=active.p.expedition.gc370AidKit===true&&active.p.expedition.gc370Contingency===true;
+  const stored=JSON.parse(JSON.stringify(state));
+  const oldSettings=stored.regions.veyric.gc280Command.gc370;
+  oldSettings.gc413Version='old';oldSettings.requests=[{kind:'charter',id:'stale'}];
+  const recovered=normalizeState(stored);
+  const x2=recovered.regions.veyric.gc280Command.gc370;
+  r.migrationSafe=x2.gc413Version===GC413_VERSION&&x2.requests.length===0&&
+    recovered.parties.find(p=>p.id===manual.p.id).gc413Manual===true&&
+    recovered.regions.veyric.gc280Command.commanderId===leader.id;
+  const failed=Object.entries(r).filter(([key,val])=>!val).map(([key])=>key);
+  return{ok:failed.length===0,failed,...r,policies:{conservative,normal,ruthless}};
+ }catch(e){return{ok:false,error:String(e&&e.stack||e),partial:r}}
+ finally{state=before;try{document.getElementById('modal')?.classList.remove('show')}catch(_){}}
+};
+/* The old test functions assumed commanders reorganize rosters and request
+   financial approvals. The replacement tests the new real behavior instead. */
+window.__GC280_TEST=window.__GC413_TEST;
+window.__GC370_TEST=window.__GC413_TEST;
 
 boot();
 })();
