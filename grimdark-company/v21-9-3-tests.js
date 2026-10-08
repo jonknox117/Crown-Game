@@ -31,13 +31,14 @@ window.__GC393_TEST=function(){
   gc340StartFocused('personalDrill');
   pr.activity.remainingDays=pr.activity.durationDays*.4;
   gc351TargetedPatch();
-  results.liveFocus=!!document.querySelector('.gc340Activity small')?.textContent.includes('1.0h remaining')&&
-   Math.abs(parseFloat(document.querySelector('[data-gc340-activitybar]')?.style.width)-60)<.01;
+  results.focusDiag={text:document.querySelector('.gc340Activity small')?.textContent||null,bar:document.querySelector('[data-gc340-activitybar]')?.style.width||null,activity:pr.activity?.remainingDays||null,panel:!!document.querySelector('#app .gc340PlacePanel'),tab:state.ui.tab};
+  results.liveFocus=!!results.focusDiag.text?.includes('1.0h remaining')&&Math.abs(parseFloat(results.focusDiag.bar)-60)<.01;
   gc340CancelFocused();
-  f.xp=7;render();f.xp=13;
+  f.lvl=10;f.xp=7;render();f.xp=13;
   const freeStatsBefore=document.querySelector('.gc260PersonalStats,.gc270PersonalStats');
   gc351TargetedPatch();
   const freeStatsAfter=document.querySelector('.gc260PersonalStats,.gc270PersonalStats');
+  results.freeStatsDiag={before:!!freeStatsBefore,after:!!freeStatsAfter,txt:freeStatsAfter?.textContent||null};
   results.liveFreeblade=!!freeStatsBefore&&freeStatsBefore===freeStatsAfter&&
    freeStatsAfter.textContent.includes('13/');
   state.ui.tab='region';render();
@@ -67,12 +68,13 @@ window.__GC393_TEST=function(){
   state.ui.tab='you';render();
   results.assignedOnMap=document.querySelector('.gc393RoomPost[data-stance="Train"] [data-gc393-post]')?.textContent.includes(manager.name)===true;
   state.ui.tab='company';state.ui.gc330CompanySub='overview';render();
-  manager.dailyOrder='Train';gc200Work(manager).gc201TrainFraction=.21;
+  manager.dailyOrder='Train';f.dailyOrder='Odd Jobs';gc200Work(manager).gc201TrainFraction=.21;
   gc351TargetedPatch();
   const stanceNode=Array.from(document.querySelectorAll('.gc201Stance')).find(x=>x.querySelector('.gc201StanceHead b')?.textContent==='TRAIN');
   gc200Work(manager).gc201TrainFraction=.72;
   gc351TargetedPatch();
   const pct=stanceNode?.querySelector(':scope > i em')?.style.width;
+  results.stanceDiag={node:!!stanceNode,connected:!!stanceNode?.isConnected,pct,raw:stanceNode?.outerHTML.slice(0,520)||null,team:gc201Team('veyric','Train').map(x=>x.name)};
   results.liveStance=!!stanceNode&&stanceNode.isConnected&&Math.abs(parseFloat(pct)-72)<.1;
   const clone=normalizeState(JSON.parse(JSON.stringify(state)));
   results.saveSafe=clone.regions.veyric.hq.gc390Posts.Train===manager.id&&gc342StateIntegrity().ok;
