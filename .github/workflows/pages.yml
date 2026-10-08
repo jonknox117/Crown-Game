@@ -7,7 +7,7 @@ on:
     branches: [main]
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
   issues: write
@@ -50,6 +50,28 @@ jobs:
           sleep 1
           "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=8000 --dump-dom http://127.0.0.1:8791/grimdark-company/play/launch-smoke.html > /tmp/grim-launch-dom.html 2>/tmp/grim-launch-chrome.log
           grep -q 'data-launch-smoke="pass"' /tmp/grim-launch-dom.html || { echo "::error::Game failed launch smoke"; grep -o 'The ledger failed to open[^<]*' /tmp/grim-launch-dom.html || true; exit 1; }
+      - name: Checkout legacy Pages branch for compatibility
+        uses: actions/checkout@v6
+        with:
+          ref: gh-pages
+          path: _branch_pages
+      - name: Publish the version to the legacy Pages branch too
+        run: |
+          mkdir -p _branch_pages/grimdark-company/play-21101 _branch_pages/grimdark-company/play _branch_pages/grimdark-company/mobile _branch_pages/grimdark-company/art
+          cp grimdark-company/play-21101/index.html _branch_pages/grimdark-company/play-21101/index.html
+          cp grimdark-company/play/index.html _branch_pages/grimdark-company/play/index.html
+          cp grimdark-company/mobile/index.html _branch_pages/grimdark-company/mobile/index.html
+          cp -R grimdark-company/art/. _branch_pages/grimdark-company/art/
+          cd _branch_pages
+          git config user.name "Grim Company Release Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add grimdark-company/play-21101/index.html grimdark-company/play/index.html grimdark-company/mobile/index.html grimdark-company/art
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish Grim Company v21.10.1 for branch-based Pages"
+            git push origin HEAD:gh-pages
+          fi
+          cd ..
+          rm -rf _branch_pages
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload playable site
