@@ -108,7 +108,7 @@ window.__GC330_TEST=function(){
   for(let i=0;i<4;i++){const a=generateAdventurer('veyric');a.status='Ready';a.lvl=6;state.roster.push(a);crew.push(a)}
   p.members=crew.map(a=>a.id);p.captainId=crew[0].id;state.parties.push(p);gc250EnsureRiskBoard('veyric');
   state.ui.tab='company';state.ui.gc330CompanySub='overview';render();
-  const nav=[...document.querySelectorAll('#nav .gc330NavBtn')].map(x=>x.dataset.tab),navOK=nav.join(',')==='you,company,contracts,world';
+  const nav=[...document.querySelectorAll('#nav .gc330NavBtn')].map(x=>x.dataset.tab),navOK=nav.join(',')==='you,company,contracts,loot,world';
   const sub=[...document.querySelectorAll('.gc330Subnav button')].map(x=>x.dataset.value),subOK=sub.join(',')==='overview,people,parties,hq';
   const companyText=document.querySelector('.gc330Screen')?.innerText||'',noPatrol=!/\\bPatrol\\b/i.test(companyText);
   state.ui.tab='you';render();const youText=document.querySelector('.gc330Screen')?.innerText||'',stances=['Scout','Odd Jobs','Train','Recover'].every(x=>youText.includes(x)),independent=youText.includes('Independent Work');
