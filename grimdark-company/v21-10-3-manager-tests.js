@@ -48,6 +48,8 @@ window.__GC413_TEST=function(){
   const ruthless=gc413PickContract('veyric',sample)?.risk||0;
   r.riskPreference=conservative===1&&ruthless===5&&normal>=conservative&&normal<=ruthless;
   x.risk='Normal';
+  /* Leave the spare healthy party on player control until pause is tested. */
+  waiting.p.gc413Manual=true;
   /* All members must finish healing — even a fractional HP shortfall blocks. */
   const patient=healing.crew[1];patient.hp=derived(patient).maxHp-.5;
   r.blocksNotFullHP=!gc413Ready(healing.p,'veyric')&&gc413PartyState(healing.p,'veyric')==='Recovering';
@@ -65,13 +67,15 @@ window.__GC413_TEST=function(){
    const p=state.parties.find(x=>x.id===b.id);
    return p&&p.members.join(',')===b.members&&p.captainId===b.captain;
   });
-  r.noJobReassignment=beforeJobs.every(([id,job])=>state.roster.find(a=>a.id===id)?.dailyOrder===job);
+  const protectedIds=new Set([founder.id,...manual.crew.map(a=>a.id),...healing.crew.map(a=>a.id)]);
+  r.noJobReassignment=beforeJobs.filter(([id])=>protectedIds.has(id)).every(([id,job])=>
+   state.roster.find(a=>a.id===id)?.dailyOrder===job);
   patient.hp=derived(patient).maxHp;
   r.readyWhenFull=gc413Ready(healing.p,'veyric');
   const sentAfterRecovery=gc280CommandAct('veyric');
   r.recoveredDispatched=sentAfterRecovery&&!!healing.p.expedition;
   const remaining=waiting.p;
-  c.autonomy=false;
+  c.autonomy=false;remaining.gc413Manual=false;
   const beforePending=!!remaining.expedition;
   gc280CommandAct('veyric');
   r.pauseRespected=!beforePending&&!remaining.expedition;
