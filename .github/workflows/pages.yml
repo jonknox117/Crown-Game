@@ -453,44 +453,50 @@ jobs:
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
           python3 - <<'PY'
           from pathlib import Path
-          p=Path('grimdark-company/play/index.html')
-          html=p.read_text(encoding='utf-8')
-          probe=r'''<script>
+          import re
+          js=Path('grimdark-company/v21-8-0-grand-stage.js').read_text(encoding='utf-8')
+          css_source=js.split('s.textContent=[',1)[1].split("].join('');",1)[0]
+          css=''.join(re.findall(r"(?m)^\s*'([^']*)',?\s*$",css_source))
+          if '.gc380Stage{' not in css or '.gc380Artwork{' not in css:
+              raise SystemExit('Could not extract real Grand Stage CSS')
+          page='''<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><style>
+          body{margin:0;background:#090b10;color:#e3d5bd}main{padding:10px}#nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#131316;min-height:60px;z-index:8}
+          #nav button{flex:1;min-height:60px}#controls button{min-height:44px;width:100%;background:#28251d;color:white;border:1px solid #756045}
+          '''+css+'''</style></head><body><main class="gc330Screen">
+          <section class="gc380Stage" data-gc380-stage="chapterhouse">
+          <div class="gc380Illustration"><img class="gc380Artwork" src="../art/chapterhouse-grand.svg" width="1200" height="820" alt="The Chapterhouse"></div>
+          <div class="gc380Tone"></div><div class="gc380SceneHeading"><span class="gc380Eyebrow">YOU • AT THE CHAPTERHOUSE</span><h2>Greyhaven Chapterhouse</h2><div class="gc380Info">Day 27 • Adventurers in the hall</div></div>
+          <div class="gc380Frame"><span class="gc380Line"></span><button class="gc380Fold">SHOW CONTROLS</button></div>
+          <span class="gc380ArtCredit">ORIGINAL VECTOR ENVIRONMENT</span></section>
+          <div id="controls"><button data-action="gc340Move">CHANGE LOCATION</button></div>
+          </main><nav id="nav"><button>YOU</button><button>COMPANY</button><button>CONTRACTS</button><button>WORLD</button></nav>
+          <script>
           setTimeout(function(){
             try{
-              window.__GC380_LAYOUT_PROBE();
-              setTimeout(function(){
-                try{
-                  var stage=document.querySelector('.gc380Stage'),img=stage&&stage.querySelector('img');
-                  var nav=document.getElementById('nav'),rect=stage&&stage.getBoundingClientRect();
-                  var data={
-                    stage:!!stage,loaded:!!img&&img.complete&&img.naturalWidth>=1200,
-                    svgAsset:img?.currentSrc.includes('chapterhouse-grand.svg'),
-                    coversTopHalf:!!rect&&rect.height>=window.innerHeight*.32&&rect.height<=window.innerHeight*.60,
-                    objectFit:img&&getComputedStyle(img).objectFit==='cover',
-                    sticky:stage&&getComputedStyle(stage).position==='sticky',
-                    nav:!!nav&&nav.querySelectorAll('button').length>=4,
-                    noOverflow:document.documentElement.scrollWidth<=window.innerWidth+2,
-                    preserveControls:!!document.querySelector('[data-action="gc340Move"]'),
-                    setup:window.__GC380_LAYOUT_RESULT||null,
-                    appState:document.querySelector('#app')?.className||'missing app',
-                    screenExists:!!document.querySelector('#app .screen')
-                  };
-                  data.ok=Object.keys(data).filter(k=>k!=='ok').every(k=>data[k]===true||['setup','appState','screenExists'].includes(k));
-                  document.body.setAttribute('data-grand-stage',data.ok?'pass':'fail');
-                  var n=document.createElement('pre');n.id='grand-stage-output';n.textContent=JSON.stringify(data);document.body.appendChild(n);
-                }catch(e){document.body.setAttribute('data-grand-stage','error');var n=document.createElement('pre');n.id='grand-stage-output';n.textContent=String(e&&e.stack||e);document.body.appendChild(n)}
-              },1000);
+              var stage=document.querySelector('.gc380Stage'),img=document.querySelector('.gc380Artwork'),rect=stage.getBoundingClientRect();
+              var data={
+                stage:!!stage,loaded:!!img&&img.complete&&img.naturalWidth>=1200&&img.naturalHeight>=820,
+                svgAsset:!!img&&img.currentSrc.includes('chapterhouse-grand.svg'),
+                coversTopHalf:rect.height>=window.innerHeight*.32&&rect.height<=window.innerHeight*.60,
+                objectFit:getComputedStyle(img).objectFit==='cover',
+                sticky:getComputedStyle(stage).position==='sticky',
+                nav:document.querySelectorAll('#nav button').length===4,
+                noOverflow:document.documentElement.scrollWidth<=window.innerWidth+2,
+                preserveControls:!!document.querySelector('[data-action="gc340Move"]')
+              };
+              data.ok=Object.keys(data).filter(k=>k!=='ok').every(k=>data[k]===true);
+              document.body.setAttribute('data-grand-stage',data.ok?'pass':'fail');
+              var n=document.createElement('pre');n.id='grand-stage-output';n.textContent=JSON.stringify(data);document.body.appendChild(n);
             }catch(e){document.body.setAttribute('data-grand-stage','error');var n=document.createElement('pre');n.id='grand-stage-output';n.textContent=String(e&&e.stack||e);document.body.appendChild(n)}
           },900);
-          </script>'''
-          Path('grimdark-company/play/art-test.html').write_text(html.replace('</body>',probe+'</body>'),encoding='utf-8')
+          </script></body></html>'''
+          Path('grimdark-company/play/art-test.html').write_text(page,encoding='utf-8')
           PY
           python3 -m http.server 8772 --bind 127.0.0.1 >/tmp/bl-art-http.log 2>&1 &
           SERVER_PID=$!
           trap 'kill $SERVER_PID 2>/dev/null || true; rm -f grimdark-company/play/art-test.html' EXIT
           sleep 1
-          "$BROWSER" --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=12000 --dump-dom http://127.0.0.1:8772/grimdark-company/play/art-test.html >/tmp/bl-art-dom.html 2>/tmp/bl-art-chrome.log
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --window-size=390,844 --virtual-time-budget=9000 --dump-dom http://127.0.0.1:8772/grimdark-company/play/art-test.html >/tmp/bl-art-dom.html 2>/tmp/bl-art-chrome.log
           if ! grep -q 'data-grand-stage="pass"' /tmp/bl-art-dom.html; then
             echo "::error::Chapterhouse art failed phone fit or image loading check"
             grep -o '<pre id="grand-stage-output">[^<]*' /tmp/bl-art-dom.html || true
