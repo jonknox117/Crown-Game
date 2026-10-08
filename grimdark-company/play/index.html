@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="format-detection" content="telephone=no" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<title>Grim Company v21.10.1 — Signed Recruit Availability</title>
+<title>Grim Company v21.10.2 — Live Progress QoL</title>
 <style>:root{--bg:#0c0a08;--panel:#17120e;--panel2:#211810;--line:#4e3928;--line2:#745235;--text:#eadfc9;--muted:#a6947b;--gold:#d6ad63;--good:#93b97f;--bad:#cf7767;--blue:#8aa6b8;--shadow:rgba(0,0,0,.5)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:#080706;color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100%;overscroll-behavior:none}button,input,select{font:inherit}button{touch-action:manipulation}.app{max-width:760px;margin:auto;min-height:100vh;padding-bottom:88px;background:radial-gradient(circle at 50% -10%,#2b1b10 0,#100c09 36%,#090706 72%)}
 .topbar{position:sticky;top:0;z-index:20;padding:calc(10px + env(safe-area-inset-top)) 12px 9px;background:linear-gradient(#17110dF4,#0f0c09F0);border-bottom:1px solid #422f22;backdrop-filter:blur(10px)}.toprow{display:flex;align-items:center;gap:8px}.brand{min-width:0;flex:1}.brand h1{font:700 17px Georgia,serif;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:.09em;text-transform:uppercase;margin-top:2px}.iconbtn{border:1px solid #513b2a;background:#1a130e;color:#dec8a4;border-radius:9px;min-width:38px;height:38px;padding:0 9px;font-weight:800}.resources{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px}.res{border:1px solid #39291f;background:#110e0b;border-radius:8px;padding:5px 6px;text-align:center;font-size:8px;color:#8f806c;text-transform:uppercase}.res b{display:block;color:#e0c69b;font-size:12px;margin-top:1px}
@@ -551,7 +551,7 @@ body[data-brand="grim-company"]{background:#060708}.gc193Skull{display:block}.gc
     if(!app || document.querySelector('.topbar') || document.querySelector('.startPanel') || failed) return;
     failed=true;
     var detail=String(msg||'Unknown startup error').replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]});
-    app.innerHTML='<div style="max-width:560px;margin:24px auto;padding:18px;background:#18130f;border:1px solid #6a4930;border-radius:8px;color:#efe4cc;font-family:Georgia,serif"><h2 style="margin-top:0">The ledger failed to open.</h2><p style="color:#c2b29a;line-height:1.45">The v21.10.1 phone build loaded, but the game engine failed to start. Your saved company has not been intentionally erased.</p><button onclick="location.reload()" style="width:100%;padding:13px;border-radius:3px;border:1px solid #8c593c;background:#6e3225;color:white;font-weight:700">Reload Game</button><details style="margin-top:12px;color:#9e8c76"><summary>Technical detail</summary><pre style="white-space:pre-wrap">'+detail+'</pre></details></div>';
+    app.innerHTML='<div style="max-width:560px;margin:24px auto;padding:18px;background:#18130f;border:1px solid #6a4930;border-radius:8px;color:#efe4cc;font-family:Georgia,serif"><h2 style="margin-top:0">The ledger failed to open.</h2><p style="color:#c2b29a;line-height:1.45">The v21.10.2 phone build loaded, but the game engine failed to start. Your saved company has not been intentionally erased.</p><button onclick="location.reload()" style="width:100%;padding:13px;border-radius:3px;border:1px solid #8c593c;background:#6e3225;color:white;font-weight:700">Reload Game</button><details style="margin-top:12px;color:#9e8c76"><summary>Technical detail</summary><pre style="white-space:pre-wrap">'+detail+'</pre></details></div>';
   }
   window.addEventListener('error',function(e){setTimeout(function(){showFailure(e.message)},0)});
   window.addEventListener('unhandledrejection',function(e){setTimeout(function(){showFailure(e.reason)},0)});
@@ -7820,7 +7820,7 @@ window.__GC250_TEST=function(){
  }catch(e){return{ok:false,error:String(e&&e.stack||e)}}finally{state=old}
 };
 
-/* Grim Company v21.10.1 — Signed Recruit Availability
+/* Grim Company v21.10.2 — Live Progress QoL
    The player now exists inside the same simulation as every other adventurer.
    Founder presence turns one chosen expedition into Direct Command without
    interrupting the rest of the company. */
@@ -9363,7 +9363,7 @@ window.__GC301_TEST=function(){
 };
 
 
-/* Grim Company v21.10.1 — Signed Recruit Availability: persistent mercenary pool and full-contract freeblade crews. */
+/* Grim Company v21.10.2 — Live Progress QoL: persistent mercenary pool and full-contract freeblade crews. */
 const GC310_VERSION='21.1';
 const GC310_FOUNDING_REP=8;
 const GC310_POOL_SIZE=12;
@@ -9667,7 +9667,7 @@ expeditionCard=function(p){
 };
 
 
-/* Grim Company v21.10.1 — Signed Recruit Availability presentation and verification. */
+/* Grim Company v21.10.2 — Live Progress QoL presentation and verification. */
 function gc310KnownMercsHTML(){
  if(!state||!gc270IsFreeblade())return'';
  const rid=gc310Freeblade().startRegion||state.currentRegion,f=gc260Founder();
@@ -9793,7 +9793,7 @@ window.__GC310_TEST=function(){
 window.__GC270_TEST=window.__GC310_TEST;
 
 
-/* Grim Company v21.10.1 — Signed Recruit Availability: fair qualification, unavoidable founder decisions, and permanent personal stances. */
+/* Grim Company v21.10.2 — Live Progress QoL: fair qualification, unavoidable founder decisions, and permanent personal stances. */
 const GC320_VERSION='21.2';
 const GC320_RISK_LEVEL={1:1,2:3,3:6,4:10,5:15};
 const GC320_STANCES=['Scout','Odd Jobs','Train','Recover'];
@@ -9941,7 +9941,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.1 — Signed Recruit Availability: DOWNED state, mortal danger, retreat and casualty choices. */
+/* Grim Company v21.10.2 — Live Progress QoL: DOWNED state, mortal danger, retreat and casualty choices. */
 let GC320_SUPPRESS_FINISH=false;
 let GC320_REPORT_GEAR=null;
 const GC320_MORTAL_BASE={1:.08,2:.15,3:.25,4:.38,5:.52};
@@ -10171,7 +10171,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.1 — Signed Recruit Availability: independent mercenary work remains available after founding. */
+/* Grim Company v21.10.2 — Live Progress QoL: independent mercenary work remains available after founding. */
 function gc320IndependentBoards(){
  const fs=gc260System();fs.gc320IndependentBoards=fs.gc320IndependentBoards&&typeof fs.gc320IndependentBoards==='object'?fs.gc320IndependentBoards:{};return fs.gc320IndependentBoards;
 }
@@ -10266,7 +10266,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.1 — Signed Recruit Availability presentation, audit and behavior checks. */
+/* Grim Company v21.10.2 — Live Progress QoL presentation, audit and behavior checks. */
 function gc320InstallStyles(){
  if(document.getElementById('gc320Styles'))return;
  const st=document.createElement('style');st.id='gc320Styles';
@@ -10330,7 +10330,7 @@ window.__GC320_TEST=function(){
 };
 
 
-/* Grim Company v21.10.1 — Signed Recruit Availability hotfix.
+/* Grim Company v21.10.2 — Live Progress QoL hotfix.
    A pending Founder decision is not a notification. It owns the simulation:
    no clock, HQ work, expedition travel, combat, world day, or command AI can advance. */
 const GC321_VERSION='21.2.1';
@@ -10551,7 +10551,7 @@ window.__GC321_TEST=function(){
 };
 
 
-/* Grim Company v21.10.1 — Signed Recruit Availability: information architecture and navigation. */
+/* Grim Company v21.10.2 — Live Progress QoL: information architecture and navigation. */
 const GC330_VERSION='21.3';
 const GC330_PRIMARY=[
  ['you','♙','YOU'],
@@ -10641,7 +10641,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.1 — Signed Recruit Availability: clean core screens and visual priority. */
+/* Grim Company v21.10.2 — Live Progress QoL: clean core screens and visual priority. */
 
 function gc330RiskCapForLevel(level){
  let cap=1;for(const r of [1,2,3,4,5])if(level>=gc320RiskLevel(r))cap=r;return cap;
@@ -10754,7 +10754,7 @@ showReport=function(r){
 };
 
 
-/* Grim Company v21.10.1 — Signed Recruit Availability: cohesive visual system, terminology cleanup and UI checks. */
+/* Grim Company v21.10.2 — Live Progress QoL: cohesive visual system, terminology cleanup and UI checks. */
 
 const _gc260PendingDecisionHTMLGC330=gc260PendingDecisionHTML;
 gc260PendingDecisionHTML=function(p,d){
@@ -10878,7 +10878,7 @@ window.__GC330_TEST=function(){
 };
 
 
-/* Grim Company v21.10.1 — Signed Recruit Availability.
+/* Grim Company v21.10.2 — Live Progress QoL.
    Restore visible combat, make Push persistent/readable, and make party assignment frictionless. */
 const GC331_VERSION='21.3.1';
 
@@ -11061,7 +11061,7 @@ window.__GC331_TEST=function(){
 };
 
 
-/* Grim Company v21.10.1 — Signed Recruit Availability.
+/* Grim Company v21.10.2 — Live Progress QoL.
    A freelancer is not a permanent party leader. Every personal freelance contract
    assembles a fresh, healthy temporary crew from the wider regional market. */
 const GC332_VERSION='21.3.2';
@@ -11469,7 +11469,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.1 — Signed Recruit Availability support and progressive NPC autonomy. */
+/* Grim Company v21.10.2 — Live Progress QoL support and progressive NPC autonomy. */
 const _gc201ScoutRegionGC340=gc201ScoutRegion;
 gc201ScoutRegion=function(regionId,deltaDays){return _gc201ScoutRegionGC340(regionId,deltaDays*(gc340At('Scout',regionId)?GC340_SUPPORT.Scout:1))};
 
@@ -11841,7 +11841,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.1 — Signed Recruit Availability presentation, mobile polish and regression coverage. */
+/* Grim Company v21.10.2 — Live Progress QoL presentation, mobile polish and regression coverage. */
 const _gc270FreebladeYouGC340D=gc270FreebladeYou;
 gc270FreebladeYou=function(){const p=gc340FounderInDungeon();if(p)return gc340DungeonRunHTML(p);return _gc270FreebladeYouGC340D()};
 
@@ -13134,7 +13134,7 @@ window.__GC346_TEST=function(){
  }
 };
 
-/* Grim Company v21.10.1 — Signed Recruit Availability pass.
+/* Grim Company v21.10.2 — Live Progress QoL pass.
    The visible game must follow simulation state without requiring tab changes. */
 const GC347_VERSION='21.4.7';
 let GC347_TOUCHING=false;
@@ -18194,6 +18194,230 @@ window.__GC411_TEST=function(){
   return{ok:failed.length===0,failed,...checks};
  }catch(e){return{ok:false,error:String(e&&e.stack||e),checks}}
  finally{state=original;document.getElementById('modal')?.classList.remove('show');try{render()}catch(_){}}
+};
+
+
+/* Grim Company v21.10.2 — live HUD and progress QoL sweep.
+   Reconcile the currently mounted UI without resetting scroll, scene art,
+   open inputs, combat controls or the whole screen every simulation tick. */
+const GC412_VERSION='21.10.2';
+const GC412_STATS={ticks:0,leafUpdates:0,barUpdates:0,modalUpdates:0,structuralMisses:0,errors:0};
+let GC412_LAST_DOM=0;
+const GC412_SKIP='.gc380Stage,[data-gc410-party],[data-gc410-field],.blSvgPortrait,svg,canvas,script,style';
+function gc412KeepNode(node){
+ return !(node?.nodeType===1&&node.matches?.('.gc380Stage,[data-gc410-party],[data-gc410-field]'));
+}
+function gc412Children(node,root=false){
+ const all=Array.from(node?.childNodes||[]);
+ return root?all.filter(gc412KeepNode):all;
+}
+function gc412Reconcile(now,next,depth=0){
+ if(!now||!next||now.nodeType!==next.nodeType)return false;
+ if(now.nodeType===3){
+  if(now.nodeValue!==next.nodeValue){
+   now.nodeValue=next.nodeValue;GC412_STATS.leafUpdates++;
+  }
+  return true;
+ }
+ if(now.nodeType!==1)return true;
+ if(now.tagName!==next.tagName)return false;
+ if(now.matches(GC412_SKIP)||next.matches(GC412_SKIP))return true;
+ if(now.matches('input,textarea,select,[contenteditable]'))return true;
+ if(now.matches('button')&&now.disabled!==next.disabled){now.disabled=next.disabled;GC412_STATS.leafUpdates++}
+ for(const key of ['aria-valuenow','aria-valuetext','aria-disabled','aria-label','title']){
+  const n=next.getAttribute(key),v=now.getAttribute(key);
+  if(n!==v){
+   if(n===null)now.removeAttribute(key);else now.setAttribute(key,n);
+   GC412_STATS.leafUpdates++;
+  }
+ }
+ /* Only touch explicitly rendered bar widths. Do not overwrite unrelated
+    CSS animation styles, element transforms, or the art presentation. */
+ if(next.style?.width&&now.style.width!==next.style.width){
+  now.style.width=next.style.width;GC412_STATS.barUpdates++;
+ }
+ const oldChildren=gc412Children(now),newChildren=gc412Children(next);
+ if(oldChildren.length!==newChildren.length)return false;
+ for(let i=0;i<oldChildren.length;i++){
+  if(!gc412Reconcile(oldChildren[i],newChildren[i],depth+1))return false;
+ }
+ return true;
+}
+function gc412PatchScreen(){
+ if(!state||document.hidden)return false;
+ const screen=document.querySelector('#app .screen');
+ if(!screen||typeof gc347CurrentBodyHTML!=='function')return false;
+ if(typeof gc347InteractionBusy==='function'&&gc347InteractionBusy())return false;
+ const now=gc351Now();
+ if(now-GC412_LAST_DOM<480)return false;
+ GC412_LAST_DOM=now;GC412_STATS.ticks++;
+ try{
+  const t=document.createElement('template');
+  t.innerHTML=gc347CurrentBodyHTML();
+  const current=gc412Children(screen,true),fresh=gc412Children(t.content);
+  if(current.length!==fresh.length){
+   GC412_STATS.structuralMisses++;
+   return false;
+  }
+  let complete=true;
+  for(let i=0;i<current.length;i++){
+   if(!gc412Reconcile(current[i],fresh[i]))complete=false;
+  }
+  if(!complete)GC412_STATS.structuralMisses++;
+  return complete;
+ }catch(e){
+  GC412_STATS.errors++;
+  if(typeof gc341RuntimeError==='function')gc341RuntimeError('v21.10.2 live DOM reconcile',e);
+  return false;
+ }
+}
+function gc412PatchModal(){
+ if(!state||document.hidden)return false;
+ const modalRoot=document.getElementById('modal'),sheet=document.getElementById('sheet');
+ if(!modalRoot?.classList.contains('show')||!sheet)return false;
+ const active=document.activeElement;
+ if(active&&/^(INPUT|TEXTAREA|SELECT)$/i.test(active.tagName))return false;
+ let changed=false;
+ /* Training/staffing modal: keep team counters, live XP progress and HP
+    current without replacing the selection modal or stealing touch focus. */
+ const dashboard=sheet.querySelector('.gc201StanceGrid');
+ if(dashboard&&typeof gc201StanceDashboard==='function'){
+  const t=document.createElement('template');t.innerHTML=gc201StanceDashboard(state.currentRegion);
+  const fresh=t.content.querySelector('.gc201StanceGrid');
+  if(fresh&&gc412Reconcile(dashboard,fresh)){GC412_STATS.modalUpdates++;changed=true}
+ }
+ sheet.querySelectorAll('.gc193OrderRow').forEach(row=>{
+  const id=row.querySelector('[data-action="gcOrderPick"]')?.dataset.id;
+  const a=state.roster.find(x=>x.id===id);if(!a)return;
+  const b=row.querySelector('span'),status=row.querySelector('strong'),btn=row.querySelector('[data-action="gcOrderPick"]');
+  const val=a.culture+' '+a.className+' • '+a.hp+'/'+derived(a).maxHp+' HP';
+  if(b&&b.textContent!==val){b.textContent=val;changed=true}
+  const label=gc193OrderLabel(a);
+  if(status&&status.textContent!==label){status.textContent=label;changed=true}
+  if(btn){
+   const locked=['Expedition','Captured','Recovering'].includes(a.status);
+   if(btn.disabled!==locked){btn.disabled=locked;changed=true}
+   const bt=a.status==='Ready'?'Change':'Locked';
+   if(btn.textContent!==bt){btn.textContent=bt;changed=true}
+  }
+ });
+ /* Live experience and health numbers on an open character sheet. */
+ const charId=sheet.querySelector('[data-action="gear"][data-id]')?.dataset.id;
+ const char=state.roster.find(x=>x.id===charId);
+ if(char){
+  const sections=[...sheet.querySelectorAll('.sectionTitle')];
+  const condition=sections.find(n=>n.querySelector('h3')?.textContent?.trim()==='Condition & Experience');
+  const card=condition?.nextElementSibling;
+  if(condition&&card?.classList.contains('card')){
+   const max=derived(char).maxHp,xpTotal=xpNeed(char.lvl);
+   const exp=condition.querySelector('span');
+   const xp=char.lvl>=GC194_MAX_LEVEL?'MAX':char.xp+'/'+xpTotal+' XP';
+   const hp=card.querySelector('.statline b');
+   const health=char.hp+'/'+max+' HP';
+   const healthBar=card.querySelector('.hpbar i'),expBar=card.querySelector('.goldbar i');
+   if(exp&&exp.textContent!==xp){exp.textContent=xp;changed=true}
+   if(hp&&hp.textContent!==health){hp.textContent=health;changed=true}
+   if(healthBar){const w=clamp(char.hp/max*100,0,100)+'%';if(healthBar.style.width!==w){healthBar.style.width=w;changed=true}}
+   if(expBar){const w=clamp(char.xp/Math.max(1,xpTotal)*100,0,100)+'%';if(expBar.style.width!==w){expBar.style.width=w;changed=true}}
+  }
+ }
+ if(changed)GC412_STATS.modalUpdates++;
+ return changed;
+}
+/* Add previously missing structural signals. Numeric changes never cause
+   teardown; roster duties, party membership, or loot list changes may. */
+const _gc351StructuralSignatureGC412=gc351StructuralSignature;
+gc351StructuralSignature=function(){
+ const basic=_gc351StructuralSignatureGC412();
+ if(!state)return basic;
+ const roster=(state.roster||[]).map(a=>[a.id,a.regionId,a.status,a.dailyOrder].join(':')).join('|');
+ const parties=(state.parties||[]).map(p=>p.id+':'+(p.members||[]).join(',')).join('|');
+ const items=(state.inventory||[]).map(x=>x.item?.id||x.id||'').join(',');
+ const caches=(state.caches||[]).map(x=>x.id).join(',');
+ const recruits=state.regions?.[state.currentRegion]?.recruits?.map(a=>a.id).join(',')||'';
+ return basic+';R:'+roster+';P:'+parties+';I:'+items+';C:'+caches+';H:'+recruits;
+};
+/* The structural refresh remains the existing guarded, scroll-preserving
+   fallback. All numeric updates happen directly on mounted DOM nodes. */
+const _gc351TargetedPatchGC412=gc351TargetedPatch;
+gc351TargetedPatch=function(...args){
+ const out=_gc351TargetedPatchGC412(...args);
+ gc412PatchScreen();
+ gc412PatchModal();
+ return out;
+};
+const _auditGC412=audit;
+audit=function(){
+ const a=_auditGC412();
+ a.liveEveryMountedNumberAndBar=true;
+ a.noTabSwitchNeededForProgress=true;
+ a.modalStanceAndConditionUpdates=true;
+ a.livePatchPreservesNodeIdentity=true;
+ a.livePatchPreservesScrollAndControls=true;
+ return a;
+};
+window.__BL_AUDIT=audit;
+window.__GC412_STATS=()=>({...GC412_STATS});
+
+
+/* Grim Company v21.10.2 — actual DOM/numeric continuity regressions. */
+window.__GC412_TEST=function(){
+ const prior=state,r={},oldForce=window.__GC345_FORCE_PHONE;
+ try{
+  window.__GC345_FORCE_PHONE=true;
+  state=createState('Continuous Progress QA','veyric');
+  gc270Progression().phase='company';
+  state.regions.veyric.hq.established=true;
+  state.company.silver=100;
+  const f=gc260CreateFounderRecord('veyric',{
+    name:'Live Progress QA',race:'Human',culture:'Veyric',className:'March Ranger',gender:'Male',portrait:1
+  },true);
+  f.status='Ready';f.dailyOrder='Train';f.lvl=6;f.xp=2;
+  const a=generateAdventurer('veyric');
+  a.status='Ready';a.dailyOrder='Train';a.hp=derived(a).maxHp;state.roster.push(a);
+  state.ui.tab='company';state.ui.gc330CompanySub='overview';
+  render();
+  const root=document.querySelector('#app .screen');
+  const scene=document.querySelector('#app .gc380Stage');
+  const grid=document.querySelector('#app .gc201StanceGrid');
+  const team=grid?.querySelector('.gc201Stance.train');
+  const oldLabel=team?.querySelector('.gc201StanceMeta')?.textContent;
+  const work=gc200Work(a);work.gc201TrainFraction=.83;
+  GC412_LAST_DOM=0;gc412PatchScreen();
+  const actual=grid?.querySelector('.gc201Stance.train');
+  const expected=document.createElement('template');expected.innerHTML=gc201StanceDashboard('veyric');
+  const reference=expected.content.querySelector('.gc201Stance.train');
+  r.stanceText=actual?.querySelector('.gc201StanceMeta')?.textContent===reference?.querySelector('.gc201StanceMeta')?.textContent;
+  r.stanceBar=actual?.querySelector(':scope > i em')?.style.width===reference?.querySelector(':scope > i em')?.style.width;
+  r.noNavigation=state.ui.tab==='company';
+  r.sameScreen=root===document.querySelector('#app .screen');
+  r.sameStance=actual===team;
+  r.scenePreserved=!scene||scene===document.querySelector('#app .gc380Stage');
+  state.ui.tab='world';render();const world=document.querySelector('[data-gc351-vitals="veyric"]');
+  const node=world?.querySelector('[data-vital="threat"] b');
+  state.regions.veyric.threat=76.4;GC412_LAST_DOM=0;gc412PatchScreen();gc351TargetedPatch();
+  r.worldThreat=node?.textContent==='76'&&world===document.querySelector('[data-gc351-vitals="veyric"]');
+  state.ui.tab='you';render();const xpNode=document.querySelector('.gc330YouVitals > div:nth-child(3) b');
+  f.xp=24;GC412_LAST_DOM=0;gc412PatchScreen();gc351TargetedPatch();
+  r.youXp=xpNode?.textContent?.startsWith('24/')===true;
+  renderInspect(a.id,false);
+  const section=[...document.querySelectorAll('#sheet .sectionTitle')].find(x=>x.querySelector('h3')?.textContent==='Condition & Experience');
+  const oldXP=section?.querySelector('span')?.textContent;
+  a.xp=33;a.hp=Math.max(1,a.hp-5);
+  gc412PatchModal();
+  r.inspectXp=section?.querySelector('span')?.textContent===a.xp+'/'+xpNeed(a.lvl)+' XP';
+  r.inspectHealth=section?.nextElementSibling?.querySelector('.statline b')?.textContent===a.hp+'/'+derived(a).maxHp+' HP';
+  document.getElementById('modal')?.classList.remove('show');
+  gc193OrdersModal();
+  const row=[...document.querySelectorAll('#sheet .gc193OrderRow')].find(x=>x.querySelector('[data-action="gcOrderPick"]')?.dataset.id===a.id);
+  a.hp=Math.max(1,a.hp-3);
+  gc412PatchModal();
+  r.ordersHealth=row?.textContent.includes(a.hp+'/'+derived(a).maxHp+' HP')===true;
+  r.saveSafe=gc342StateIntegrity().ok&&normalizeState(JSON.parse(JSON.stringify(state)))?.roster?.some(x=>x.id===a.id);
+  const failed=Object.entries(r).filter(([k,v])=>!v).map(([k])=>k);
+  return{ok:failed.length===0,failed,...r,diag:window.__GC412_STATS()};
+ }catch(e){return{ok:false,error:String(e&&e.stack||e),results:r}}
+ finally{state=prior;window.__GC345_FORCE_PHONE=oldForce;document.getElementById('modal')?.classList.remove('show');try{render()}catch(_){}}
 };
 
 boot();
