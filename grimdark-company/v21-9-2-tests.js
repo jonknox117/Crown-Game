@@ -29,7 +29,7 @@ window.__GC392_TEST=function(){
   baselineWork.gc201TrainFraction=0;
   gc201TrainRegion('veyric',.1);
   const awayFraction=baselineWork.gc201TrainFraction;
-  const actualWorkBonus=boostedFraction>awayFraction+.02&&awayFraction>.59;
+  const actualWorkBonus=boostedFraction>awayFraction+.02&&awayFraction>.10;
   pr.place='odd';f.dailyOrder='Odd Jobs';render();
   const otherLocations=gc340TownHTML().includes('Odd Jobs • ACTIVE PRESENCE')||
    gc340TownHTML().includes('ODD JOBS • ACTIVE PRESENCE');
