@@ -122,8 +122,9 @@ enemyAttack=function(actor,target,p){
    gc410Log(b,guard.name+' intercepts a strike meant for '+original.name+' behind the Oathwall.');break;
   }
   if(cls==='Bone-Seer'&&!flag.foretold&&target.hp/Math.max(1,target.maxHp)<.25){
-   flag.foretold=true;target.gc360WardCharges=(target.gc360WardCharges||0)+1;
-   gc410Log(b,guard.name+' foresees a fatal path and wards '+target.name+'.');break;
+   flag.foretold=true;target.gc360LastStand=true;target.gc360LastStandBy=guard.name;
+   target.gc360WardCharges=(target.gc360WardCharges||0)+1;
+   gc410Log(b,guard.name+' foresees a fatal path and protects '+target.name+' from death.');break;
   }
  }
  const uFlag=target.gc410Passive||(target.gc410Passive={});
@@ -142,9 +143,15 @@ enemyAttack=function(actor,target,p){
  }
  const was=target.hp,out=_enemyAttackGC410(actor,target,p),taken=target.hp<was;
  if(taken){
-  if(target.className==='Battle Chaplain'&&!uFlag.mercy&&target.gc320Downed){
-   uFlag.mercy=true;delete target.gc320Downed;target.hp=Math.max(1,Math.round(target.maxHp*.12));
-   gc410Log(b,target.name+' calls on mercy and remains standing against a fatal blow.');
+  if(target.gc320Downed){
+   const chaplain=defenders.find(x=>x.className==='Battle Chaplain'&&!(x.gc410Passive||{}).mercy);
+   if(chaplain){
+    const instinct=chaplain.gc410Passive||(chaplain.gc410Passive={});
+    instinct.mercy=true;
+    delete target.gc320Downed;
+    target.hp=Math.max(1,Math.round(target.maxHp*.12));
+    gc410Log(b,chaplain.name+' invokes Mercy Before Death and saves '+target.name+' from being downed.');
+   }
   }
   if(target.className==='Berserker'&&uFlag.bloodRound!==b.round){
    uFlag.bloodRound=b.round;gc410Chip(target,enemy,b,.48,'retaliates in a blood frenzy against');
