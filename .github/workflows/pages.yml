@@ -458,11 +458,7 @@ jobs:
           probe=r'''<script>
           setTimeout(function(){
             try{
-              state=createState('Art Quality Test','veyric');
-              state.regions.veyric.hq.established=true;
-              var f=gc260CreateFounderRecord('veyric',{name:'Stage Tester',race:'Human',culture:'Veyric',className:'March Ranger',gender:'Male',portrait:1},true);
-              f.status='Ready';gc270Progression().phase='company';
-              state.ui.tab='you';gc340Presence().mode='town';gc340Presence().place='hall';render();
+              window.__GC380_LAYOUT_PROBE();
               setTimeout(function(){
                 try{
                   var stage=document.querySelector('.gc380Stage'),img=stage&&stage.querySelector('img');
