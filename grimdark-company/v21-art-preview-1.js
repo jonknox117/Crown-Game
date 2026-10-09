@@ -230,6 +230,8 @@ window.__GC420_TEST=function(){
  const b=typeof gc420OpenDB==='function'&&typeof gc420SaveMedia==='function';
  const c=typeof _gc380StageHTMLGC420==='function'&&typeof _blPortraitHTMLGC420==='function';
  const d=!!document.getElementById('gc420SceneInput')&&!!document.getElementById('gc420PortraitInput');
- return{ok:a&&b&&c&&d,isolatedStorage:a,browserImport:b,svgFallback:c,importControls:d}
+ const e=SAVE_KEY==='brokenLanternCanonical_v9_artPreview1';
+ const f=BACKUP_KEY==='brokenLanternPreV9Backup_artPreview1';
+ return{ok:a&&b&&c&&d&&e&&f,assetStorage:a,browserImport:b,svgFallback:c,importControls:d,gameSaveIsolated:e,backupIsolated:f}
 };
 setTimeout(gc420Start,0);
