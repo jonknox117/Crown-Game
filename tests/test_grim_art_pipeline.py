@@ -36,7 +36,7 @@ class GrimArtPipelineTest(unittest.TestCase):
         self.assertEqual({s["sceneId"] for s in scenes}, expected)
         self.assertEqual(len(scenes), 8)
         self.assertTrue(all(s["master"] is None for s in scenes))
-        self.assertEqual(self.manifest["portraits"]["plannedBaseCount"], 48)
+        self.assertEqual(self.manifest["portraits"]["plannedBaseCount"], 60)
 
     def test_environment_exports_without_modifying_master(self):
         with tempfile.TemporaryDirectory() as d:
