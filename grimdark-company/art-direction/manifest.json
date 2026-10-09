@@ -1,7 +1,7 @@
 {
   "schema": "grim-art-1",
   "version": "1.0.0",
-  "stage": "step1-review-only",
+  "stage": "step3-eight-scene-preview-step4-portrait-architecture",
   "requirements": {
     "environment": {
       "minMaster": [
@@ -59,10 +59,17 @@
         0.5,
         0.43
       ],
-      "status": "pending-master",
+      "status": "raster-preview-only",
       "master": null,
       "artist": null,
-      "license": null
+      "license": null,
+      "benchmarkSource": "blood_moon_mercenary_hall.png",
+      "importFilename": "chapterhouse.webp",
+      "benchmarkPixels": [
+        1536,
+        1024
+      ],
+      "exportPolicy": "native size — do not upscale"
     },
     {
       "id": "scene.market",
@@ -74,10 +81,17 @@
         0.5,
         0.48
       ],
-      "status": "pending-master",
+      "status": "raster-preview-only",
       "master": null,
       "artist": null,
-      "license": null
+      "license": null,
+      "benchmarkSource": "crimson_moon_gothic_market.png",
+      "importFilename": "market.webp",
+      "benchmarkPixels": [
+        1536,
+        1024
+      ],
+      "exportPolicy": "native size — do not upscale"
     },
     {
       "id": "scene.musterYard",
@@ -89,10 +103,17 @@
         0.5,
         0.53
       ],
-      "status": "pending-master",
+      "status": "raster-preview-only",
       "master": null,
       "artist": null,
-      "license": null
+      "license": null,
+      "benchmarkSource": "crimson_moon_fortress_training_yard.png",
+      "importFilename": "musterYard.webp",
+      "benchmarkPixels": [
+        1536,
+        1024
+      ],
+      "exportPolicy": "native size — do not upscale"
     },
     {
       "id": "scene.marchWatch",
@@ -104,10 +125,17 @@
         0.57,
         0.5
       ],
-      "status": "pending-master",
+      "status": "raster-preview-only",
       "master": null,
       "artist": null,
-      "license": null
+      "license": null,
+      "benchmarkSource": "blood_moon_watchpost.png",
+      "importFilename": "marchWatch.webp",
+      "benchmarkPixels": [
+        1536,
+        1024
+      ],
+      "exportPolicy": "native size — do not upscale"
     },
     {
       "id": "scene.pilgrimHouse",
@@ -119,10 +147,17 @@
         0.5,
         0.46
       ],
-      "status": "pending-master",
+      "status": "raster-preview-only",
       "master": null,
       "artist": null,
-      "license": null
+      "license": null,
+      "benchmarkSource": "gothic_infirmary_by_candlelight.png",
+      "importFilename": "pilgrimHouse.webp",
+      "benchmarkPixels": [
+        1536,
+        1024
+      ],
+      "exportPolicy": "native size — do not upscale"
     },
     {
       "id": "scene.jobsBoard",
@@ -134,10 +169,17 @@
         0.5,
         0.47
       ],
-      "status": "pending-master",
+      "status": "raster-preview-only",
       "master": null,
       "artist": null,
-      "license": null
+      "license": null,
+      "benchmarkSource": "war_council_beneath_the_blood_moon.png",
+      "importFilename": "jobsBoard.webp",
+      "benchmarkPixels": [
+        1536,
+        1024
+      ],
+      "exportPolicy": "native size — do not upscale"
     },
     {
       "id": "scene.armory",
@@ -149,10 +191,17 @@
         0.5,
         0.53
       ],
-      "status": "pending-master",
+      "status": "raster-preview-only",
       "master": null,
       "artist": null,
-      "license": null
+      "license": null,
+      "benchmarkSource": "gothic_forge_of_the_wolf_banners.png",
+      "importFilename": "armory.webp",
+      "benchmarkPixels": [
+        1536,
+        1024
+      ],
+      "exportPolicy": "native size — do not upscale"
     },
     {
       "id": "scene.worldMap",
@@ -164,10 +213,17 @@
         0.5,
         0.44
       ],
-      "status": "pending-master",
+      "status": "raster-preview-only",
       "master": null,
       "artist": null,
-      "license": null
+      "license": null,
+      "benchmarkSource": "blood_moon_mercenary_war_room.png",
+      "importFilename": "worldMap.webp",
+      "benchmarkPixels": [
+        1536,
+        1024
+      ],
+      "exportPolicy": "native size — do not upscale"
     }
   ],
   "portraits": {
@@ -175,14 +231,15 @@
       "Human",
       "Elf",
       "Dwarf",
-      "Orc"
+      "Orc",
+      "Celestial"
     ],
     "plannedPresentations": [
       "Male",
       "Female"
     ],
     "curatedBasesPerGroup": 6,
-    "plannedBaseCount": 48,
+    "plannedBaseCount": 60,
     "cultures": [
       "Veyric",
       "Skeldic",
@@ -202,7 +259,8 @@
       "master": null,
       "artist": null,
       "license": null
-    }
+    },
+    "notes": "Deterministic curated atlas: five supported races × two genders × six curated bases. Never show a portrait from a different race or presentation; do not synthesize appearance from an unrelated finished painting."
   },
   "benchmarkSceneId": "scene.chapterhouse",
   "uiSvgPolicy": "Retain vector only for small UI icons, glyphs, borders, dividers, meters and heraldic symbols; replace illustrative SVGs in phases."
