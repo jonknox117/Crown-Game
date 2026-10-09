@@ -1,0 +1,33 @@
+name: Image-quality proof browser check
+on:
+  push:
+    paths:
+      - '.github/workflows/art-quality-proof.yml'
+      - 'grimdark-company/art-quality-proof/index.html'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-original-raster:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify source file and browser rendering
+        run: |
+          set -eu
+          test -s grimdark-company/art-quality-proof/index.html
+          grep -q "object-fit:cover" grimdark-company/art-quality-proof/index.html
+          grep -q "image-rendering:auto;filter:none" grimdark-company/art-quality-proof/index.html
+          python3 -m http.server 8792 --bind 127.0.0.1 >/tmp/quality-http.log 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          sleep 1
+          BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          test -n "$BROWSER"
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=14000 --window-size=390,844 --dump-dom 'http://127.0.0.1:8792/grimdark-company/art-quality-proof/' >/tmp/quality-dom.html 2>/tmp/quality-browser.log
+          if ! grep -q 'Source: 3224 × 2127 real pixels' /tmp/quality-dom.html; then
+            grep -o '<strong id="state">[^<]*' /tmp/quality-dom.html || true
+            echo 'Original raster did not load at its native pixel dimensions'
+            exit 1
+          fi
+          echo "PASSED: Chrome loaded the original 3224x2127 image into a 390px mobile layout without CSS filters or recompression"
