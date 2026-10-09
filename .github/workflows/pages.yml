@@ -147,12 +147,12 @@ jobs:
               const encoded=canvas.toDataURL('image/png').split(',')[1];
               const bytes=Uint8Array.from(atob(encoded),c=>c.charCodeAt(0));
               document.body.setAttribute('data-gc423-stage','import-start');
-              await gc423ImportBatch([new File([bytes],'human-male-01.png',{type:'image/png'})]);
+              await window.__GC423_PORTFOLIO.importBatch([new File([bytes],'human-male-01.png',{type:'image/png'})]);
               document.body.setAttribute('data-gc423-stage','import-done');
               const a={id:'qa-person',race:'Human',gender:'Male',culture:'Veyric',className:'Knight-Errant'};
-              const chosen=gc423Choose(a),again=gc423Choose(a);
-              const saved=await gc420Get(gc420DB,'portrait.human.male.01');
-              const valid=initial?.ok&&!!chosen&&chosen.id==='portrait.human.male.01'&&again?.id===chosen.id&&!!saved&&GC423_SLOTS.length===60;
+              const chosen=window.__GC423_PORTFOLIO.choose(a),again=window.__GC423_PORTFOLIO.choose(a);
+              const saved=await window.__GC423_PORTFOLIO.getStored('portrait.human.male.01');
+              const valid=initial?.ok&&!!chosen&&chosen.id==='portrait.human.male.01'&&again?.id===chosen.id&&!!saved&&window.__GC423_PORTFOLIO.slots.length===60;
               document.body.setAttribute('data-gc423-smoke',valid?'pass':'fail');
               const pre=document.createElement('pre');pre.id='gc423-report';pre.textContent=JSON.stringify({initial,chosen:chosen?.id,persistent:!!saved,valid});document.body.appendChild(pre);
             }catch(e){document.body.setAttribute('data-gc423-smoke','fail');const pre=document.createElement('pre');pre.id='gc423-report';pre.textContent=String(e&&e.stack||e);document.body.appendChild(pre);console.error(e)}

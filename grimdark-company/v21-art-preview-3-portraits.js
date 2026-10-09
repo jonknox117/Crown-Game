@@ -194,4 +194,5 @@ function gc423TestCatalog(){
 }
 window.__GC423_TEST=gc423TestCatalog;
 window.__GC423_PORTFOLIO={version:GC423_VERSION,slots:GC423_SLOTS,
-  counts:gc423Counts,choose:gc423Choose,validate:gc423Validate};
+  counts:gc423Counts,choose:gc423Choose,validate:gc423Validate,
+  importBatch:gc423ImportBatch,getStored:(id)=>gc420Get(gc420DB,id)};
