@@ -561,9 +561,9 @@ body[data-brand="grim-company"]{background:#060708}.gc193Skull{display:block}.gc
 'use strict';
 
 const VERSION=9;
-const SAVE_KEY='brokenLanternCanonical_v9';
-const LEGACY_KEY='brokenLanternDemo_v1';
-const BACKUP_KEY='brokenLanternPreV9Backup';
+const SAVE_KEY='brokenLanternCanonical_v9_artPreview1';
+const LEGACY_KEY='brokenLanternDemo_v1_artPreview1';
+const BACKUP_KEY='brokenLanternPreV9Backup_artPreview1';
 const RARITIES=['Common','Uncommon','Rare','Super Rare','Legendary'];
 const RARITY_MULT=[1,1.75,3.1,5.2,8.8];
 const RACE_ICONS={Human:'🧑',Dwarf:'🧔',Elf:'🧝',Orc:'👹',Celestial:'✧'};
@@ -778,10 +778,10 @@ function withState(s,fn){const prev=state;state=s;try{return fn()}finally{state=
 function makeParty(regionId,name){return{id:uid('p'),regionId,name,members:[],tactic:'Balanced',cohesion:0,captainId:null,missions:0,wins:0,deaths:0,expedition:null,specialty:null,enemyWins:{}}}
 
 const BL_IDB_BOOT_TIMEOUT_MS=2000;
-function idbOpen(name='brokenLanternCanonical'){return new Promise(resolve=>{if(!('indexedDB'in window))return resolve(null);let settled=false,timer=null;const finish=v=>{if(settled)return;settled=true;if(timer)clearTimeout(timer);resolve(v)};timer=setTimeout(()=>finish(null),BL_IDB_BOOT_TIMEOUT_MS);try{const r=indexedDB.open(name,1);r.onupgradeneeded=()=>{const db=r.result;if(!db.objectStoreNames.contains('saves'))db.createObjectStore('saves')};r.onsuccess=()=>finish(r.result);r.onerror=()=>finish(null);r.onblocked=()=>finish(null)}catch(e){finish(null)}})}
-async function idbGet(key=SAVE_KEY,name='brokenLanternCanonical'){const db=await idbOpen(name);if(!db)return null;return new Promise(resolve=>{let settled=false,timer=null;const finish=v=>{if(settled)return;settled=true;if(timer)clearTimeout(timer);resolve(v)};timer=setTimeout(()=>finish(null),BL_IDB_BOOT_TIMEOUT_MS);try{const tx=db.transaction('saves','readonly'),r=tx.objectStore('saves').get(key);r.onsuccess=()=>finish(r.result||null);r.onerror=()=>finish(null);tx.onabort=()=>finish(null);tx.onerror=()=>finish(null)}catch(e){finish(null)}})}
+function idbOpen(name='brokenLanternCanonical_artPreview1'){return new Promise(resolve=>{if(!('indexedDB'in window))return resolve(null);let settled=false,timer=null;const finish=v=>{if(settled)return;settled=true;if(timer)clearTimeout(timer);resolve(v)};timer=setTimeout(()=>finish(null),BL_IDB_BOOT_TIMEOUT_MS);try{const r=indexedDB.open(name,1);r.onupgradeneeded=()=>{const db=r.result;if(!db.objectStoreNames.contains('saves'))db.createObjectStore('saves')};r.onsuccess=()=>finish(r.result);r.onerror=()=>finish(null);r.onblocked=()=>finish(null)}catch(e){finish(null)}})}
+async function idbGet(key=SAVE_KEY,name='brokenLanternCanonical_artPreview1'){const db=await idbOpen(name);if(!db)return null;return new Promise(resolve=>{let settled=false,timer=null;const finish=v=>{if(settled)return;settled=true;if(timer)clearTimeout(timer);resolve(v)};timer=setTimeout(()=>finish(null),BL_IDB_BOOT_TIMEOUT_MS);try{const tx=db.transaction('saves','readonly'),r=tx.objectStore('saves').get(key);r.onsuccess=()=>finish(r.result||null);r.onerror=()=>finish(null);tx.onabort=()=>finish(null);tx.onerror=()=>finish(null)}catch(e){finish(null)}})}
 async function idbPut(raw){const db=await idbOpen();if(!db)return;try{const tx=db.transaction('saves','readwrite');tx.objectStore('saves').put(raw,SAVE_KEY)}catch(e){}}
-async function idbClear(){try{indexedDB.deleteDatabase('brokenLanternCanonical')}catch(e){}try{indexedDB.deleteDatabase('brokenLanternMobile')}catch(e){}}
+async function idbClear(){try{indexedDB.deleteDatabase('brokenLanternCanonical_artPreview1')}catch(e){}try{indexedDB.deleteDatabase('brokenLanternMobile_artPreview1')}catch(e){}}
 function safeLocalGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function safeLocalSet(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}}
 function safeLocalRemove(k){try{localStorage.removeItem(k)}catch(e){}}
@@ -19420,7 +19420,9 @@ window.__GC420_TEST=function(){
  const b=typeof gc420OpenDB==='function'&&typeof gc420SaveMedia==='function';
  const c=typeof _gc380StageHTMLGC420==='function'&&typeof _blPortraitHTMLGC420==='function';
  const d=!!document.getElementById('gc420SceneInput')&&!!document.getElementById('gc420PortraitInput');
- return{ok:a&&b&&c&&d,isolatedStorage:a,browserImport:b,svgFallback:c,importControls:d}
+ const e=SAVE_KEY==='brokenLanternCanonical_v9_artPreview1';
+ const f=BACKUP_KEY==='brokenLanternPreV9Backup_artPreview1';
+ return{ok:a&&b&&c&&d&&e&&f,assetStorage:a,browserImport:b,svgFallback:c,importControls:d,gameSaveIsolated:e,backupIsolated:f}
 };
 setTimeout(gc420Start,0);
 
