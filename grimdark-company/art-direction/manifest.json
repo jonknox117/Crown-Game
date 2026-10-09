@@ -1,7 +1,7 @@
 {
   "schema": "grim-art-1",
   "version": "1.0.0",
-  "stage": "step3-eight-scene-preview-step4-portrait-architecture",
+  "stage": "step5-curated-portrait-library-infrastructure",
   "requirements": {
     "environment": {
       "minMaster": [
@@ -260,7 +260,30 @@
       "artist": null,
       "license": null
     },
-    "notes": "Deterministic curated atlas: five supported races × two genders × six curated bases. Never show a portrait from a different race or presentation; do not synthesize appearance from an unrelated finished painting."
+    "notes": "Deterministic curated atlas: five supported races × two genders × six curated bases. Never show a portrait from a different race or presentation; do not synthesize appearance from an unrelated finished painting.",
+    "library": {
+      "plannedSlots": 60,
+      "completedOriginalArtworks": 1,
+      "pendingOriginalArtworks": 59,
+      "sourceBenchmark": "grim_mercenary_beneath_the_blood_moon.png",
+      "benchmarkOriginalPixels": [
+        1254,
+        1254
+      ],
+      "benchmarkStatus": "preview-only, below 1536 master target",
+      "importer": "play-art-preview-3",
+      "filenameConvention": "race-gender-XX.webp",
+      "races": [
+        "Human",
+        "Elf",
+        "Dwarf",
+        "Orc",
+        "Celestial"
+      ],
+      "stableAssignment": "separate preview-browser identity map; never rewrites original save",
+      "sharpnessGate": "reject <512x512 and non-square contact sheets; 1024x1024 preferred",
+      "warning": "Image generation produced dense reference boards, not independent 60 portrait masters. Remaining art not passed QA."
+    }
   },
   "benchmarkSceneId": "scene.chapterhouse",
   "uiSvgPolicy": "Retain vector only for small UI icons, glyphs, borders, dividers, meters and heraldic symbols; replace illustrative SVGs in phases."

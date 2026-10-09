@@ -26,7 +26,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
       - name: Build current playable bundle plus isolated raster art preview
-        run: python3 scripts/build_grim_company_art_preview_2.py
+        run: python3 scripts/build_grim_company_art_preview_3.py
       - name: Check scripts and current version
         run: |
           node --check /tmp/broken-lantern-v9.js
@@ -36,6 +36,9 @@ jobs:
           test -s grimdark-company/play-art-preview-1/index.html
           node --check /tmp/grim-art-preview-1.js
           node --check /tmp/grim-art-preview-2.js
+          node --check /tmp/grim-art-preview-3.js
+          test -s grimdark-company/play-art-preview-3/index.html
+          grep -q "GC423_VERSION='portrait-library-1'" grimdark-company/play-art-preview-3/index.html
           test -s grimdark-company/play-art-preview-2/index.html
           grep -q "GC421_VERSION='art-preview-2'" grimdark-company/play-art-preview-2/index.html
           grep -q "GC420_VERSION='art-preview-1'" grimdark-company/play-art-preview-1/index.html
@@ -128,6 +131,39 @@ jobs:
           "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=12500 --window-size=390,844 --dump-dom http://127.0.0.1:8798/grimdark-company/play-art-preview-2/smoke.html >/tmp/gc421-dom.html 2>/tmp/gc421-chrome.log
           grep -q 'data-gc421-smoke="pass"' /tmp/gc421-dom.html || { grep -o '<pre id="gc421-report">[^<]*' /tmp/gc421-dom.html || true; echo 'Eight-scene/portrait preview startup failed'; exit 1; }
           echo 'All eight scene routes and curated portrait fallbacks passed'
+      - name: Validate portrait import image quality and stable assignments
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path=Path('grimdark-company/play-art-preview-3/index.html')
+          source=path.read_text(encoding='utf-8')
+          probe="""<script>
+          setTimeout(async function(){
+            try{
+              const initial=window.__GC423_TEST?.();
+              const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=1024;
+              const cx=canvas.getContext('2d');cx.fillStyle='#46382c';cx.fillRect(0,0,1024,1024);
+              const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
+              await gc423ImportBatch([new File([blob],'human-male-01.png',{type:'image/png'})]);
+              const a={id:'qa-person',race:'Human',gender:'Male',culture:'Veyric',className:'Knight-Errant'};
+              const chosen=gc423Choose(a),again=gc423Choose(a);
+              const saved=await gc420Get(gc420DB,'portrait.human.male.01');
+              const valid=initial?.ok&&!!chosen&&chosen.id==='portrait.human.male.01'&&again?.id===chosen.id&&!!saved&&GC423_SLOTS.length===60;
+              document.body.setAttribute('data-gc423-smoke',valid?'pass':'fail');
+              const pre=document.createElement('pre');pre.id='gc423-report';pre.textContent=JSON.stringify({initial,chosen:chosen?.id,persistent:!!saved,valid});document.body.appendChild(pre);
+            }catch(e){document.body.setAttribute('data-gc423-smoke','fail');console.error(e)}
+          },2600)
+          </script>"""
+          Path('grimdark-company/play-art-preview-3/smoke.html').write_text(source.replace('</body>',probe+'</body>'),encoding='utf-8')
+          PY
+          python3 -m http.server 8797 --bind 127.0.0.1 >/tmp/gc423-http.log 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true; rm -f grimdark-company/play-art-preview-3/smoke.html' EXIT
+          sleep 1
+          BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=14500 --window-size=390,844 --dump-dom http://127.0.0.1:8797/grimdark-company/play-art-preview-3/smoke.html >/tmp/gc423-dom.html 2>/tmp/gc423-chrome.log
+          grep -q 'data-gc423-smoke="pass"' /tmp/gc423-dom.html || { grep -o '<pre id="gc423-report">[^<]*' /tmp/gc423-dom.html || true; tail -c 2200 /tmp/gc423-chrome.log || true; echo 'Portrait preview quality/identity regression failed'; exit 1; }
+          echo 'Portrait library import + isolated persistence + stable identity checks passed'
       - name: Checkout legacy Pages branch for compatibility
         uses: actions/checkout@v6
         with:
@@ -135,17 +171,18 @@ jobs:
           path: _branch_pages
       - name: Publish the version to the legacy Pages branch too
         run: |
-          mkdir -p _branch_pages/grimdark-company/play-21104 _branch_pages/grimdark-company/play _branch_pages/grimdark-company/mobile _branch_pages/grimdark-company/art _branch_pages/grimdark-company/play-art-preview-1 _branch_pages/grimdark-company/play-art-preview-2
+          mkdir -p _branch_pages/grimdark-company/play-21104 _branch_pages/grimdark-company/play _branch_pages/grimdark-company/mobile _branch_pages/grimdark-company/art _branch_pages/grimdark-company/play-art-preview-1 _branch_pages/grimdark-company/play-art-preview-2 _branch_pages/grimdark-company/play-art-preview-3
           cp grimdark-company/play-21104/index.html _branch_pages/grimdark-company/play-21104/index.html
           cp grimdark-company/play-art-preview-1/index.html _branch_pages/grimdark-company/play-art-preview-1/index.html
           cp grimdark-company/play-art-preview-2/index.html _branch_pages/grimdark-company/play-art-preview-2/index.html
+          cp grimdark-company/play-art-preview-3/index.html _branch_pages/grimdark-company/play-art-preview-3/index.html
           cp grimdark-company/play/index.html _branch_pages/grimdark-company/play/index.html
           cp grimdark-company/mobile/index.html _branch_pages/grimdark-company/mobile/index.html
           cp -R grimdark-company/art/. _branch_pages/grimdark-company/art/
           cd _branch_pages
           git config user.name "Grim Company Release Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add grimdark-company/play-21104/index.html grimdark-company/play-art-preview-1/index.html grimdark-company/play-art-preview-2/index.html grimdark-company/play/index.html grimdark-company/mobile/index.html grimdark-company/art
+          git add grimdark-company/play-21104/index.html grimdark-company/play-art-preview-1/index.html grimdark-company/play-art-preview-2/index.html grimdark-company/play-art-preview-3/index.html grimdark-company/play/index.html grimdark-company/mobile/index.html grimdark-company/art
           if ! git diff --cached --quiet; then
             git commit -m "Publish Grim Company v21.10.4 for branch-based Pages"
             git push origin HEAD:gh-pages
