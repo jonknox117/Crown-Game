@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Grim Company — Original-resolution Artwork Proof</title>
+<style>
+:root{color-scheme:dark;font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;background:#080809;color:#efe3d2}
+*{box-sizing:border-box}body{margin:0;background:#080809;color:#efe3d2}
+main{max-width:650px;margin:auto;padding:0 0 40px}
+.banner{padding:21px 16px;background:#11100f;border-bottom:1px solid #70583b}
+.kicker{font-size:10px;letter-spacing:.2em;font-weight:700;color:#c6a36c}
+h1{font-family:Georgia,serif;font-size:28px;line-height:1.1;margin:7px 0}
+p{font-size:12px;line-height:1.55;color:#c6b9a6;margin:10px 0}
+.viewport{width:100%;height:min(60vh,450px);min-height:330px;position:relative;overflow:hidden;border-bottom:2px solid #aa8350;background:#120d0e}
+.viewport img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 48%;image-rendering:auto;filter:none;transform:none}
+.viewport.contain img{object-fit:contain}
+.viewport.native img{width:3224px;height:2127px;max-width:none;object-fit:fill;transform:translate(-52%,-27%);transform-origin:top left}
+.viewport.native{overflow:auto}
+.overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,#050506eF);padding:60px 16px 14px;pointer-events:none}
+.overlay strong{font-family:Georgia,serif;font-size:26px;display:block;text-shadow:0 2px 6px black}
+.overlay span{display:block;font-size:10px;letter-spacing:.12em;color:#dec397}
+.menu{display:flex;gap:8px;padding:14px 16px 4px;flex-wrap:wrap}
+button{border-radius:5px;background:#201b16;color:#ecd2a6;border:1px solid #665037;padding:12px 16px;min-height:44px;font-weight:700;cursor:pointer}
+button[aria-pressed=true]{border-color:#e0a758;background:#5e351e;color:white}
+.panel{margin:8px 16px;padding:12px;border:1px solid #5a4432;background:#14120f;border-radius:6px}
+.panel strong{color:#f1dfc0}.panel small{color:#baa993}
+.status{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:11px}
+.dot{width:8px;height:8px;background:#d18b3a;border-radius:50%;display:inline-block}
+.dot.ok{background:#60b88a}
+a{color:#d9bb7c}
+footer{font-size:10px;line-height:1.5;color:#a49279;margin:14px 16px}
+</style></head>
+<body><main>
+<header class="banner"><div class="kicker">GRIM COMPANY • MOBILE RASTER PROOF</div>
+<h1>Does the actual browser keep artwork sharp?</h1>
+<p>Real 3,224 × 2,127-pixel JPG with its original detail, displayed directly by the same mobile browser that runs the game. No image filters, base64 recompression, canvas downscaling, or raster-to-SVG conversion.</p></header>
+<section class="viewport" id="viewport">
+<img id="art" alt="A dramatic painting of a monumental hellish fortress with fire and lava" loading="eager" decoding="sync" fetchpriority="high"
+src="https://upload.wikimedia.org/wikipedia/commons/0/08/John_Martin_Le_Pandemonium_Louvre.JPG">
+<div class="overlay" id="caption"><span>THE CITADEL • IMAGE-QUALITY TEST ONLY</span><strong>Original-resolution artwork</strong></div>
+</section>
+<nav class="menu" aria-label="Image zoom controls">
+<button data-view="cover" aria-pressed="true">Game crop</button>
+<button data-view="contain" aria-pressed="false">Entire artwork</button>
+<button data-view="native" aria-pressed="false">Actual pixels</button>
+</nav>
+<div class="panel">
+<div class="status"><span class="dot" id="indicator"></span><strong id="state">Loading full-resolution image…</strong></div>
+<p id="metrics">Checking natural image dimensions and screen resolution.</p>
+<p>Tap <b>Actual pixels</b> and scroll inside the picture to inspect detail. Switch to <b>Game crop</b> to see the intended mobile hero layout.</p>
+</div>
+<footer>This is an isolated art-rendering proof, not a Grim Company gameplay build. It does not access or change your saves. Demonstration artwork: John Martin, <i>Pandemonium</i> (1841), public domain, original photograph from Wikimedia Commons. <a href="https://commons.wikimedia.org/wiki/File:John_Martin_Le_Pandemonium_Louvre.JPG">Source and attribution</a>.</footer>
+</main>
+<script>
+const image=document.getElementById('art'),label=document.getElementById('state'),dot=document.getElementById('indicator'),metrics=document.getElementById('metrics'),viewport=document.getElementById('viewport'),caption=document.getElementById('caption');
+function report(){
+ if(!image.naturalWidth){label.textContent='Artwork did not load';metrics.textContent='Please check internet access or the Commons image host.';return}
+ label.textContent='Full-resolution image loaded';dot.classList.add('ok');
+ const dpr=window.devicePixelRatio||1;
+ const cssWidth=image.getBoundingClientRect().width;
+ metrics.textContent='Source: '+image.naturalWidth+' × '+image.naturalHeight+' real pixels. Screen: '+innerWidth+' CSS px at '+dpr.toFixed(2)+'× pixel density. Image file has not been resized or recompressed by this page.';
+}
+image.addEventListener('load',report);image.addEventListener('error',report);
+document.querySelectorAll('[data-view]').forEach(btn=>btn.addEventListener('click',()=>{
+ let mode=btn.dataset.view;viewport.className='viewport'+(mode==='cover'?'':' '+mode);
+ caption.style.display=mode==='native'?'none':'';
+ document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));
+ report();
+}));
+if(image.complete)report();
+</script></body></html>
