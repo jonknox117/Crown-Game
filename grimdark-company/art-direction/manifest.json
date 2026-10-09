@@ -1,0 +1,209 @@
+{
+  "schema": "grim-art-1",
+  "version": "1.0.0",
+  "stage": "step1-review-only",
+  "requirements": {
+    "environment": {
+      "minMaster": [
+        3072,
+        2048
+      ],
+      "renditions": [
+        {
+          "suffix": "desktop",
+          "width": 2048,
+          "height": 1365,
+          "quality": 90,
+          "maxBytes": 1153434
+        },
+        {
+          "suffix": "mobile",
+          "width": 1536,
+          "height": 1024,
+          "quality": 90,
+          "maxBytes": 768000
+        }
+      ]
+    },
+    "portrait": {
+      "minMaster": [
+        1536,
+        1536
+      ],
+      "renditions": [
+        {
+          "suffix": "detail",
+          "width": 1024,
+          "height": 1024,
+          "quality": 91,
+          "maxBytes": 358400
+        },
+        {
+          "suffix": "card",
+          "width": 512,
+          "height": 512,
+          "quality": 91,
+          "maxBytes": 143360
+        }
+      ]
+    }
+  },
+  "scenes": [
+    {
+      "id": "scene.chapterhouse",
+      "sceneId": "chapterhouse",
+      "type": "environment",
+      "legacy": "chapterhouse-grand.svg",
+      "mood": "Medieval guild hall with firelit vaults and weathered heraldry",
+      "focal": [
+        0.5,
+        0.43
+      ],
+      "status": "pending-master",
+      "master": null,
+      "artist": null,
+      "license": null
+    },
+    {
+      "id": "scene.market",
+      "sceneId": "market",
+      "type": "environment",
+      "legacy": "market-grand.svg",
+      "mood": "Gothic town market illuminated by scattered lamps",
+      "focal": [
+        0.5,
+        0.48
+      ],
+      "status": "pending-master",
+      "master": null,
+      "artist": null,
+      "license": null
+    },
+    {
+      "id": "scene.musterYard",
+      "sceneId": "musterYard",
+      "type": "environment",
+      "legacy": "muster-yard-grand.svg",
+      "mood": "Veteran sellswords training inside fortified courtyard",
+      "focal": [
+        0.5,
+        0.53
+      ],
+      "status": "pending-master",
+      "master": null,
+      "artist": null,
+      "license": null
+    },
+    {
+      "id": "scene.marchWatch",
+      "sceneId": "marchWatch",
+      "type": "environment",
+      "legacy": "march-watch-grand.svg",
+      "mood": "Windblown remote watchtower looking over dark forest",
+      "focal": [
+        0.57,
+        0.5
+      ],
+      "status": "pending-master",
+      "master": null,
+      "artist": null,
+      "license": null
+    },
+    {
+      "id": "scene.pilgrimHouse",
+      "sceneId": "pilgrimHouse",
+      "type": "environment",
+      "legacy": "pilgrim-house-grand.svg",
+      "mood": "Stone infirmary, bedside candlelight and stained glass",
+      "focal": [
+        0.5,
+        0.46
+      ],
+      "status": "pending-master",
+      "master": null,
+      "artist": null,
+      "license": null
+    },
+    {
+      "id": "scene.jobsBoard",
+      "sceneId": "jobsBoard",
+      "type": "environment",
+      "legacy": "jobs-board-grand.svg",
+      "mood": "Contract hall, wax seals, rough vellum without legible writing",
+      "focal": [
+        0.5,
+        0.47
+      ],
+      "status": "pending-master",
+      "master": null,
+      "artist": null,
+      "license": null
+    },
+    {
+      "id": "scene.armory",
+      "sceneId": "armory",
+      "type": "environment",
+      "legacy": "armory-grand.svg",
+      "mood": "Hammers, plate steel, shields and a low ember-lit forge",
+      "focal": [
+        0.5,
+        0.53
+      ],
+      "status": "pending-master",
+      "master": null,
+      "artist": null,
+      "license": null
+    },
+    {
+      "id": "scene.worldMap",
+      "sceneId": "worldMap",
+      "type": "environment",
+      "legacy": "world-map-grand.svg",
+      "mood": "Gothic atlas table with physical cartography; never fake labels",
+      "focal": [
+        0.5,
+        0.44
+      ],
+      "status": "pending-master",
+      "master": null,
+      "artist": null,
+      "license": null
+    }
+  ],
+  "portraits": {
+    "plannedRace": [
+      "Human",
+      "Elf",
+      "Dwarf",
+      "Orc"
+    ],
+    "plannedPresentations": [
+      "Male",
+      "Female"
+    ],
+    "curatedBasesPerGroup": 6,
+    "plannedBaseCount": 48,
+    "cultures": [
+      "Veyric",
+      "Skeldic",
+      "Hoshin",
+      "Nambaran",
+      "Aethren"
+    ],
+    "benchmark": {
+      "id": "portrait.human.fighter.01",
+      "type": "portrait",
+      "mood": "Battle-weathered sellsword, dark graphic-novel portrait, believable gear and warm-rim/cool-shadow lighting",
+      "focal": [
+        0.5,
+        0.45
+      ],
+      "status": "pending-master",
+      "master": null,
+      "artist": null,
+      "license": null
+    }
+  },
+  "benchmarkSceneId": "scene.chapterhouse",
+  "uiSvgPolicy": "Retain vector only for small UI icons, glyphs, borders, dividers, meters and heraldic symbols; replace illustrative SVGs in phases."
+}
