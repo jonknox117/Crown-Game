@@ -143,15 +143,19 @@ jobs:
               const initial=window.__GC423_TEST?.();
               const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=1024;
               const cx=canvas.getContext('2d');cx.fillStyle='#46382c';cx.fillRect(0,0,1024,1024);
-              const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
-              await gc423ImportBatch([new File([blob],'human-male-01.png',{type:'image/png'})]);
+              document.body.setAttribute('data-gc423-stage','catalog-checked');
+              const encoded=canvas.toDataURL('image/png').split(',')[1];
+              const bytes=Uint8Array.from(atob(encoded),c=>c.charCodeAt(0));
+              document.body.setAttribute('data-gc423-stage','import-start');
+              await gc423ImportBatch([new File([bytes],'human-male-01.png',{type:'image/png'})]);
+              document.body.setAttribute('data-gc423-stage','import-done');
               const a={id:'qa-person',race:'Human',gender:'Male',culture:'Veyric',className:'Knight-Errant'};
               const chosen=gc423Choose(a),again=gc423Choose(a);
               const saved=await gc420Get(gc420DB,'portrait.human.male.01');
               const valid=initial?.ok&&!!chosen&&chosen.id==='portrait.human.male.01'&&again?.id===chosen.id&&!!saved&&GC423_SLOTS.length===60;
               document.body.setAttribute('data-gc423-smoke',valid?'pass':'fail');
               const pre=document.createElement('pre');pre.id='gc423-report';pre.textContent=JSON.stringify({initial,chosen:chosen?.id,persistent:!!saved,valid});document.body.appendChild(pre);
-            }catch(e){document.body.setAttribute('data-gc423-smoke','fail');console.error(e)}
+            }catch(e){document.body.setAttribute('data-gc423-smoke','fail');const pre=document.createElement('pre');pre.id='gc423-report';pre.textContent=String(e&&e.stack||e);document.body.appendChild(pre);console.error(e)}
           },2600)
           </script>"""
           Path('grimdark-company/play-art-preview-3/smoke.html').write_text(source.replace('</body>',probe+'</body>'),encoding='utf-8')
@@ -162,7 +166,7 @@ jobs:
           sleep 1
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
           "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=14500 --window-size=390,844 --dump-dom http://127.0.0.1:8797/grimdark-company/play-art-preview-3/smoke.html >/tmp/gc423-dom.html 2>/tmp/gc423-chrome.log
-          grep -q 'data-gc423-smoke="pass"' /tmp/gc423-dom.html || { grep -o '<pre id="gc423-report">[^<]*' /tmp/gc423-dom.html || true; tail -c 2200 /tmp/gc423-chrome.log || true; echo 'Portrait preview quality/identity regression failed'; exit 1; }
+          grep -q 'data-gc423-smoke="pass"' /tmp/gc423-dom.html || { grep -o 'data-gc423-stage="[^"]*"' /tmp/gc423-dom.html || true; grep -o 'data-gc423-smoke="[^"]*"' /tmp/gc423-dom.html || true; grep -o '<pre id="gc423-report">[^<]*' /tmp/gc423-dom.html || true; tail -c 1000 /tmp/gc423-chrome.log || true; echo 'Portrait preview quality/identity regression failed'; exit 1; }
           echo 'Portrait library import + isolated persistence + stable identity checks passed'
       - name: Checkout legacy Pages branch for compatibility
         uses: actions/checkout@v6
