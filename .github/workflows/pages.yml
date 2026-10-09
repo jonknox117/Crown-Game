@@ -25,14 +25,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Build current playable bundle
-        run: python3 scripts/build_grim_company_v21_10_4.py
+      - name: Build current playable bundle plus isolated raster art preview
+        run: python3 scripts/build_grim_company_art_preview_1.py
       - name: Check scripts and current version
         run: |
           node --check /tmp/broken-lantern-v9.js
           grep -q "GC414_VERSION='21.10.4'" grimdark-company/play/index.html
           grep -q "gc414HireReplacement" grimdark-company/play/index.html
           test -s grimdark-company/play-21104/index.html
+          test -s grimdark-company/play-art-preview-1/index.html
+          node --check /tmp/grim-art-preview-1.js
+          grep -q "GC420_VERSION='art-preview-1'" grimdark-company/play-art-preview-1/index.html
       - name: Browser startup smoke test
         run: |
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
@@ -86,6 +89,25 @@ jobs:
           print('v21.10.4 startup smoke passed:', sorted(rendered))
           PY
 
+      - name: Confirm isolated art preview mounts and SVG fallback remains
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          src=Path('grimdark-company/play-art-preview-1/index.html')
+          s=src.read_text(encoding='utf-8')
+          assert 'chapterhouse-grand.svg' in s
+          assert '__GC420_TEST' in s
+          probe="""<script>setTimeout(function(){const t=window.__GC420_TEST?.();document.body.setAttribute('data-gc420-smoke',t?.ok?'pass':'fail');},1400)</script>"""
+          Path('grimdark-company/play-art-preview-1/smoke.html').write_text(s.replace('</body>',probe+'</body>'),encoding='utf-8')
+          PY
+          python3 -m http.server 8799 --bind 127.0.0.1 >/tmp/gc420-http.log 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true; rm -f grimdark-company/play-art-preview-1/smoke.html' EXIT
+          sleep 1
+          BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=14000 --window-size=390,844 --dump-dom http://127.0.0.1:8799/grimdark-company/play-art-preview-1/smoke.html >/tmp/gc420-dom.html 2>/tmp/gc420-chrome.log
+          grep -q 'data-gc420-smoke="pass"' /tmp/gc420-dom.html || { grep -o 'The ledger failed to open.[^<]*' /tmp/gc420-dom.html || true; echo 'Raster preview startup failed'; exit 1; }
+          echo 'Raster preview browser launch passed'
       - name: Checkout legacy Pages branch for compatibility
         uses: actions/checkout@v6
         with:
@@ -93,15 +115,16 @@ jobs:
           path: _branch_pages
       - name: Publish the version to the legacy Pages branch too
         run: |
-          mkdir -p _branch_pages/grimdark-company/play-21104 _branch_pages/grimdark-company/play _branch_pages/grimdark-company/mobile _branch_pages/grimdark-company/art
+          mkdir -p _branch_pages/grimdark-company/play-21104 _branch_pages/grimdark-company/play _branch_pages/grimdark-company/mobile _branch_pages/grimdark-company/art _branch_pages/grimdark-company/play-art-preview-1
           cp grimdark-company/play-21104/index.html _branch_pages/grimdark-company/play-21104/index.html
+          cp grimdark-company/play-art-preview-1/index.html _branch_pages/grimdark-company/play-art-preview-1/index.html
           cp grimdark-company/play/index.html _branch_pages/grimdark-company/play/index.html
           cp grimdark-company/mobile/index.html _branch_pages/grimdark-company/mobile/index.html
           cp -R grimdark-company/art/. _branch_pages/grimdark-company/art/
           cd _branch_pages
           git config user.name "Grim Company Release Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add grimdark-company/play-21104/index.html grimdark-company/play/index.html grimdark-company/mobile/index.html grimdark-company/art
+          git add grimdark-company/play-21104/index.html grimdark-company/play-art-preview-1/index.html grimdark-company/play/index.html grimdark-company/mobile/index.html grimdark-company/art
           if ! git diff --cached --quiet; then
             git commit -m "Publish Grim Company v21.10.4 for branch-based Pages"
             git push origin HEAD:gh-pages
