@@ -19237,7 +19237,15 @@ function gc420SaveMedia(id,file){
  GC420_IMAGES[id]={url:URL.createObjectURL(file),size:file.size,name:file.name};
  const img=new Image();
  img.decoding='async';img.src=GC420_IMAGES[id].url;
- img.decode?.().catch(()=>gc420ShowNotice(id+' failed to decode; SVG fallback remains available.'));
+ img.decode?.().catch(()=>{
+  if(GC420_IMAGES[id]?.url===img.src){
+   URL.revokeObjectURL(GC420_IMAGES[id].url);
+   GC420_IMAGES[id]=null;
+   gc420UpdateControls();
+   try{if(state)render()}catch(_){}
+   gc420ShowNotice(id+' could not be decoded. The original SVG art is restored.');
+  }
+ });
  gc420UpdateControls();
  try{if(state)render()}catch(_){}
 }
@@ -19390,7 +19398,11 @@ document.addEventListener('error',e=>{
  if(!el?.matches)return;
  if(el.matches('.gc420RasterPortrait img')){
   const frame=el.closest('.gc420RasterPortrait');
-  if(frame)frame.replaceWith(document.createTextNode('Portrait unavailable'));
+  if(frame){
+   const target=(state?.roster||[]).find(a=>a.id===gc420DemoId);
+   if(target)frame.outerHTML=_blPortraitHTMLGC420(target,frame.className.replace('blSvgPortrait','').replace('gc420RasterPortrait','').trim());
+   else frame.replaceWith(document.createTextNode('Portrait unavailable'));
+  }
  }
  if(el.matches('.gc380Artwork')&&el.dataset.gc420Raster){
   el.removeAttribute('data-gc420-raster');
