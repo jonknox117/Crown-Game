@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="format-detection" content="telephone=no" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<title>Grim Company v21.10.4 — Casualty Replacement</title>
+<title>Grim Company v21.10.5 — Original Character Portraits</title>
 <style>:root{--bg:#0c0a08;--panel:#17120e;--panel2:#211810;--line:#4e3928;--line2:#745235;--text:#eadfc9;--muted:#a6947b;--gold:#d6ad63;--good:#93b97f;--bad:#cf7767;--blue:#8aa6b8;--shadow:rgba(0,0,0,.5)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:#080706;color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100%;overscroll-behavior:none}button,input,select{font:inherit}button{touch-action:manipulation}.app{max-width:760px;margin:auto;min-height:100vh;padding-bottom:88px;background:radial-gradient(circle at 50% -10%,#2b1b10 0,#100c09 36%,#090706 72%)}
 .topbar{position:sticky;top:0;z-index:20;padding:calc(10px + env(safe-area-inset-top)) 12px 9px;background:linear-gradient(#17110dF4,#0f0c09F0);border-bottom:1px solid #422f22;backdrop-filter:blur(10px)}.toprow{display:flex;align-items:center;gap:8px}.brand{min-width:0;flex:1}.brand h1{font:700 17px Georgia,serif;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:.09em;text-transform:uppercase;margin-top:2px}.iconbtn{border:1px solid #513b2a;background:#1a130e;color:#dec8a4;border-radius:9px;min-width:38px;height:38px;padding:0 9px;font-weight:800}.resources{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px}.res{border:1px solid #39291f;background:#110e0b;border-radius:8px;padding:5px 6px;text-align:center;font-size:8px;color:#8f806c;text-transform:uppercase}.res b{display:block;color:#e0c69b;font-size:12px;margin-top:1px}
@@ -551,7 +551,7 @@ body[data-brand="grim-company"]{background:#060708}.gc193Skull{display:block}.gc
     if(!app || document.querySelector('.topbar') || document.querySelector('.startPanel') || failed) return;
     failed=true;
     var detail=String(msg||'Unknown startup error').replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]});
-    app.innerHTML='<div style="max-width:560px;margin:24px auto;padding:18px;background:#18130f;border:1px solid #6a4930;border-radius:8px;color:#efe4cc;font-family:Georgia,serif"><h2 style="margin-top:0">The ledger failed to open.</h2><p style="color:#c2b29a;line-height:1.45">The v21.10.4 phone build loaded, but the game engine failed to start. Your saved company has not been intentionally erased.</p><button onclick="location.reload()" style="width:100%;padding:13px;border-radius:3px;border:1px solid #8c593c;background:#6e3225;color:white;font-weight:700">Reload Game</button><details style="margin-top:12px;color:#9e8c76"><summary>Technical detail</summary><pre style="white-space:pre-wrap">'+detail+'</pre></details></div>';
+    app.innerHTML='<div style="max-width:560px;margin:24px auto;padding:18px;background:#18130f;border:1px solid #6a4930;border-radius:8px;color:#efe4cc;font-family:Georgia,serif"><h2 style="margin-top:0">The ledger failed to open.</h2><p style="color:#c2b29a;line-height:1.45">The v21.10.5 phone build loaded, but the game engine failed to start. Your saved company has not been intentionally erased.</p><button onclick="location.reload()" style="width:100%;padding:13px;border-radius:3px;border:1px solid #8c593c;background:#6e3225;color:white;font-weight:700">Reload Game</button><details style="margin-top:12px;color:#9e8c76"><summary>Technical detail</summary><pre style="white-space:pre-wrap">'+detail+'</pre></details></div>';
   }
   window.addEventListener('error',function(e){setTimeout(function(){showFailure(e.message)},0)});
   window.addEventListener('unhandledrejection',function(e){setTimeout(function(){showFailure(e.reason)},0)});
@@ -7820,7 +7820,7 @@ window.__GC250_TEST=function(){
  }catch(e){return{ok:false,error:String(e&&e.stack||e)}}finally{state=old}
 };
 
-/* Grim Company v21.10.4 — Casualty Replacement
+/* Grim Company v21.10.5 — Original Character Portraits
    The player now exists inside the same simulation as every other adventurer.
    Founder presence turns one chosen expedition into Direct Command without
    interrupting the rest of the company. */
@@ -9363,7 +9363,7 @@ window.__GC301_TEST=function(){
 };
 
 
-/* Grim Company v21.10.4 — Casualty Replacement: persistent mercenary pool and full-contract freeblade crews. */
+/* Grim Company v21.10.5 — Original Character Portraits: persistent mercenary pool and full-contract freeblade crews. */
 const GC310_VERSION='21.1';
 const GC310_FOUNDING_REP=8;
 const GC310_POOL_SIZE=12;
@@ -9667,7 +9667,7 @@ expeditionCard=function(p){
 };
 
 
-/* Grim Company v21.10.4 — Casualty Replacement presentation and verification. */
+/* Grim Company v21.10.5 — Original Character Portraits presentation and verification. */
 function gc310KnownMercsHTML(){
  if(!state||!gc270IsFreeblade())return'';
  const rid=gc310Freeblade().startRegion||state.currentRegion,f=gc260Founder();
@@ -9793,7 +9793,7 @@ window.__GC310_TEST=function(){
 window.__GC270_TEST=window.__GC310_TEST;
 
 
-/* Grim Company v21.10.4 — Casualty Replacement: fair qualification, unavoidable founder decisions, and permanent personal stances. */
+/* Grim Company v21.10.5 — Original Character Portraits: fair qualification, unavoidable founder decisions, and permanent personal stances. */
 const GC320_VERSION='21.2';
 const GC320_RISK_LEVEL={1:1,2:3,3:6,4:10,5:15};
 const GC320_STANCES=['Scout','Odd Jobs','Train','Recover'];
@@ -9941,7 +9941,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.4 — Casualty Replacement: DOWNED state, mortal danger, retreat and casualty choices. */
+/* Grim Company v21.10.5 — Original Character Portraits: DOWNED state, mortal danger, retreat and casualty choices. */
 let GC320_SUPPRESS_FINISH=false;
 let GC320_REPORT_GEAR=null;
 const GC320_MORTAL_BASE={1:.08,2:.15,3:.25,4:.38,5:.52};
@@ -10171,7 +10171,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.4 — Casualty Replacement: independent mercenary work remains available after founding. */
+/* Grim Company v21.10.5 — Original Character Portraits: independent mercenary work remains available after founding. */
 function gc320IndependentBoards(){
  const fs=gc260System();fs.gc320IndependentBoards=fs.gc320IndependentBoards&&typeof fs.gc320IndependentBoards==='object'?fs.gc320IndependentBoards:{};return fs.gc320IndependentBoards;
 }
@@ -10266,7 +10266,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.4 — Casualty Replacement presentation, audit and behavior checks. */
+/* Grim Company v21.10.5 — Original Character Portraits presentation, audit and behavior checks. */
 function gc320InstallStyles(){
  if(document.getElementById('gc320Styles'))return;
  const st=document.createElement('style');st.id='gc320Styles';
@@ -10330,7 +10330,7 @@ window.__GC320_TEST=function(){
 };
 
 
-/* Grim Company v21.10.4 — Casualty Replacement hotfix.
+/* Grim Company v21.10.5 — Original Character Portraits hotfix.
    A pending Founder decision is not a notification. It owns the simulation:
    no clock, HQ work, expedition travel, combat, world day, or command AI can advance. */
 const GC321_VERSION='21.2.1';
@@ -10551,7 +10551,7 @@ window.__GC321_TEST=function(){
 };
 
 
-/* Grim Company v21.10.4 — Casualty Replacement: information architecture and navigation. */
+/* Grim Company v21.10.5 — Original Character Portraits: information architecture and navigation. */
 const GC330_VERSION='21.3';
 const GC330_PRIMARY=[
  ['you','♙','YOU'],
@@ -10641,7 +10641,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.4 — Casualty Replacement: clean core screens and visual priority. */
+/* Grim Company v21.10.5 — Original Character Portraits: clean core screens and visual priority. */
 
 function gc330RiskCapForLevel(level){
  let cap=1;for(const r of [1,2,3,4,5])if(level>=gc320RiskLevel(r))cap=r;return cap;
@@ -10754,7 +10754,7 @@ showReport=function(r){
 };
 
 
-/* Grim Company v21.10.4 — Casualty Replacement: cohesive visual system, terminology cleanup and UI checks. */
+/* Grim Company v21.10.5 — Original Character Portraits: cohesive visual system, terminology cleanup and UI checks. */
 
 const _gc260PendingDecisionHTMLGC330=gc260PendingDecisionHTML;
 gc260PendingDecisionHTML=function(p,d){
@@ -10878,7 +10878,7 @@ window.__GC330_TEST=function(){
 };
 
 
-/* Grim Company v21.10.4 — Casualty Replacement.
+/* Grim Company v21.10.5 — Original Character Portraits.
    Restore visible combat, make Push persistent/readable, and make party assignment frictionless. */
 const GC331_VERSION='21.3.1';
 
@@ -11061,7 +11061,7 @@ window.__GC331_TEST=function(){
 };
 
 
-/* Grim Company v21.10.4 — Casualty Replacement.
+/* Grim Company v21.10.5 — Original Character Portraits.
    A freelancer is not a permanent party leader. Every personal freelance contract
    assembles a fresh, healthy temporary crew from the wider regional market. */
 const GC332_VERSION='21.3.2';
@@ -11469,7 +11469,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.4 — Casualty Replacement support and progressive NPC autonomy. */
+/* Grim Company v21.10.5 — Original Character Portraits support and progressive NPC autonomy. */
 const _gc201ScoutRegionGC340=gc201ScoutRegion;
 gc201ScoutRegion=function(regionId,deltaDays){return _gc201ScoutRegionGC340(regionId,deltaDays*(gc340At('Scout',regionId)?GC340_SUPPORT.Scout:1))};
 
@@ -11841,7 +11841,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.4 — Casualty Replacement presentation, mobile polish and regression coverage. */
+/* Grim Company v21.10.5 — Original Character Portraits presentation, mobile polish and regression coverage. */
 const _gc270FreebladeYouGC340D=gc270FreebladeYou;
 gc270FreebladeYou=function(){const p=gc340FounderInDungeon();if(p)return gc340DungeonRunHTML(p);return _gc270FreebladeYouGC340D()};
 
@@ -13134,7 +13134,7 @@ window.__GC346_TEST=function(){
  }
 };
 
-/* Grim Company v21.10.4 — Casualty Replacement pass.
+/* Grim Company v21.10.5 — Original Character Portraits pass.
    The visible game must follow simulation state without requiring tab changes. */
 const GC347_VERSION='21.4.7';
 let GC347_TOUCHING=false;
@@ -19187,6 +19187,184 @@ window.__GC414_TEST=function(){
  finally{state=previous;document.getElementById('modal')?.classList.remove('show');try{render()}catch(_){}}
 };
 
+
+/* Grim Company — 50 original portraits, displayed without downsampling or filters.
+ * Dedicated art database. Canonical game-save keys and gameplay state are unchanged.
+ * Source art is loaded directly as JPEG Blobs. No image resampling/canvas/encoder.
+ */
+const GC425_VERSION='21.10.5';
+const GC425_CULTURES=['veyric','skeldic','hoshin','nambaran','aethren'];
+const GC425_RACES=['human','elf','dwarf','orc','celestial'];
+const GC425_GENDERS=['male','female'];
+const GC425_DB_NAME='grim-company-original-portraits-v1';
+const GC425_SLOTS=[];
+for(const culture of GC425_CULTURES)for(const race of GC425_RACES)for(const gender of GC425_GENDERS)
+ GC425_SLOTS.push(culture+'_'+race+'_'+gender);
+const GC425_URLS=Object.create(null);
+let gc425Database=null;
+let gc425ImportBusy=false;
+let gc425ImportedCount=0;
+function gc425Key(a){
+ if(!a)return null;
+ const c=String(a.culture||'').trim().toLowerCase().replace('velric','veyric');
+ const r=String(a.race||'').trim().toLowerCase();
+ let g=String(a.gender||'').trim().toLowerCase();
+ if(!GC425_GENDERS.includes(g))try{g=String(bl15EnsureGender(a)).toLowerCase()}catch(_){}
+ const key=c+'_'+r+'_'+g;
+ return GC425_SLOTS.includes(key)?key:null;
+}
+function gc425SetImage(key,blob){
+ if(GC425_URLS[key])URL.revokeObjectURL(GC425_URLS[key]);
+ GC425_URLS[key]=URL.createObjectURL(blob);
+}
+const _gc425OldPortraitHTML=blPortraitHTML;
+blPortraitHTML=function(a,cls=''){
+ const key=gc425Key(a),src=key&&GC425_URLS[key];
+ if(!src)return _gc425OldPortraitHTML(a,cls);
+ return '<span class="blSvgPortrait gc425Portrait '+esc(cls)+'" data-gc425-portrait="'+key+'">'+
+  '<img src="'+src+'" alt="'+esc(String(a.name||a.race||'Adventurer'))+' portrait" loading="eager" decoding="async" draggable="false"></span>';
+};
+function gc425OpenDb(){
+ return new Promise(resolve=>{
+  try{
+   if(!window.indexedDB)return resolve(null);
+   const q=indexedDB.open(GC425_DB_NAME,1);
+   q.onupgradeneeded=()=>{if(!q.result.objectStoreNames.contains('images'))q.result.createObjectStore('images',{keyPath:'id'})};
+   q.onsuccess=()=>resolve(q.result);
+   q.onerror=()=>resolve(null);
+  }catch(_){resolve(null)}
+ });
+}
+function gc425ReadAll(){
+ return new Promise(resolve=>{
+  if(!gc425Database)return resolve([]);
+  try{
+   const q=gc425Database.transaction('images','readonly').objectStore('images').getAll();
+   q.onsuccess=()=>resolve(q.result||[]);
+   q.onerror=()=>resolve([]);
+  }catch(_){resolve([])}
+ });
+}
+function gc425StoreAll(rows){
+ return new Promise(resolve=>{
+  if(!gc425Database)return resolve(false);
+  try{
+   const t=gc425Database.transaction('images','readwrite');
+   const store=t.objectStore('images');
+   for(const row of rows)store.put(row);
+   t.oncomplete=()=>resolve(true);
+   t.onabort=()=>resolve(false);
+   t.onerror=()=>resolve(false);
+  }catch(_){resolve(false)}
+ });
+}
+function gc425ParseArchive(buffer){
+ const view=new DataView(buffer),decoder=new TextDecoder(),data=new Uint8Array(buffer);
+ const slots=new Map();let offset=0,entries=0;
+ while(offset+4<=data.length){
+  const signature=view.getUint32(offset,true);
+  if(signature!==0x04034b50)break;
+  if(offset+30>data.length)throw Error('Incomplete ZIP entry');
+  const flags=view.getUint16(offset+6,true),method=view.getUint16(offset+8,true);
+  const comp=view.getUint32(offset+18,true),size=view.getUint32(offset+22,true);
+  const nlen=view.getUint16(offset+26,true),elen=view.getUint16(offset+28,true);
+  if(flags&8||method!==0)throw Error('Use the provided uncompressed portrait archive');
+  const start=offset+30+nlen+elen,end=start+comp;
+  if(end>data.length||comp!==size)throw Error('Damaged ZIP entry');
+  const name=decoder.decode(data.subarray(offset+30,offset+30+nlen)).toLowerCase();
+  const match=name.match(/^([a-z]+_[a-z]+_(?:male|female))\.(jpg|jpeg|png|webp)$/);
+  if(match&&GC425_SLOTS.includes(match[1])){
+   if(slots.has(match[1]))throw Error('Duplicate portrait: '+match[1]);
+   const mime=match[2]==='png'?'image/png':match[2]==='webp'?'image/webp':'image/jpeg';
+   slots.set(match[1],{id:match[1],blob:new Blob([data.slice(start,end)],{type:mime})});
+  }
+  offset=end;
+  if(++entries>100)throw Error('Too many ZIP entries');
+ }
+ if(slots.size!==50)throw Error('Expected all 50 portraits. Found '+slots.size+'.');
+ return GC425_SLOTS.map(id=>slots.get(id));
+}
+function gc425ValidateFile(file){
+ return new Promise((resolve,reject)=>{
+  const url=URL.createObjectURL(file),img=new Image();
+  img.onload=()=>{
+   const w=img.naturalWidth,h=img.naturalHeight;
+   URL.revokeObjectURL(url);
+   (w>=800&&h>=800&&w/h>.75&&w/h<1.3)?resolve(true):reject(Error('Portrait image dimensions are too small or distorted'));
+  };
+  img.onerror=()=>{URL.revokeObjectURL(url);reject(Error('One portrait cannot be decoded'))};
+  img.src=url;
+ });
+}
+function gc425Notice(text){const el=document.getElementById('gc425Notice');if(el)el.textContent=text}
+function gc425Refresh(){
+ gc425ImportedCount=GC425_SLOTS.filter(id=>!!GC425_URLS[id]).length;
+ const t=document.getElementById('gc425Trigger');if(t)t.textContent='PORTRAITS '+gc425ImportedCount+'/50';
+ const c=document.getElementById('gc425Count');if(c)c.textContent=gc425ImportedCount+'/50 original portraits loaded';
+ try{if(typeof render==='function')render()}catch(_){}
+ try{if(document.getElementById('modal')?.classList.contains('show')&&typeof renderModal==='function')renderModal()}catch(_){}
+}
+async function gc425ImportZip(file){
+ if(!file||gc425ImportBusy)return;
+ gc425ImportBusy=true;gc425Notice('Reading the original portraits…');
+ try{
+  if(file.size>100*1024*1024)throw Error('Archive exceeds 100 MB');
+  const rows=gc425ParseArchive(await file.arrayBuffer());
+  for(let i=0;i<rows.length;i++){
+   await gc425ValidateFile(rows[i].blob);
+   if((i+1)%10===0)gc425Notice('Verified '+(i+1)+'/50 original images…');
+  }
+  gc425Notice('Saving the full-resolution originals in this browser…');
+  const persisted=await gc425StoreAll(rows);
+  for(const item of rows)gc425SetImage(item.id,item.blob);
+  gc425Refresh();
+  gc425Notice(persisted?'All 50 installed. No artwork recompressed. Images will reload from browser storage.':
+   'All 50 loaded for this session. Browser storage is unavailable; keep the ZIP to reimport next time.');
+ }catch(error){gc425Notice('Import failed: '+String(error?.message||error))}
+ finally{gc425ImportBusy=false}
+}
+function gc425Mount(){
+ if(document.getElementById('gc425Trigger'))return;
+ const s=document.createElement('style');s.id='gc425Style';
+ s.textContent='.gc425Portrait{display:inline-block;position:relative;overflow:hidden;vertical-align:middle;isolation:isolate}'+
+  '.gc425Portrait>img{display:block;width:100%!important;height:100%!important;max-width:none!important;object-fit:cover!important;object-position:center 34%!important;image-rendering:auto!important;filter:none!important;transform:none!important;opacity:1!important}'+
+  '#gc425Trigger{position:fixed;z-index:10010;right:10px;bottom:calc(76px + env(safe-area-inset-bottom,0px));background:#231d17;color:#f0d8af;border:1px solid #a38257;border-radius:5px;padding:8px 10px;min-height:42px;font:700 11px system-ui;box-shadow:0 2px 12px #0009}'+
+  '#gc425Dialog{display:none;position:fixed;inset:0;z-index:10011;background:#000c;align-items:center;justify-content:center;padding:14px}'+
+  '#gc425Dialog.gc425Open{display:flex}#gc425Box{box-sizing:border-box;width:100%;max-width:470px;background:#191816;color:#f2debc;border:1px solid #b38a58;border-radius:9px;padding:18px;max-height:85vh;overflow-y:auto;font:13px/1.55 system-ui}'+
+  '#gc425Box h2{margin:0 0 10px;font:700 22px Georgia,serif}#gc425Box input{display:block;margin:15px 0;width:100%;min-height:44px}'+
+  '#gc425Box button{background:#493325;border:1px solid #b38a58;color:#f2debc;padding:10px;min-height:44px}#gc425Notice{min-height:36px;color:#dec69e}';
+ document.head.appendChild(s);
+ const button=document.createElement('button');button.id='gc425Trigger';button.type='button';button.textContent='PORTRAITS 0/50';
+ const dialog=document.createElement('div');dialog.id='gc425Dialog';dialog.setAttribute('role','dialog');dialog.setAttribute('aria-modal','true');
+ dialog.innerHTML='<div id="gc425Box"><h2>Original Adventurer Portraits</h2><p id="gc425Count">0/50 original portraits loaded</p>'+
+  '<p>Import the 50-portrait ZIP once. The game displays the exact images without resizing, re-encoding, filters or atlases. Portraits are selected by culture, race and gender, not class.</p>'+
+  '<label>Original portrait ZIP<input id="gc425Zip" type="file" accept=".zip,application/zip,application/x-zip-compressed"></label>'+
+  '<p id="gc425Notice" role="status" aria-live="polite"></p><button type="button" id="gc425Close">CLOSE</button></div>';
+ document.body.appendChild(button);document.body.appendChild(dialog);
+ button.addEventListener('click',()=>{dialog.classList.add('gc425Open');gc425Refresh()});
+ document.getElementById('gc425Close').addEventListener('click',()=>dialog.classList.remove('gc425Open'));
+ dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.classList.remove('gc425Open')});
+ document.getElementById('gc425Zip').addEventListener('change',e=>gc425ImportZip(e.target.files?.[0]));
+ gc425Refresh();
+}
+async function gc425Boot(){
+ gc425Mount();gc425Database=await gc425OpenDb();
+ const rows=await gc425ReadAll();
+ for(const row of rows)if(row&&GC425_SLOTS.includes(row.id)&&row.blob instanceof Blob)gc425SetImage(row.id,row.blob);
+ gc425Refresh();
+}
+window.__GC425_TEST=function(){
+ const ids=new Set(GC425_SLOTS);
+ const expected=GC425_CULTURES.length*GC425_RACES.length*GC425_GENDERS.length;
+ const id=gc425Key({culture:'Veyric',race:'Elf',gender:'Female'});
+ const other=gc425Key({culture:'Nambaran',race:'Elf',gender:'Female'});
+ return {ok:ids.size===50&&expected===50&&id==='veyric_elf_female'&&other==='nambaran_elf_female'&&
+  gc425Key({culture:'Veyric',race:'Unknown',gender:'Male'})===null&&
+  gc425Key({culture:'Veyric',race:'Human',gender:'Male',className:'Mage'})==='veyric_human_male',
+  slots:ids.size,assetDb:GC425_DB_NAME,loaded:gc425ImportedCount};
+};
+window.__GC425_IMPORT={importZip:gc425ImportZip,parseZip:gc425ParseArchive,slots:GC425_SLOTS,loaded:()=>gc425ImportedCount};
+setTimeout(gc425Boot,0);
 boot();
 })();
 </script>
