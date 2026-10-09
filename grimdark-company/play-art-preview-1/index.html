@@ -19327,6 +19327,18 @@ function gc420TogglePanel(open){
  panel.classList.toggle('gc420Open',show);
  if(button)button.setAttribute('aria-expanded',String(show));
 }
+function gc420CopyCompany(){
+ /* Only reads production save and writes to isolated preview key, never vice versa. */
+ try{
+  const prod=localStorage.getItem('brokenLanternCanonical_v9');
+  if(!prod){gc420ShowNotice('No original company found in this browser. Start a new preview company instead.');return}
+  const saved=JSON.parse(prod);
+  if(!saved||!saved.company||!saved.regions)throw Error('Invalid company data');
+  if(localStorage.getItem(SAVE_KEY)&&!window.confirm('Replace the preview-only company with a COPY of your normal company? Your original save remains untouched.'))return;
+  localStorage.setItem(SAVE_KEY,prod);
+  window.location.reload();
+ }catch(err){gc420ShowNotice('Unable to copy the company: '+String(err?.message||err))}
+}
 function gc420InstallControls(){
  if(document.getElementById('gc420Root'))return;
  const root=document.createElement('div');root.id='gc420Root';
@@ -19340,6 +19352,7 @@ function gc420InstallControls(){
  '<input type="file" id="gc420PortraitInput" accept="image/webp,image/png,image/avif,image/jpeg"/></label>'+
  '<div class="gc420PreviewRow"><div id="gc420PortraitDemo"><div class="gc420EmptyPortrait">Portrait art not imported</div></div>'+
  '<div><strong>Game integration proof</strong><p>The Chapterhouse image appears in the actual scene viewport. One eligible human adventurer receives the benchmark portrait throughout the game UI. Other characters retain SVG portraits.</p></div></div>'+
+ '<button id="gc420CopyCompany" class="gc420CopyCompany" type="button">COPY MY EXISTING COMPANY INTO PREVIEW</button>'+
  '<div id="gc420Notice" role="status" aria-live="polite">No game saves are modified.</div>'+
  '<small>Art originals are kept separately. File selection uses native browser images with no canvas recompression or blur filters.</small>'+
  '</aside>';
@@ -19348,6 +19361,7 @@ function gc420InstallControls(){
  document.getElementById('gc420Close').addEventListener('click',e=>{e.stopPropagation();gc420TogglePanel(false)});
  document.getElementById('gc420SceneInput').addEventListener('change',e=>gc420HandleFile('chapterhouse',e.target.files?.[0]));
  document.getElementById('gc420PortraitInput').addEventListener('change',e=>gc420HandleFile('portrait',e.target.files?.[0]));
+ document.getElementById('gc420CopyCompany').addEventListener('click',e=>{e.stopPropagation();gc420CopyCompany()});
  document.getElementById('gc420Panel').addEventListener('click',e=>e.stopPropagation());
  gc420UpdateControls();
 }
@@ -19372,6 +19386,7 @@ function gc420InstallCSS(){
  '#gc420PortraitDemo{height:116px;width:116px;flex:0 0 116px;background:#28201b;border:1px solid #a87e4a;overflow:hidden}',
  '#gc420PortraitDemo img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 34%}',
  '.gc420EmptyPortrait{padding:16px;font:12px Georgia,serif;color:#bfaa89}',
+ '#gc420CopyCompany{width:100%;min-height:45px;border:1px solid #aa814a;background:#422d1c;color:#f8d9a3;font:700 10px system-ui;margin:10px 0;padding:8px}',
  '#gc420Notice{margin:10px 0;padding:8px;border-left:2px solid #cda36b;background:#211b17;font:12px/1.4 system-ui}',
  '@media(max-width:360px){#gc420Panel{inset:10px 5px 12px;padding:12px}.gc420PreviewRow{gap:8px}#gc420PortraitDemo{height:88px;width:88px;flex-basis:88px}}'
  ].join('');
@@ -19419,7 +19434,7 @@ window.__GC420_TEST=function(){
  const a=GC420_ASSET_DB==='grim-company-art-preview-v1';
  const b=typeof gc420OpenDB==='function'&&typeof gc420SaveMedia==='function';
  const c=typeof _gc380StageHTMLGC420==='function'&&typeof _blPortraitHTMLGC420==='function';
- const d=!!document.getElementById('gc420SceneInput')&&!!document.getElementById('gc420PortraitInput');
+ const d=!!document.getElementById('gc420SceneInput')&&!!document.getElementById('gc420PortraitInput')&&!!document.getElementById('gc420CopyCompany');
  const e=SAVE_KEY==='brokenLanternCanonical_v9_artPreview1';
  const f=BACKUP_KEY==='brokenLanternPreV9Backup_artPreview1';
  return{ok:a&&b&&c&&d&&e&&f,assetStorage:a,browserImport:b,svgFallback:c,importControls:d,gameSaveIsolated:e,backupIsolated:f}
