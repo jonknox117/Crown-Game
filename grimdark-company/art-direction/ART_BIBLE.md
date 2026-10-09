@@ -50,7 +50,7 @@ Use near-black and bone for most UI text. Gold is uncommon, meaningful emphasis.
 ## 5. Asset catalog
 Eight **existing** routed environment scenes must be replaced individually (see `manifest.json`): chapterhouse, market, musterYard, marchWatch, pilgrimHouse, jobsBoard, armory, worldMap. More scenes for travel, dungeon and combat are **additional** future assets; do not pretend the eight current routes cover all environments.
 
-Portrait v1 target: **4 races (Human, Elf, Dwarf, Orc) × 2 presentations × 6 curated bases = 48** candidate base faces. Keep the current five cultural identities, class archetypes, gear roles and distinct silhouettes. Phase 1 prioritizes fully curated portraits; any hair/helmet/armor overlay is permitted **only if mobile compositing keeps painted edges, anatomy and lighting coherent**. Otherwise use more quality presets instead of procedural seams. Save/stable IDs must not change.
+Portrait v1 target: **5 races (Human, Elf, Dwarf, Orc, Celestial) × 2 presentations × 6 curated bases = 60** candidate base faces. Keep the current five cultural identities, class archetypes, gear roles and distinct silhouettes. Phase 1 prioritizes fully curated portraits; any hair/helmet/armor overlay is permitted **only if mobile compositing keeps painted edges, anatomy and lighting coherent**. Otherwise use more quality presets instead of procedural seams. Save/stable IDs must not change.
 
 ## 6. Export pipeline
 1. Artist creates original master in `art-sources/` or another versioned original storage. **Never** overwrite the master with a compressed export.
@@ -67,7 +67,7 @@ Portrait v1 target: **4 races (Human, Elf, Dwarf, Orc) × 2 presentations × 6 c
 - **Character test:** the same face looks consistent in roster card, party panel, character sheet and manager modal; no flicker or identity changes across loads.
 - **Performance:** no persistent frame/scroll hitch when switching 8 scenes; transparent fallback while loading, browser caching, no repeated decode each simulation tick.
 - **Compatibility:** save keys and gameplay logic unchanged; all 8 art routes still resolve; old SVG fallbacks still work; missing image does not crash UI.
-- **Go/no-go:** Step 1 does not ship art into gameplay; Step 2 launches one actual new scene and portrait into a sandbox preview first. Do not commission all 48 portraits until those benchmarks pass human phone review.
+- **Go/no-go:** Step 1 does not ship art into gameplay; Step 2 launches one actual new scene and portrait into a sandbox preview first. Do not commission all 60 portraits until those benchmarks pass human phone review.
 
 ## 8. What Step 1 actually delivers
 - This fixed reference specification and `manifest.json` covering all 8 currently routed scenes.
