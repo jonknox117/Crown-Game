@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   publish:
-    name: Build and publish playable Grim Company v21.10.5
+    name: Build and publish playable Grim Company v21.10.6
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -28,14 +28,17 @@ jobs:
       - name: Build current playable bundle plus isolated raster art preview
         run: |
           python3 scripts/build_grim_company_art_preview_3.py
-          python3 scripts/build_grim_company_v21_10_5.py
+          python3 scripts/build_grim_company_v21_10_6.py
       - name: Check scripts and current version
         run: |
           node --check /tmp/broken-lantern-v9.js
           node --check grimdark-company/v21-10-5-portraits.js
+          node --check grimdark-company/v21-10-6-auto-art.js
           grep -q "GC425_VERSION='21.10.5'" grimdark-company/play/index.html
+          grep -q "GC426_VERSION='21.10.6'" grimdark-company/play/index.html
           grep -q "GC414_VERSION='21.10.4'" grimdark-company/play/index.html
           grep -q "gc414HireReplacement" grimdark-company/play/index.html
+          test -s grimdark-company/play-21106/index.html
           test -s grimdark-company/play-21105/index.html
           test -s grimdark-company/play-21104/index.html
           test -s grimdark-company/play-art-preview-1/index.html
@@ -180,7 +183,8 @@ jobs:
           path: _branch_pages
       - name: Publish the version to the legacy Pages branch too
         run: |
-          mkdir -p _branch_pages/grimdark-company/play-21105 _branch_pages/grimdark-company/play-21104 _branch_pages/grimdark-company/play _branch_pages/grimdark-company/mobile _branch_pages/grimdark-company/art _branch_pages/grimdark-company/play-art-preview-1 _branch_pages/grimdark-company/play-art-preview-2 _branch_pages/grimdark-company/play-art-preview-3
+          mkdir -p _branch_pages/grimdark-company/play-21106 _branch_pages/grimdark-company/play-21105 _branch_pages/grimdark-company/play-21104 _branch_pages/grimdark-company/play _branch_pages/grimdark-company/mobile _branch_pages/grimdark-company/art _branch_pages/grimdark-company/play-art-preview-1 _branch_pages/grimdark-company/play-art-preview-2 _branch_pages/grimdark-company/play-art-preview-3
+          cp grimdark-company/play-21106/index.html _branch_pages/grimdark-company/play-21106/index.html
           cp grimdark-company/play-21105/index.html _branch_pages/grimdark-company/play-21105/index.html
           cp grimdark-company/play-21104/index.html _branch_pages/grimdark-company/play-21104/index.html
           cp grimdark-company/play-art-preview-1/index.html _branch_pages/grimdark-company/play-art-preview-1/index.html
@@ -192,7 +196,7 @@ jobs:
           cd _branch_pages
           git config user.name "Grim Company Release Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add grimdark-company/play-21105/index.html grimdark-company/play-21104/index.html grimdark-company/play-art-preview-1/index.html grimdark-company/play-art-preview-2/index.html grimdark-company/play-art-preview-3/index.html grimdark-company/play/index.html grimdark-company/mobile/index.html grimdark-company/art
+          git add grimdark-company/play-21106/index.html grimdark-company/play-21105/index.html grimdark-company/play-21104/index.html grimdark-company/play-art-preview-1/index.html grimdark-company/play-art-preview-2/index.html grimdark-company/play-art-preview-3/index.html grimdark-company/play/index.html grimdark-company/mobile/index.html grimdark-company/art
           if ! git diff --cached --quiet; then
             git commit -m "Publish Grim Company v21.10.4 for branch-based Pages"
             git push origin HEAD:gh-pages
