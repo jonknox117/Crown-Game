@@ -18,7 +18,7 @@ for name,expected in PORTRAIT_HASHES.items():
  if not dest.exists():
   encoded=dest.with_name(name+'.b64')
   if not encoded.exists():raise SystemExit('Missing original portrait: '+name)
-  dest.write_bytes(base64.b64decode(encoded.read_text(encoding='ascii'),validate=True))
+  dest.write_bytes(base64.b64decode(''.join(encoded.read_text(encoding='ascii').split()),validate=True))
  actual=hashlib.sha256(dest.read_bytes()).hexdigest()
  if actual!=expected:raise SystemExit('Original portrait checksum mismatch: '+name+' got '+actual+' expected '+expected)
 for name,expected in SCENE_HASHES.items():
