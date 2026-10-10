@@ -157,7 +157,7 @@ jobs:
                   assert f.is_file(),f'Missing bundled asset: {f}'
                   data=f.read_bytes()
                   assert hashlib.sha256(data).hexdigest()==sha,f'Original bytes changed: {f}'
-                  assert (data[:3]==b'\\xff\\xd8\\xff' if f.suffix=='.jpg' else data[:8]==b'\\x89PNG\\r\\n\\x1a\\n'),f'Invalid image header: {f}'
+                  assert (data[:3]==bytes.fromhex('ffd8ff') if f.suffix=='.jpg' else data[:8]==bytes.fromhex('89504e470d0a1a0a')),f'Invalid image header: {f}'
           html=Path('grimdark-company/play-21106/index.html').read_text(encoding='utf-8')
           assert "GC426_VERSION='21.10.6'" in html
           assert 'gc426OriginalPortrait' in html
