@@ -139,43 +139,55 @@ jobs:
           "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=12500 --window-size=390,844 --dump-dom http://127.0.0.1:8798/grimdark-company/play-art-preview-2/smoke.html >/tmp/gc421-dom.html 2>/tmp/gc421-chrome.log
           grep -q 'data-gc421-smoke="pass"' /tmp/gc421-dom.html || { grep -o '<pre id="gc421-report">[^<]*' /tmp/gc421-dom.html || true; echo 'Eight-scene/portrait preview startup failed'; exit 1; }
           echo 'All eight scene routes and curated portrait fallbacks passed'
-      - name: Validate portrait import image quality and stable assignments
+      - name: Validate all 58 bundled original artwork files
+        run: |
+          python3 - <<'PY'
+          import ast,hashlib
+          from pathlib import Path
+          module=ast.parse(Path('scripts/build_grim_company_v21_10_6.py').read_text())
+          values={}
+          for item in module.body:
+              if isinstance(item,ast.Assign) and len(item.targets)==1 and isinstance(item.targets[0],ast.Name) and item.targets[0].id in ('PORTRAIT_HASHES','SCENE_HASHES'):
+                  values[item.targets[0].id]=ast.literal_eval(item.value)
+          portraits=values['PORTRAIT_HASHES']; scenes=values['SCENE_HASHES']
+          assert len(portraits)==50 and len(scenes)==8
+          for root,expected in ((Path('grimdark-company/art/portraits/original-50'),portraits),(Path('grimdark-company/art'),scenes)):
+              for name,sha in expected.items():
+                  f=root/name
+                  assert f.is_file(),f'Missing bundled asset: {f}'
+                  data=f.read_bytes()
+                  assert hashlib.sha256(data).hexdigest()==sha,f'Original bytes changed: {f}'
+                  assert (data[:3]==b'\\xff\\xd8\\xff' if f.suffix=='.jpg' else data[:8]==b'\\x89PNG\\r\\n\\x1a\\n'),f'Invalid image header: {f}'
+          html=Path('grimdark-company/play-21106/index.html').read_text(encoding='utf-8')
+          assert "GC426_VERSION='21.10.6'" in html
+          assert 'gc426OriginalPortrait' in html
+          assert "window.__GC426_TEST" in html
+          print('Validated 50 original portraits + 8 full-resolution scene assets and production game bundle')
+          PY
+      - name: Live-game artwork routing smoke test
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          path=Path('grimdark-company/play-art-preview-3/index.html')
-          source=path.read_text(encoding='utf-8')
+          html=Path('grimdark-company/play-21106/index.html')
+          src=html.read_text(encoding='utf-8')
           probe="""<script>
-          setTimeout(async function(){
+          setTimeout(function(){
             try{
-              const initial=window.__GC423_TEST?.();
-              const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=1024;
-              const cx=canvas.getContext('2d');cx.fillStyle='#46382c';cx.fillRect(0,0,1024,1024);
-              document.body.setAttribute('data-gc423-stage','catalog-checked');
-              const encoded=canvas.toDataURL('image/png').split(',')[1];
-              const bytes=Uint8Array.from(atob(encoded),c=>c.charCodeAt(0));
-              document.body.setAttribute('data-gc423-stage','import-start');
-              await window.__GC423_PORTFOLIO.importBatch([new File([bytes],'human-male-01.png',{type:'image/png'})]);
-              document.body.setAttribute('data-gc423-stage','import-done');
-              const a={id:'qa-person',race:'Human',gender:'Male',culture:'Veyric',className:'Knight-Errant'};
-              const chosen=window.__GC423_PORTFOLIO.choose(a),again=window.__GC423_PORTFOLIO.choose(a);
-              const saved=await window.__GC423_PORTFOLIO.getStored('portrait.human.male.01');
-              const valid=initial?.ok&&!!chosen&&chosen.id==='portrait.human.male.01'&&again?.id===chosen.id&&!!saved&&window.__GC423_PORTFOLIO.slots.length===60;
-              document.body.setAttribute('data-gc423-smoke',valid?'pass':'fail');
-              const pre=document.createElement('pre');pre.id='gc423-report';pre.textContent=JSON.stringify({initial,chosen:chosen?.id,persistent:!!saved,valid});document.body.appendChild(pre);
-            }catch(e){document.body.setAttribute('data-gc423-smoke','fail');const pre=document.createElement('pre');pre.id='gc423-report';pre.textContent=String(e&&e.stack||e);document.body.appendChild(pre);console.error(e)}
-          },2600)
+              const art=window.__GC426_TEST?.();
+              document.body.setAttribute('data-gc426-smoke',art?.ok&&art?.scenes===8&&art?.portraits===50?'pass':'fail');
+            }catch(e){document.body.setAttribute('data-gc426-smoke','fail');console.error(e)}
+          },1250)
           </script>"""
-          Path('grimdark-company/play-art-preview-3/smoke.html').write_text(source.replace('</body>',probe+'</body>'),encoding='utf-8')
+          Path('grimdark-company/play-21106/smoke.html').write_text(src.replace('</body>',probe+'</body>'),encoding='utf-8')
           PY
-          python3 -m http.server 8797 --bind 127.0.0.1 >/tmp/gc423-http.log 2>&1 &
+          python3 -m http.server 8797 --bind 127.0.0.1 >/tmp/gc426-http.log 2>&1 &
           server=$!
-          trap 'kill "$server" 2>/dev/null || true; rm -f grimdark-company/play-art-preview-3/smoke.html' EXIT
+          trap 'kill "$server" 2>/dev/null || true; rm -f grimdark-company/play-21106/smoke.html' EXIT
           sleep 1
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
-          "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=14500 --window-size=390,844 --dump-dom http://127.0.0.1:8797/grimdark-company/play-art-preview-3/smoke.html >/tmp/gc423-dom.html 2>/tmp/gc423-chrome.log
-          grep -q 'data-gc423-smoke="pass"' /tmp/gc423-dom.html || { grep -o 'data-gc423-stage="[^"]*"' /tmp/gc423-dom.html || true; grep -o 'data-gc423-smoke="[^"]*"' /tmp/gc423-dom.html || true; grep -o '<pre id="gc423-report">[^<]*' /tmp/gc423-dom.html || true; tail -c 1000 /tmp/gc423-chrome.log || true; echo 'Portrait preview quality/identity regression failed'; exit 1; }
-          echo 'Portrait library import + isolated persistence + stable identity checks passed'
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=9000 --window-size=390,844 --dump-dom http://127.0.0.1:8797/grimdark-company/play-21106/smoke.html >/tmp/gc426-dom.html 2>/tmp/gc426-chrome.log
+          grep -q 'data-gc426-smoke="pass"' /tmp/gc426-dom.html || { grep -o 'data-gc426-smoke="[^"]*"' /tmp/gc426-dom.html || true; tail -c 1300 /tmp/gc426-chrome.log || true; echo 'Bundled art routing failed'; exit 1; }
+          echo 'Production game: scene routing and portrait selection passed'
       - name: Checkout legacy Pages branch for compatibility
         uses: actions/checkout@v6
         with:
@@ -198,7 +210,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add grimdark-company/play-21106/index.html grimdark-company/play-21105/index.html grimdark-company/play-21104/index.html grimdark-company/play-art-preview-1/index.html grimdark-company/play-art-preview-2/index.html grimdark-company/play-art-preview-3/index.html grimdark-company/play/index.html grimdark-company/mobile/index.html grimdark-company/art
           if ! git diff --cached --quiet; then
-            git commit -m "Publish Grim Company v21.10.4 for branch-based Pages"
+            git commit -m "Publish Grim Company v21.10.6 with bundled original artwork"
             git push origin HEAD:gh-pages
           fi
           cd ..
@@ -222,8 +234,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Build Grim Company v21.10.1 mobile bundle
-        run: python3 scripts/build_grim_company_v21_10_5.py
+      - name: Build Grim Company v21.10.6 mobile bundle
+        run: python3 scripts/build_grim_company_v21_10_6.py
 
       - name: Validate JavaScript and release markers
         run: |
