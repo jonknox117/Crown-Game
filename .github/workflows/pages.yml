@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   publish:
-    name: Build and publish playable Grim Company v21.10.6
+    name: Build and publish playable Grim Company v21.10.7
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -28,16 +28,19 @@ jobs:
       - name: Build current playable bundle plus isolated raster art preview
         run: |
           python3 scripts/build_grim_company_art_preview_3.py
-          python3 scripts/build_grim_company_v21_10_6.py
+          python3 scripts/build_grim_company_v21_10_7.py
       - name: Check scripts and current version
         run: |
           node --check /tmp/broken-lantern-v9.js
           node --check grimdark-company/v21-10-5-portraits.js
           node --check grimdark-company/v21-10-6-auto-art.js
+          node --check grimdark-company/v21-10-7-hq-follow.js
           grep -q "GC425_VERSION='21.10.5'" grimdark-company/play/index.html
           grep -q "GC426_VERSION='21.10.6'" grimdark-company/play/index.html
+          grep -q "GC427_VERSION='21.10.7'" grimdark-company/play/index.html
           grep -q "GC414_VERSION='21.10.4'" grimdark-company/play/index.html
           grep -q "gc414HireReplacement" grimdark-company/play/index.html
+          test -s grimdark-company/play-21107/index.html
           test -s grimdark-company/play-21106/index.html
           test -s grimdark-company/play-21105/index.html
           test -s grimdark-company/play-21104/index.html
@@ -188,6 +191,29 @@ jobs:
           "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=9000 --window-size=390,844 --dump-dom http://127.0.0.1:8797/grimdark-company/play-21106/smoke.html >/tmp/gc426-dom.html 2>/tmp/gc426-chrome.log
           grep -q 'data-gc426-smoke="pass"' /tmp/gc426-dom.html || { grep -o 'data-gc426-smoke="[^"]*"' /tmp/gc426-dom.html || true; tail -c 1300 /tmp/gc426-chrome.log || true; echo 'Bundled art routing failed'; exit 1; }
           echo 'Production game: scene routing and portrait selection passed'
+      - name: Verify founder moves with the managed HQ and can join its parties
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path=Path('grimdark-company/play-21107/index.html')
+          content=path.read_text(encoding='utf-8')
+          probe="""<script>setTimeout(function(){
+            try{
+              const t=window.__GC427_TEST?.();
+              document.body.setAttribute('data-gc427-smoke',t?.ok?'pass':'fail');
+              const pre=document.createElement('pre');pre.id='gc427-report';pre.textContent=JSON.stringify(t);document.body.appendChild(pre);
+            }catch(e){document.body.setAttribute('data-gc427-smoke','fail');console.error(e)}
+          },1800)</script>"""
+          Path('grimdark-company/play-21107/smoke-hq.html').write_text(content.replace('</body>',probe+'</body>'),encoding='utf-8')
+          PY
+          python3 -m http.server 8796 --bind 127.0.0.1 >/tmp/gc427-http.log 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true; rm -f grimdark-company/play-21107/smoke-hq.html' EXIT
+          sleep 1
+          BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --virtual-time-budget=10000 --window-size=390,844 --dump-dom http://127.0.0.1:8796/grimdark-company/play-21107/smoke-hq.html >/tmp/gc427-dom.html 2>/tmp/gc427-chrome.log
+          grep -q 'data-gc427-smoke="pass"' /tmp/gc427-dom.html || { grep -o '<pre id="gc427-report">[^<]*' /tmp/gc427-dom.html || true; grep -o 'data-gc427-smoke="[^"]*"' /tmp/gc427-dom.html || true; tail -c 1200 /tmp/gc427-chrome.log || true; echo 'Founder HQ follow behavior failed'; exit 1; }
+          echo 'Founder follows selected HQ, joins local party, and remains protected while busy'
       - name: Checkout legacy Pages branch for compatibility
         uses: actions/checkout@v6
         with:
@@ -195,7 +221,8 @@ jobs:
           path: _branch_pages
       - name: Publish the version to the legacy Pages branch too
         run: |
-          mkdir -p _branch_pages/grimdark-company/play-21106 _branch_pages/grimdark-company/play-21105 _branch_pages/grimdark-company/play-21104 _branch_pages/grimdark-company/play _branch_pages/grimdark-company/mobile _branch_pages/grimdark-company/art _branch_pages/grimdark-company/play-art-preview-1 _branch_pages/grimdark-company/play-art-preview-2 _branch_pages/grimdark-company/play-art-preview-3
+          mkdir -p _branch_pages/grimdark-company/play-21107 _branch_pages/grimdark-company/play-21106 _branch_pages/grimdark-company/play-21105 _branch_pages/grimdark-company/play-21104 _branch_pages/grimdark-company/play _branch_pages/grimdark-company/mobile _branch_pages/grimdark-company/art _branch_pages/grimdark-company/play-art-preview-1 _branch_pages/grimdark-company/play-art-preview-2 _branch_pages/grimdark-company/play-art-preview-3
+          cp grimdark-company/play-21107/index.html _branch_pages/grimdark-company/play-21107/index.html
           cp grimdark-company/play-21106/index.html _branch_pages/grimdark-company/play-21106/index.html
           cp grimdark-company/play-21105/index.html _branch_pages/grimdark-company/play-21105/index.html
           cp grimdark-company/play-21104/index.html _branch_pages/grimdark-company/play-21104/index.html
@@ -208,9 +235,9 @@ jobs:
           cd _branch_pages
           git config user.name "Grim Company Release Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add grimdark-company/play-21106/index.html grimdark-company/play-21105/index.html grimdark-company/play-21104/index.html grimdark-company/play-art-preview-1/index.html grimdark-company/play-art-preview-2/index.html grimdark-company/play-art-preview-3/index.html grimdark-company/play/index.html grimdark-company/mobile/index.html grimdark-company/art
+          git add grimdark-company/play-21107/index.html grimdark-company/play-21106/index.html grimdark-company/play-21105/index.html grimdark-company/play-21104/index.html grimdark-company/play-art-preview-1/index.html grimdark-company/play-art-preview-2/index.html grimdark-company/play-art-preview-3/index.html grimdark-company/play/index.html grimdark-company/mobile/index.html grimdark-company/art
           if ! git diff --cached --quiet; then
-            git commit -m "Publish Grim Company v21.10.6 with bundled original artwork"
+            git commit -m "Publish Grim Company v21.10.7 with founder-follow QoL"
             git push origin HEAD:gh-pages
           fi
           cd ..
@@ -234,8 +261,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Build Grim Company v21.10.6 mobile bundle
-        run: python3 scripts/build_grim_company_v21_10_6.py
+      - name: Build Grim Company v21.10.7 mobile bundle
+        run: python3 scripts/build_grim_company_v21_10_7.py
 
       - name: Validate JavaScript and release markers
         run: |
