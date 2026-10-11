@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="format-detection" content="telephone=no" />
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<title>Grim Company v21.10.6 — Original Artwork Bundled</title>
+<title>Grim Company v21.10.7 — Founder Follows Headquarters</title>
 <style>:root{--bg:#0c0a08;--panel:#17120e;--panel2:#211810;--line:#4e3928;--line2:#745235;--text:#eadfc9;--muted:#a6947b;--gold:#d6ad63;--good:#93b97f;--bad:#cf7767;--blue:#8aa6b8;--shadow:rgba(0,0,0,.5)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:#080706;color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100%;overscroll-behavior:none}button,input,select{font:inherit}button{touch-action:manipulation}.app{max-width:760px;margin:auto;min-height:100vh;padding-bottom:88px;background:radial-gradient(circle at 50% -10%,#2b1b10 0,#100c09 36%,#090706 72%)}
 .topbar{position:sticky;top:0;z-index:20;padding:calc(10px + env(safe-area-inset-top)) 12px 9px;background:linear-gradient(#17110dF4,#0f0c09F0);border-bottom:1px solid #422f22;backdrop-filter:blur(10px)}.toprow{display:flex;align-items:center;gap:8px}.brand{min-width:0;flex:1}.brand h1{font:700 17px Georgia,serif;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:.09em;text-transform:uppercase;margin-top:2px}.iconbtn{border:1px solid #513b2a;background:#1a130e;color:#dec8a4;border-radius:9px;min-width:38px;height:38px;padding:0 9px;font-weight:800}.resources{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px}.res{border:1px solid #39291f;background:#110e0b;border-radius:8px;padding:5px 6px;text-align:center;font-size:8px;color:#8f806c;text-transform:uppercase}.res b{display:block;color:#e0c69b;font-size:12px;margin-top:1px}
@@ -551,7 +551,7 @@ body[data-brand="grim-company"]{background:#060708}.gc193Skull{display:block}.gc
     if(!app || document.querySelector('.topbar') || document.querySelector('.startPanel') || failed) return;
     failed=true;
     var detail=String(msg||'Unknown startup error').replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]});
-    app.innerHTML='<div style="max-width:560px;margin:24px auto;padding:18px;background:#18130f;border:1px solid #6a4930;border-radius:8px;color:#efe4cc;font-family:Georgia,serif"><h2 style="margin-top:0">The ledger failed to open.</h2><p style="color:#c2b29a;line-height:1.45">The v21.10.6 phone build loaded, but the game engine failed to start. Your saved company has not been intentionally erased.</p><button onclick="location.reload()" style="width:100%;padding:13px;border-radius:3px;border:1px solid #8c593c;background:#6e3225;color:white;font-weight:700">Reload Game</button><details style="margin-top:12px;color:#9e8c76"><summary>Technical detail</summary><pre style="white-space:pre-wrap">'+detail+'</pre></details></div>';
+    app.innerHTML='<div style="max-width:560px;margin:24px auto;padding:18px;background:#18130f;border:1px solid #6a4930;border-radius:8px;color:#efe4cc;font-family:Georgia,serif"><h2 style="margin-top:0">The ledger failed to open.</h2><p style="color:#c2b29a;line-height:1.45">The v21.10.7 phone build loaded, but the game engine failed to start. Your saved company has not been intentionally erased.</p><button onclick="location.reload()" style="width:100%;padding:13px;border-radius:3px;border:1px solid #8c593c;background:#6e3225;color:white;font-weight:700">Reload Game</button><details style="margin-top:12px;color:#9e8c76"><summary>Technical detail</summary><pre style="white-space:pre-wrap">'+detail+'</pre></details></div>';
   }
   window.addEventListener('error',function(e){setTimeout(function(){showFailure(e.message)},0)});
   window.addEventListener('unhandledrejection',function(e){setTimeout(function(){showFailure(e.reason)},0)});
@@ -7820,7 +7820,7 @@ window.__GC250_TEST=function(){
  }catch(e){return{ok:false,error:String(e&&e.stack||e)}}finally{state=old}
 };
 
-/* Grim Company v21.10.6 — Original Artwork Bundled
+/* Grim Company v21.10.7 — Founder Follows Headquarters
    The player now exists inside the same simulation as every other adventurer.
    Founder presence turns one chosen expedition into Direct Command without
    interrupting the rest of the company. */
@@ -9363,7 +9363,7 @@ window.__GC301_TEST=function(){
 };
 
 
-/* Grim Company v21.10.6 — Original Artwork Bundled: persistent mercenary pool and full-contract freeblade crews. */
+/* Grim Company v21.10.7 — Founder Follows Headquarters: persistent mercenary pool and full-contract freeblade crews. */
 const GC310_VERSION='21.1';
 const GC310_FOUNDING_REP=8;
 const GC310_POOL_SIZE=12;
@@ -9667,7 +9667,7 @@ expeditionCard=function(p){
 };
 
 
-/* Grim Company v21.10.6 — Original Artwork Bundled presentation and verification. */
+/* Grim Company v21.10.7 — Founder Follows Headquarters presentation and verification. */
 function gc310KnownMercsHTML(){
  if(!state||!gc270IsFreeblade())return'';
  const rid=gc310Freeblade().startRegion||state.currentRegion,f=gc260Founder();
@@ -9793,7 +9793,7 @@ window.__GC310_TEST=function(){
 window.__GC270_TEST=window.__GC310_TEST;
 
 
-/* Grim Company v21.10.6 — Original Artwork Bundled: fair qualification, unavoidable founder decisions, and permanent personal stances. */
+/* Grim Company v21.10.7 — Founder Follows Headquarters: fair qualification, unavoidable founder decisions, and permanent personal stances. */
 const GC320_VERSION='21.2';
 const GC320_RISK_LEVEL={1:1,2:3,3:6,4:10,5:15};
 const GC320_STANCES=['Scout','Odd Jobs','Train','Recover'];
@@ -9941,7 +9941,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.6 — Original Artwork Bundled: DOWNED state, mortal danger, retreat and casualty choices. */
+/* Grim Company v21.10.7 — Founder Follows Headquarters: DOWNED state, mortal danger, retreat and casualty choices. */
 let GC320_SUPPRESS_FINISH=false;
 let GC320_REPORT_GEAR=null;
 const GC320_MORTAL_BASE={1:.08,2:.15,3:.25,4:.38,5:.52};
@@ -10171,7 +10171,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.6 — Original Artwork Bundled: independent mercenary work remains available after founding. */
+/* Grim Company v21.10.7 — Founder Follows Headquarters: independent mercenary work remains available after founding. */
 function gc320IndependentBoards(){
  const fs=gc260System();fs.gc320IndependentBoards=fs.gc320IndependentBoards&&typeof fs.gc320IndependentBoards==='object'?fs.gc320IndependentBoards:{};return fs.gc320IndependentBoards;
 }
@@ -10266,7 +10266,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.6 — Original Artwork Bundled presentation, audit and behavior checks. */
+/* Grim Company v21.10.7 — Founder Follows Headquarters presentation, audit and behavior checks. */
 function gc320InstallStyles(){
  if(document.getElementById('gc320Styles'))return;
  const st=document.createElement('style');st.id='gc320Styles';
@@ -10330,7 +10330,7 @@ window.__GC320_TEST=function(){
 };
 
 
-/* Grim Company v21.10.6 — Original Artwork Bundled hotfix.
+/* Grim Company v21.10.7 — Founder Follows Headquarters hotfix.
    A pending Founder decision is not a notification. It owns the simulation:
    no clock, HQ work, expedition travel, combat, world day, or command AI can advance. */
 const GC321_VERSION='21.2.1';
@@ -10551,7 +10551,7 @@ window.__GC321_TEST=function(){
 };
 
 
-/* Grim Company v21.10.6 — Original Artwork Bundled: information architecture and navigation. */
+/* Grim Company v21.10.7 — Founder Follows Headquarters: information architecture and navigation. */
 const GC330_VERSION='21.3';
 const GC330_PRIMARY=[
  ['you','♙','YOU'],
@@ -10641,7 +10641,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.6 — Original Artwork Bundled: clean core screens and visual priority. */
+/* Grim Company v21.10.7 — Founder Follows Headquarters: clean core screens and visual priority. */
 
 function gc330RiskCapForLevel(level){
  let cap=1;for(const r of [1,2,3,4,5])if(level>=gc320RiskLevel(r))cap=r;return cap;
@@ -10754,7 +10754,7 @@ showReport=function(r){
 };
 
 
-/* Grim Company v21.10.6 — Original Artwork Bundled: cohesive visual system, terminology cleanup and UI checks. */
+/* Grim Company v21.10.7 — Founder Follows Headquarters: cohesive visual system, terminology cleanup and UI checks. */
 
 const _gc260PendingDecisionHTMLGC330=gc260PendingDecisionHTML;
 gc260PendingDecisionHTML=function(p,d){
@@ -10878,7 +10878,7 @@ window.__GC330_TEST=function(){
 };
 
 
-/* Grim Company v21.10.6 — Original Artwork Bundled.
+/* Grim Company v21.10.7 — Founder Follows Headquarters.
    Restore visible combat, make Push persistent/readable, and make party assignment frictionless. */
 const GC331_VERSION='21.3.1';
 
@@ -11061,7 +11061,7 @@ window.__GC331_TEST=function(){
 };
 
 
-/* Grim Company v21.10.6 — Original Artwork Bundled.
+/* Grim Company v21.10.7 — Founder Follows Headquarters.
    A freelancer is not a permanent party leader. Every personal freelance contract
    assembles a fresh, healthy temporary crew from the wider regional market. */
 const GC332_VERSION='21.3.2';
@@ -11469,7 +11469,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.6 — Original Artwork Bundled support and progressive NPC autonomy. */
+/* Grim Company v21.10.7 — Founder Follows Headquarters support and progressive NPC autonomy. */
 const _gc201ScoutRegionGC340=gc201ScoutRegion;
 gc201ScoutRegion=function(regionId,deltaDays){return _gc201ScoutRegionGC340(regionId,deltaDays*(gc340At('Scout',regionId)?GC340_SUPPORT.Scout:1))};
 
@@ -11841,7 +11841,7 @@ processAction=function(el){
 };
 
 
-/* Grim Company v21.10.6 — Original Artwork Bundled presentation, mobile polish and regression coverage. */
+/* Grim Company v21.10.7 — Founder Follows Headquarters presentation, mobile polish and regression coverage. */
 const _gc270FreebladeYouGC340D=gc270FreebladeYou;
 gc270FreebladeYou=function(){const p=gc340FounderInDungeon();if(p)return gc340DungeonRunHTML(p);return _gc270FreebladeYouGC340D()};
 
@@ -13134,7 +13134,7 @@ window.__GC346_TEST=function(){
  }
 };
 
-/* Grim Company v21.10.6 — Original Artwork Bundled pass.
+/* Grim Company v21.10.7 — Founder Follows Headquarters pass.
    The visible game must follow simulation state without requiring tab changes. */
 const GC347_VERSION='21.4.7';
 let GC347_TOUCHING=false;
@@ -19417,6 +19417,121 @@ window.__GC426_TEST=function(){
  return {ok:files&&portraits&&probe.includes('veyric_orc_female.jpg')&&
   Object.keys(GC426_SCENE_FILES).every(id=>GC381_SCENES[id]?.file===GC426_SCENE_FILES[id]),
   scenes:Object.keys(GC426_SCENE_FILES).length,portraits:GC425_SLOTS.length,version:GC426_VERSION};
+};
+
+/* Grim Company v21.10.7 — founder follows the actively selected headquarters. */
+const GC427_VERSION='21.10.7';
+function gc427MoveFounderToHQ(id){
+ if(!state?.regions?.[id]?.hq?.established)return {moved:false,reason:'unavailable'};
+ const founder=gc260Founder();
+ if(!founder||founder.status==='Dead')return {moved:false,reason:'no-founder'};
+ if(founder.regionId===id)return {moved:false,reason:'already-here'};
+ const fs=gc260System(),presence=gc340Presence();
+ const inActiveParty=state.parties.some(p=>p.members?.includes(founder.id)&&
+   (p.expedition||p.gc340DungeonRun?.active));
+ const busy=founder.status!=='Ready'||!!fs?.activity||!!presence?.activity||
+   !!gc340FounderInField()||!!gc340FounderInDungeon()||inActiveParty;
+ if(busy)return {moved:false,reason:'busy',from:founder.regionId};
+ const from=founder.regionId;
+ gc260RemoveFounderFromParties();
+ founder.regionId=id;
+ if(fs)fs.location=id;
+ const p=gc340Presence();
+ if(p){p.regionId=id;p.place='hall';p.mode='town';p.activity=null;}
+ founder.history=founder.history||[];
+ founder.history.push('Day '+state.company.day+': moved from '+
+   (REGION_DEFS[from]?.name||from)+' to '+(REGION_DEFS[id]?.name||id)+' to manage the HQ.');
+ pushHistory(founder.name+' relocated to '+(REGION_DEFS[id]?.name||id)+' headquarters.',id);
+ return {moved:true,from,to:id};
+}
+function gc427HQMoveNotice(result,id){
+ if(result.moved)toast('You have moved to '+(REGION_DEFS[id]?.name||id)+'. You can join local parties.');
+ else if(result.reason==='busy')toast('HQ view switched. Your character remains in '+
+  (REGION_DEFS[result.from]?.name||result.from)+' until the current activity or expedition ends.');
+}
+const _gc427SwitchRegion=switchRegion;
+switchRegion=function(id){
+ if(!state?.regions?.[id]?.hq?.established)return _gc427SwitchRegion(id);
+ const result=gc427MoveFounderToHQ(id);
+ const out=_gc427SwitchRegion(id);
+ gc427HQMoveNotice(result,id);
+ return out;
+};
+const _gc427FoundBranch=foundBranch;
+foundBranch=function(id){
+ const established=!!state?.regions?.[id]?.hq?.established;
+ const out=_gc427FoundBranch(id);
+ if(!established&&state?.regions?.[id]?.hq?.established&&state.currentRegion===id){
+  const result=gc427MoveFounderToHQ(id);
+  if(result.moved){save();render();}
+  gc427HQMoveNotice(result,id);
+ }
+ return out;
+};
+const _gc427HQAgencyHTML=gc260HQAgencyHTML;
+gc260HQAgencyHTML=function(f,p){
+ return _gc427HQAgencyHTML(f,p).replace(
+  'Your physical location matters. Management remains global, but Direct Command only happens where you actually are.',
+  'Switch HQ on the World screen to move here and join its parties. Active expeditions and personal activities prevent instant relocation.'
+ );
+};
+window.__GC427_TEST=function(){
+ const priorState=state,priorSave=save,priorRender=render,priorToast=toast,r={};
+ try{
+  save=function(){};render=function(){};toast=function(){};
+  state=createState('HQ Transfer Regression','veyric');
+  state.company.silver=1000000;state.company.renown=100000;
+  state.regions.veyric.hq.established=true;
+  state.regions.skeld.hq.established=true;
+  gc270Progression().phase='network';
+  const founder=gc260CreateFounderRecord('veyric',{
+   name:'Relocation Tester',race:'Human',culture:'Veyric',
+   className:'March Ranger',gender:'Male',portrait:1
+  },true);
+  founder.status='Ready';
+  const teammate=generateAdventurer('veyric');teammate.status='Ready';state.roster.push(teammate);
+  const oldParty=makeParty('veyric','Old Headquarters Party');
+  oldParty.members=[founder.id,teammate.id];oldParty.captainId=founder.id;
+  const newParty=makeParty('skeld','New Headquarters Party');
+  state.parties.push(oldParty,newParty);
+  const presence=gc340Presence();presence.regionId='veyric';presence.place='scout';presence.mode='town';
+  switchRegion('skeld');
+  r.switchMovesFounder=state.currentRegion==='skeld'&&founder.regionId==='skeld';
+  r.presenceTracksMove=presence.regionId==='skeld'&&presence.place==='hall'&&
+   presence.mode==='town'&&gc260System().location==='skeld';
+  r.oldPartyPreserved=oldParty.members.length===1&&oldParty.members[0]===teammate.id&&
+   oldParty.captainId===teammate.id&&teammate.regionId==='veyric';
+  r.newPartyCanRecruitFounder=localRoster('skeld').some(a=>a.id===founder.id);
+  gc260JoinParty(newParty.id);
+  r.canJoinNewHQParty=newParty.members.includes(founder.id)&&gc260FounderParty()?.id===newParty.id;
+  switchRegion('veyric');
+  r.movesBack=founder.regionId==='veyric'&&state.currentRegion==='veyric'&&
+   !newParty.members.includes(founder.id)&&presence.regionId==='veyric';
+  oldParty.members.push(founder.id);oldParty.expedition={contract:{regionId:'veyric'}};
+  switchRegion('skeld');
+  r.fieldProtected=founder.regionId==='veyric'&&oldParty.members.includes(founder.id)&&
+   !!oldParty.expedition&&state.currentRegion==='skeld';
+  oldParty.expedition=null;oldParty.members=oldParty.members.filter(x=>x!==founder.id);
+  presence.activity={type:'study',remainingDays:.1};
+  switchRegion('skeld');
+  r.activityProtected=founder.regionId==='veyric'&&!!presence.activity;
+  presence.activity=null;
+  gc260System().activity={type:'training',remaining:1};
+  switchRegion('skeld');
+  r.travelProtected=founder.regionId==='veyric'&&!!gc260System().activity;
+  gc260System().activity=null;
+  state.regions.nambara.hq.established=false;
+  foundBranch('nambara');
+  r.newBranchMovesFounder=state.regions.nambara.hq.established&&
+   founder.regionId==='nambara'&&state.currentRegion==='nambara'&&presence.place==='hall';
+  r.noDuplicateFounder=state.roster.filter(x=>x.id===founder.id).length===1;
+  const saved=normalizeState(JSON.parse(JSON.stringify(state)));
+  r.saveCompatible=saved.company.founderId===founder.id&&
+    saved.roster.find(x=>x.id===founder.id)?.regionId===founder.regionId;
+  const failed=Object.keys(r).filter(k=>!r[k]);
+  return {ok:failed.length===0,failed,...r};
+ }catch(e){return {ok:false,error:String(e?.stack||e),partial:r}}
+ finally{state=priorState;save=priorSave;render=priorRender;toast=priorToast;try{render()}catch(_){}}
 };
 boot();
 })();
